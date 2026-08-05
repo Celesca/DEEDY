@@ -245,14 +245,14 @@ def make_interaction_script(scroll_rounds: int, click_rounds: int) -> str:
     this script intentionally keeps the extraction payload simple and auditable.
     """
     return rf"""
-(async () => {{
+return await (async () => {{
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const visible = (node) => {{
     const rect = node.getBoundingClientRect();
     const style = window.getComputedStyle(node);
     return rect.width > 0 && rect.height > 0 && style.visibility !== 'hidden';
   }};
-  const expansionPattern = /(?:view|see|load|more|previous).*?(?:comment|repl)|(?:ดู|โหลด).*?(?:ความคิดเห็น|ความเห็น|การตอบกลับ)|ความคิดเห็นก่อนหน้า/i;
+  const expansionPattern = /(?:view|see|load|more|previous).*?(?:comment|repl)|(?:ดู|โหลด).*?(?:ความคิดเห็น|ความเห็น|การตอบกลับ)|ความคิดเห็นก่อนหน้า|^\s*\d[\d,.]*\s*(?:comments?|replies)\s*$|^\s*(?:ความคิดเห็น|ความเห็น|การตอบกลับ)\s*\d[\d,.]*\s*(?:รายการ)?\s*$/i;
   const moreTextPattern = /^(?:see more|more|ดูเพิ่มเติม|เพิ่มเติม)$/i;
 
   for (let round = 0; round < {int(click_rounds)}; round += 1) {{
@@ -287,7 +287,12 @@ def make_interaction_script(scroll_rounds: int, click_rounds: int) -> str:
     if (!rawText) continue;
     const aria = article.getAttribute('aria-label') || '';
     const parentArticle = article.parentElement && article.parentElement.closest('[role="article"]');
-    const looksLikeComment = Boolean(parentArticle) || /comment|reply|ความคิดเห็น|ความเห็น|ตอบกลับ/i.test(aria);
+    const hasCommentPermalink = Boolean(article.querySelector('a[href*="comment_id="], a[href*="reply_comment_id="]'));
+    // On direct post pages, Facebook now also renders top-level comments as
+    // sibling articles without a useful aria-label. The post article was
+    // excluded above, so remaining text-bearing articles are comment candidates.
+    const looksLikeComment = Boolean(parentArticle) || hasCommentPermalink ||
+      /comment|reply|ความคิดเห็น|ความเห็น|ตอบกลับ/i.test(aria) || Boolean(rawText);
     if (!looksLikeComment) continue;
 
     const profileLink = article.querySelector('a[role="link"] strong, a[role="link"] span');
@@ -305,7 +310,13 @@ def make_interaction_script(scroll_rounds: int, click_rounds: int) -> str:
     page_url: location.href,
     title: document.title,
     post_text: postMessage ? (postMessage.innerText || '').trim() : '',
-    comments
+    comments,
+    diagnostics: {{
+      article_count: articles.length,
+      comment_permalink_count: document.querySelectorAll('a[href*="comment_id="], a[href*="reply_comment_id="]').length,
+      dialog_count: document.querySelectorAll('[role="dialog"]').length,
+      login_form_count: document.querySelectorAll('form[action*="login"], input[name="email"]').length
+    }}
   }};
   document.querySelector('#deedy-facebook-payload')?.remove();
   const payloadNode = document.createElement('script');
@@ -322,7 +333,14 @@ def is_authentication_page(url: str, page_html: str) -> bool:
     if parts.path.startswith(("/login", "/checkpoint", "/recover")):
         return True
     title = parse_page(page_html).title.casefold()
-    return title in {"log in to facebook", "เข้าสู่ระบบ facebook"}
+    if title in {"log in to facebook", "เข้าสู่ระบบ facebook"}:
+        return True
+    # Facebook can show a public-page shell with a login dialog while keeping
+    # the requested URL and a generic title. Detect stable login form fields.
+    return bool(
+        re.search(r'<input\b[^>]*\bname=["\']email["\']', page_html, re.IGNORECASE)
+        and re.search(r'<input\b[^>]*\bname=["\']pass["\']', page_html, re.IGNORECASE)
+    )
 
 
 def record_id(post_url: str, comment_text: str) -> str:
@@ -449,6 +467,23 @@ async def collect_post(
             "Facebook redirected to login/checkpoint. Recreate or refresh the Crawl4AI profile."
         )
 
+    if args.verbose:
+        parsed_page = parse_page(page_html)
+        payload_count = 0
+        diagnostics: dict[str, Any] = {}
+        if parsed_page.payload:
+            try:
+                payload_data = json.loads(parsed_page.payload)
+                payload_count = len(payload_data.get("comments", []))
+                diagnostics = payload_data.get("diagnostics", {})
+            except (AttributeError, json.JSONDecodeError):
+                pass
+        print(
+            f"  extraction diagnostic: html_bytes={len(page_html)}; "
+            f"payload_bytes={len(parsed_page.payload)}; candidates={payload_count}; "
+            f"dom={diagnostics}"
+        )
+
     post_text, comments = extract_comments(page_html, args.max_comments)
     collected_at = utc_now()
     records: list[dict[str, Any]] = []
@@ -525,6 +560,12 @@ async def run_search(args: argparse.Namespace) -> int:
             )
             return 1
 
+        if args.discover_only:
+            print(f"Posts discovered: {len(post_urls)}")
+            for post_url in post_urls:
+                print(post_url)
+            return 0
+
         visible_total = 0
         written_total = 0
         failed = 0
@@ -535,6 +576,77 @@ async def run_search(args: argparse.Namespace) -> int:
                     crawler,
                     post_url,
                     query=args.query,
+                    args=args,
+                    seen_ids=seen_ids,
+                )
+            except RuntimeError as exc:
+                failed += 1
+                print(f"  warning: {exc}", file=sys.stderr)
+                continue
+            visible_total += found
+            written_total += written
+            print(f"  comments visible: {found}; new: {written}")
+
+    print(
+        f"Posts discovered: {len(post_urls)}; failed: {failed}; comments visible: "
+        f"{visible_total}; new records written: {written_total}; output: {args.output}"
+    )
+    return 0 if written_total or visible_total else 1
+
+
+async def run_page(args: argparse.Namespace) -> int:
+    """Discover post permalinks from a Facebook Page and collect comments."""
+    parts = urlsplit(args.page_url)
+    host = parts.netloc.lower().split(":", 1)[0]
+    if parts.scheme not in {"http", "https"} or host not in {
+        "facebook.com",
+        "www.facebook.com",
+        "m.facebook.com",
+    }:
+        print("--page-url must be a Facebook Page URL.", file=sys.stderr)
+        return 2
+
+    page_url = urlunsplit(("https", "www.facebook.com", parts.path.rstrip("/"), "", ""))
+    seen_ids = load_seen_ids(args.output)
+    crawler = await open_crawler(args.profile, args.headless, args.verbose)
+    async with crawler:
+        page_result = await crawl_page(
+            crawler,
+            page_url,
+            locale=args.locale,
+            scroll_rounds=args.page_scroll_rounds,
+            click_rounds=0,
+            verbose=args.verbose,
+        )
+        final_url = str(getattr(page_result, "url", "") or page_url)
+        page_html = str(getattr(page_result, "html", "") or "")
+        if not getattr(page_result, "success", False):
+            message = str(getattr(page_result, "error_message", "page crawl failed"))
+            raise RuntimeError(message)
+        if is_authentication_page(final_url, page_html):
+            raise RuntimeError(
+                "Facebook redirected to login/checkpoint. Recreate or refresh the Crawl4AI profile."
+            )
+
+        post_urls = discover_post_urls(page_html, args.max_posts)
+        if not post_urls:
+            print(
+                "No Facebook post permalinks were found on the Page. Run with --show-browser "
+                "or provide a known post URL with the post command.",
+                file=sys.stderr,
+            )
+            return 1
+
+        visible_total = 0
+        written_total = 0
+        failed = 0
+        for position, post_url in enumerate(post_urls, start=1):
+            print(f"[{position}/{len(post_urls)}] {post_url}")
+            try:
+                found, written = await collect_post(
+                    crawler,
+                    post_url,
+                    query=page_url,
                     args=args,
                     seen_ids=seen_ids,
                 )
@@ -627,6 +739,27 @@ def build_parser() -> argparse.ArgumentParser:
     search_parser.add_argument("--scroll-rounds", type=nonnegative_int, default=8)
     search_parser.add_argument("--click-rounds", type=nonnegative_int, default=6)
     search_parser.add_argument(
+        "--discover-only",
+        action="store_true",
+        help="Print discovered post URLs without crawling comments.",
+    )
+    search_parser.add_argument(
+        "--include-author",
+        action="store_true",
+        help="Include visible display names. Disabled by default for data minimization.",
+    )
+
+    page_parser = subparsers.add_parser(
+        "page", help="Discover posts on a Facebook Page and collect their visible comments."
+    )
+    add_runtime_options(page_parser)
+    page_parser.add_argument("--page-url", required=True, help="Facebook Page URL.")
+    page_parser.add_argument("--max-posts", type=positive_int, default=10)
+    page_parser.add_argument("--max-comments", type=positive_int, default=100)
+    page_parser.add_argument("--page-scroll-rounds", type=nonnegative_int, default=8)
+    page_parser.add_argument("--scroll-rounds", type=nonnegative_int, default=8)
+    page_parser.add_argument("--click-rounds", type=nonnegative_int, default=6)
+    page_parser.add_argument(
         "--include-author",
         action="store_true",
         help="Include visible display names. Disabled by default for data minimization.",
@@ -644,6 +777,8 @@ async def async_main(args: argparse.Namespace) -> int:
         return await run_post(args)
     if args.command == "search":
         return await run_search(args)
+    if args.command == "page":
+        return await run_page(args)
     return 2
 
 

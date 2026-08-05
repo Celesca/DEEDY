@@ -14,6 +14,18 @@ SPEC.loader.exec_module(MODULE)
 
 
 class FacebookCommentsTests(unittest.TestCase):
+    def test_detects_login_dialog_on_public_page_shell(self):
+        page = """
+        <html><head><title>Facebook</title></head><body>
+          <form><input name="email"><input name="pass" type="password"></form>
+        </body></html>
+        """
+        self.assertTrue(
+            MODULE.is_authentication_page(
+                "https://www.facebook.com/parameterthailand/posts/123", page
+            )
+        )
+
     def test_canonicalize_post_url(self):
         actual = MODULE.canonicalize_facebook_url(
             "https://m.facebook.com/example/posts/123/?fbclid=tracking"
