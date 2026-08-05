@@ -1,0 +1,353 @@
+                  MANJU: A Multi-Agent Framework for Natural
+                                  Just-in-Time Understanding in Thai
+                                                           1                    1                  2                        1
+                                 Sawit Koseeyaumporn , Siratee Saiprom , Watin Promfiy , Sansiri Tarnpradab
+                    1Department of Computer Engineering, King Mongkut’s University of Technology Thonburi, Bangkok, Thailand
+                 2                                  {sawit.kosee, siratee.saipr, sansiri.tarn}@kmutt.ac.th
+                  Department of Information and Technology, King Mongkut’s Institute of Technology Ladkrabang, Bangkok, Thailand
+                                                                   66070184@kmitl.ac.th
+                Abstract—This paper presents MANJU (Multi-Agent AI for             • We introduce a visual, no-code workflow builder that
+             Natural Just-in-Time Understanding), an automated platform               decouples conversation policy from infrastructure, en-
+             for Thai-language customer service delivered through just-in-            abling non-technical operators to design and deploy flows
+             time voice interaction. MANJU transcribes a customer’s spoken            via drag-and-drop without programming.
+             query, applies multi-agent reasoning with retrieval-augmented         • Wedevelopamulti-agentorchestrationengineinwhich
+             generation (RAG) to determine the optimal response strategy,
+             and synthesises a reply in natural Thai, delivering the first audio      specialised agents for intent classification, document re-
+             segment within approximately 1.8s via sentence-level streaming.          trieval, live data lookup, and response generation coop-
+             A visual drag-and-drop workflow editor enables non-technical             erate within a RAG-grounded pipeline, achieving 100%
+             operators to compose and modify conversation logic without               routing accuracy and GR=62% on 50 standard Thai
+             programming.                                                             queries.
+                Evaluated on 50 standard Thai customer-service queries and         • We implement a production-ready Thai voice platform
+             23 adversarial edge cases, MANJU achieves 100% intent rout-
+             ing accuracy, 62% RAG-grounded responses (GR), 78% edge-                 with streaming ASR, GPU-accelerated TTS with voice
+             case acceptability with 100% safety, and Mean Opinion Score              cloning (MOS=4.33), and sentence-level streaming de-
+             (MOS)=4.33 for VoiceDesign TTS. End-to-end median latency                livering the first audio segment within ≈1.8s.
+             is 6.07s; the primary bottleneck is Qwen3-TTS at Real-Time
+             Factor (RTF)=1.54, partially offset by sentence-level streaming.                         II. RELATED WORK
+                Index Terms—Multi-Agent System, Voice AI, Thai NLP,              A. Automatic Speech Recognition
+             Retrieval-Augmented Generation, Customer Service Automation.
+                                                                                   Automatic Speech Recognition (ASR) converts speech to
+                                                                                 text via deep learning. While large-scale models like OpenAI
+                                   I. INTRODUCTION                               Whisper [2] demonstrate multilingual robustness, their non-
+                Enterprises increasingly face pressure to provide uninter-       causal encoder-decoder architecture is designed for offline pro-
+             rupted customer support, yet telephone-based service consis-        cessing: fixed-chunk segmentation causes split-word artefacts
+             tently underperforms during peak demand due to insufficient         and unpredictable latency in streaming scenarios.
+             staffing, extended queue times, and consequent customer at-           Of particular relevance to MANJU is Typhoon ASR Real-
+             trition [1]. Existing AI deployments partially address this gap,    Time[3], a 115M-parameter FastConformer-Transducer model
+             but remain limited to text-only chatbots or rule-based interac-     for low-latency Thai streaming ASR. Unlike offline Whisper-
+             tive voice response (IVR) systems that follow rigid decision        based approaches [4], [5], Typhoon’s Transducer (RNN-T) de-
+             trees. Neither paradigm supports natural voice dialogue in          coder enables frame-synchronous streaming without chunking
+             Thai, dynamic knowledge retrieval, or flexible adaptation to        latency. Trained on approximately 11,000 hours of Thai audio,
+             diverse business domains.                                           it achieves 6.81% Character Error Rate (CER) at 4,097× real-
+                This paper introduces MANJU, a voice-based customer              time throughput (15–19× faster than Whisper) at $0.0023/hr
+             service platform designed specifically for the Thai language.       on an L4 GPU, making it the designated server-side ASR
+             Upon receiving a spoken query, MANJU transcribes the in-            replacement for the current MANJU prototype.
+             put, applies multi-agent reasoning to determine the optimal         B. Text-to-Speech Synthesis
+             response strategy, retrieves supporting evidence from domain-
+             specific documents when required, and synthesises a reply in          Modern end-to-end TTS systems predict acoustic features
+             natural Thai, with sentence-level streaming delivering the first    and synthesise waveforms via neural vocoders [6]. MANJU
+             audio segment within approximately 1.8s. A key feature of           adopts Qwen3-TTS-12Hz-1.7B, a 1.7B-parameter model ac-
+             MANJU is its visual workflow editor, which manages the              celerated by Flash Attention 2 [7], supporting three voice
+             complete conversation logic. This no-code approach enables          modes: base voice cloning, preset voices, and text-described
+             rapid deployment by non-technical operators.                        voice design. This enables on-premise Thai voice cloning
+                Our contributions are threefold:                                 without cloud dependency.
+              C. Multi-Agent Orchestration and Retrieval-Augmented Gen-                 TABLE I: Feature comparison across system paradigms. ✓:
+              eration                                                                   supported; ✗: not supported; △: partial support.
+                                                                                        Capability               IVR   Text Chatbot   Cloud Voice AI   MANJU
+                 Transformer-based Large Language Models (LLMs) [8]                     Thai voice I/O            ✗          ✗              △             ✓
+              model long-range token dependencies for contextual language               Multi-agent RAG           ✗         △                ✗            ✓
+                                                                                        No-code workflow editor   ✗          ✗               ✗            ✓
+              understanding and generation. In automated customer service,              On-premise deployment     ✓         ✓                ✗            ✓
+              LLMsact as the core reasoning engine to interpret user intent,            Voice cloning             ✗          ✗               ✗            ✓
+              generate coherent responses, and integrate external knowledge.
+              For this project, MANJU supports configurable LLM selec-                                            Speech-to-Text
+              tion per workflow node via LiteLLM provider abstraction.                                           Voice Input        Typhoon ASR
+              Typhoon-v2.5-30b [9], a Thai-optimised open-weight model,                     Multi-Agent
+              serves as the primary on-premise default evaluated in the
+                                                                                                                   Intent          Supervisor Agent
+              experiments. Qwen3.5 [10], a highly capable multilingual                                           Classification
+              LLMwith strong Thai performance, is evaluated as a capable
+              alternative. Both enable on-premise deployment without API                       PRODUCT          KNOWLEDGE           GENERAL
+              dependency, reducing operational costs and mitigating data-
+              privacy risks.                                                                  Product Agent     Knowledge Agent
+                                                                                                                                     Immediate
+                 However, relying on a single monolithic LLM is often                                                                Response
+                                                                                              Product Data      RAG Document
+              insufficient for managing heterogeneous subtasks such as                          Lookup            Search
+              intent classification, document retrieval, live data lookup, and
+              response generation. These tasks exhibit distinct failure modes                                                Response Agent
+              and benefit from explicit delegation to domain-specialised                                             Text-to-Speech
+              components. Multi-agent architectures address this limitation
+              by decomposing complex reasoning into specialised agents                                                        Qwen3-TTS           Voice Output
+              that coordinate via structured message passing. To orchestrate
+              this, MANJU leverages LangGraph1, a graph-based frame-                                                        Generated Clone Voice
+              work for stateful multi-actor LLM applications, which enables             Fig. 1: MANJU framework overview. The pipeline consists
+              conditional routing and persistent context across multiple                of three stages: (1) Speech-to-Text transcribes voice input via
+              conversation turns through structured state management.                   Typhoon ASR; (2) Multi-Agent routing classifies intent and
+                 Despite their advanced reasoning capabilities, LLMs inher-             dispatches to Product, Knowledge, or General agents; (3) Text-
+              ently suffer from “hallucinations”—the tendency to generate               to-Speech synthesises the final response via Qwen3-TTS.
+              responses that are grammatically fluent but factually incorrect
+              or ungrounded. To mitigate this critical issue and ensure
+              the system delivers reliable information, MANJU integrates                                   III. MANJU FRAMEWORK
+              Retrieval-Augmented Generation (RAG) [11]. RAG directly                   A. System Architecture Overview
+              addresses hallucination by combining dense passage retrieval                 To ensure system reliability and scalability, MANJU is ar-
+              with LLM generation, explicitly grounding the model’s an-                 chitected across four independent operational tiers, as detailed
+              swers in verified external sources. To facilitate this, FAISS             in Table II, each encapsulated within its own Docker container.
+              (Facebook AI Similarity Search) [12] is utilised for efficient            The Frontend (Tier 1) provides the React/TypeScript workflow
+              similarity search over dense vectors. In our pipeline, user-              editor and Voice Activity Detection (VAD) for audio capture.
+              uploaded documents (e.g., PDF, DOCX, TXT) are chunked,                    All requests route through the API Gateway (Tier 2), a Go-
+              embedded via the OpenAI text-embedding-3-small model, and                 based server responsible for Google OAuth authentication and
+              indexed in FAISS for precise, per-query retrieval.                        encrypted API key management. Authenticated requests are
+                 Traditional IVR systems provide menu-based automation                  forwarded to the AI Orchestrator (Tier 3), which manages
+              but lack conversational flexibility [1]. Recent voice assistants          LLMrouting, RAG processes, and Google Sheets integration.
+              combine ASR, LLM intent handling, and TTS but must                        Finally, the TTS Service (Tier 4) leverages GPU-accelerated
+              balance latency and groundedness. As Table I shows, to                    Qwen3-TTS to synthesise spoken audio across multiple voice
+              our knowledge MANJU is the first platform to unify Thai                   modes.
+              voice I/O, multi-agent RAG, no-code workflow configuration,
+              on-premise deployment, and voice cloning within a single                  B. Core Pipeline Modules
+              framework.                                                                   The MANJU framework is composed of specialised mod-
+                                                                                        ules that handle distinct stages of the conversational pipeline,
+                                                                                        ensuring a seamless flow from voice capture to synthesised
+                 1https://www.langchain.com/langgraph                                   response.
+                  TABLE II: MANJU’s four-tier architecture. Each tier runs in                                    and similarity scores.
+                  its own Docker container and can be scaled independently.                                                                                                                              2
+                                                                                                                        b) Google Sheets Integration: The Google Sheets node
+                  Tier                 Role                  Key responsibilities                                fetches live spreadsheet data via gspread with OAuth2
+                  1 Frontend           User interface        React/TS workflow editor, voice capture, VAD        authentication, converting it to a Markdown table (capped at
+                  2 API Gateway        Security & routing    Go server, Google OAuth, encrypted API keys         50 rows) and injecting it into the LLM prompt—enabling real-
+                  3 AI Orchestrator    Reasoning             LLMrouting, RAG, Google Sheets integration          time access to inventory or pricing data without re-embedding.
+                  4 TTS Service        Voice synthesis       Qwen3-TTS on GPU, three voice modes
+                                                                                                                    3) Text-to-Speech (TTS) Module: Once the AI Orchestrator
+                                                                                                                 produces a textual response, the TTS module converts it into
+                      1) ASR Module with Voice Activity Detection: The current                                   spoken audio for delivery to the user. MANJU supports two
+                  MANJUprototype captures audio via the browser-native Web                                       interchangeable providers, configurable within the workflow
+                  Speech API (MediaRecorder), which provides broad cross-                                        editor. The OpenAI TTS service offers a cloud-based solution
+                  platform compatibility but is susceptible to domain-term mis-                                  with six built-in voices, requiring minimal setup and serving
+                  recognition on Thai administrative vocabulary. Typhoon ASR                                     as an ideal option for rapid prototyping. For production envi-
+                  Real-Time [3], a 115M-parameter FastConformer-Transducer                                       ronments requiring data sovereignty, Qwen3-TTS is deployed
+                  model trained on 11,000 hours of Thai audio, is the target                                     on-premise. This GPU-accelerated model provides nine preset
+                  server-side upgrade; its frame-synchronous streaming decoder                                   character voices across three operating modes and supports
+                  eliminates the chunking latency of offline Whisper-based al-                                   Thai voice cloning from a short reference recording. Further-
+                  ternatives and will directly address the ASR misrecognition                                    more, it features a VoiceDesign mode, allowing operators to
+                  failures described in Section V-F.                                                             generate custom voices via natural language descriptors (e.g.,
+                      To provide a fully hands-free experience, the frontend                                     “young female, warm tone”). To ensure near-instantaneous
+                  integrates a Voice Activity Detector (VAD) that determines                                     synthesis, all Qwen3-TTS variants are preloaded into GPU
+                  when the user has finished speaking. The VAD accesses                                          memory with Flash Attention 2 [7] and undergo a warmup
+                  the microphone through the Web Audio API, reads PCM                                            pass at system startup.
+                  amplitude from an AnalyserNode, and computes the root                                                 a) Sentence-Level Audio Streaming and Latency Optimi-
+                  mean square (RMS) energy of each frame. Frames with an                                         sation: To minimise perceived latency and prevent the de-
+                  RMSaboveθ                 =0.01areclassified as speech. Once speech                            lays associated with synthesising lengthy paragraphs, MANJU
+                                      VAD
+                  has been detected, a sustained silence of τ                              = 1,100ms             implements a sentence-level streaming strategy. The response
+                                                                                   silence
+                  triggers automatic finalisation: the system stops recording,                                   text is partitioned into granular segments, with a maximum
+                  dispatches the audio blob to the backend, and releases the                                     threshold of 200 characters per chunk. Thai text is segmented
+                  microphone stream.                                                                             using the PyThaiNLP sentence tokeniser [13], while other
+                      2) Multi-Agent Architecture Module: MANJU treats a con-                                    languages are split based on standard punctuation marks. To
+                  versation workflow as a declarative, serialisable configuration                                maintain natural prosody, fragments under 20 characters are
+                  rather than hard-coded software logic. An operator defines the                                 automatically merged with the subsequent sentence.
+                  system’s conversational behaviour by composing typed pro-                                         This pipeline enables the browser to initiate playback of
+                  cessing components in the visual editor; the resulting directed                                the initial segment while the server concurrently synthesises
+                  graph is persisted as a JSON object and executed at query time                                 subsequent chunks. To further optimise performance for re-
+                  without requiring code modification or redeployment. This                                      curring interactions, completed audio clips are cached in
+                  workflow-as-data principle decouples the conversation policy                                   the browser’s local storage (IndexedDB), allowing for in-
+                  from the underlying infrastructure, enabling non-technical op-                                 stantaneous playback of repeated queries without redundant
+                  erators to adapt system behaviour by editing the visual layout                                 synthesis overhead.
+                  alone.                                                                                         C. Web Application
+                      To ground the LLM’s responses in verified context, the                                        The MANJU platform is delivered as a comprehensive web
+                  architecture delegates dynamic information retrieval to spe-                                   application comprising two primary modules: a visual work-
+                  cialised agent nodes. These components integrate external                                      flow editor and an interactive end-user client. The workflow
+                  knowledge into the conversation flow via two primary mech-                                     editor provides an infinite canvas equipped with zoom and pan
+                  anisms: unstructured document retrieval and structured real-                                   capabilities, drag-and-drop node placement from a predefined
+                  time data lookups.                                                                                                    ´
+                         a) RAG Document Search: To ground responses in                                          palette, cubic Bezier curve routing for connections, marquee
+                  operator-provided knowledge, MANJU employs Retrieval-                                          multi-selection, and state-history undo support (Fig. 2). Each
+                  Augmented Generation (RAG) [11]. Uploaded documents                                            node type features a dedicated configuration panel, allowing
+                  (PDF, DOCX, TXT) are split into overlapping 1,000-character                                    operators to define system prompts, select AI models, tune
+                  chunks and embedded with the text-embedding-3-small model                                      RAG parameters, set conditional operators, and specify TTS
+                  (1,536-dimensional vectors) into a persistent FAISS index.                                     voice providers and output variables. Once configured, the
+                  At inference time, the user query is embedded and the top-                                     entire workflow is serialised as a JSON object containing
+                  3 nearest chunks are retrieved and prepended to the LLM                                           2Integrated via the Google Sheets API: https://developers.google.com/
+                  prompt as grounding context, together with source filenames                                    sheets/api
+                    arrays of nodes and connections, which is then persisted                                              Mongkut’s University of Technology Thonburi (KMUTT): 50
+                    securely via the API gateway.                                                                         standard queries (FAQ 20, product 15, knowledge-base 15)
+                                                                                                                          plus 23 adversarial edge cases. Latency trials use unique
+                                                                                                                          session_ids to bypass caching; significance at α=0.05
+                                                                                                                          via Friedman test, post-hoc Wilcoxon, Bonferroni-adjusted
+                                                                                                                          αadj=0.0167. Hardware: Orchestrator: 8-core CPU, 32GB
+                                                                                                                          RAM; TTS: NVIDIA RTX 5070 Ti 16GB GPU with
+                                                                                                                          Flash Attention 2. Default pipeline: voice-input →
+                                                                                                                          rag-documents (k=3, 1,000-char chunks) → ai-model
+                                                                                                                          (Typhoon-v2.5-30b, T=0.7) → voice-output (Qwen3-
+                                                                                                                          TTS CustomVoice); RAG index: 15 CPE domain PDF/DOCX
+                                                                                                                          files (∼120 chunks).
+                    Fig. 2: Visual Workflow Editor showing the node canvas with                                           B. Metrics
+                    drag-and-drop components, connections, and the AI Model                                               (a) End-to-end latency. We decompose total latency te2e
+                    configuration panel.                                                                                  into ASR (t              ), retrieval (t        ), LLM (t             ), and TTS (t              )
+                                                                                                                                             ASR                       ret                LLM                         TTS
+                                                                                                                          component times as
+                        Rather than a simple demonstration page, the interactive                                                                  t      =t          +t +t                +t                            (1)
+                    end-user client functions as a robust multimodal chat en-                                                                       e2e       ASR         ret      LLM         TTS
+                    vironment supporting both text and voice I/O. It displays                                             and measure the 5-second compliance rate C5 (fraction of N
+                    ASR transcripts in real time and streams synthesised audio                                            trials within the SLA):
+                    responses. To optimise playback performance, the application                                                                                                    
+                                                                                                                                                                     (i)            
+                    implements local caching via IndexedDB; each audio clip is                                                                                {i : t       <5s}
+                                                                                                                                                  C =                 e2e              ×100%                            (2)
+                    keyed by a deterministic hash of its text and voice settings,                                                                    5                  N
+                    enabling instant replay without redundant server synthesis.                                           (b) TTS speed and quality. The Real-Time Factor (RTF)
+                    Furthermore, the client interface allows users to upload cus-                                         measures synthesis speed (RTF<1 = faster than real-time),
+                    tom voice reference audio (supporting WAV, MP3, and M4A                                               where t              is wall-clock synthesis time, N                           is WAV file
+                    formats up to 50MB) for Qwen3-TTS cloning. These media                                                             synth                                                      bytes
+                                                                                                                          size, and taudio is PCM audio duration:
+                    files are securely stored in either Azure Blob Storage or the                                                                 t                          N         −44
+                    local filesystem, with corresponding metadata maintained in a                                                     RTF= synth,               t        = bytes                ×1000ms                 (3)
+                                                                                                                                                  t              audio        16000×2
+                    PostgreSQL database.                                                                                                            audio
+                                                     IV. EXPERIMENTS                                                      Character Error Rate (CER, Whisper large-v3) measures in-
+                                                                                                                          telligibility; Word Error Rate (WER) is not used as Thai has
+                        We design four experiments to address three core ques-                                            no word boundaries. Mean Opinion Score (MOS, 1–5) is
+                    tions: (i) Is the pipeline fast enough for real-time dialogue?                                        the mean rating from three human evaluators (Experiment 4)
+                    (Experiment 1, latency); (ii) Does it retrieve and present                                            measuring perceived naturalness across four criteria: audio
+                    accurate domain knowledge? (Experiment 2, LLM quality);                                               quality, prosody, word-choice naturalness, and intonation.
+                    (iii) Does it remain safe under adversarial input? (Experi-                                           (c) Pipeline completion rate. Ratio of trials in which the
+                    ment 3, robustness). Experiment 4 independently benchmarks                                            full LangGraph node sequence executes successfully to total
+                    TTS speed and voice quality. Table III summarises all con-                                            trials (successful trials/N); incomplete execution indicates an
+                    ditions; each experiment varies one dimension while holding                                           upstream structural failure.
+                    the rest fixed.                                                                                       (d) Answer groundedness. Groundedness measures fac-
+                                       TABLE III: Experimental conditions.                                                tual accuracy—how closely a response is anchored to ver-
+                                                                                                                          ified     source documents rather than the model’s internal
+                    Experiment              Condition                  Purpose                                            knowledge—and is scored 0–3 by a GPT-4o judge against
+                                            (a) Full pipeline          Proposed system: RAG + routing                     the CPE domain knowledge base: 0=hallucinated; 1=partial;
+                    Exp 1 — Latency         (b) No-RAG                 Remove retrieval; LLM uses parametric memory
+                                            (c) Single-agent           Remove routing; one direct LLM call                2=mostly grounded; 3=fully grounded. The judge runs at
+                                            (a) Typhoon-v2.5-30b [9]   On-premise Thai-optimised (default)                T=0 with an explicit rubric and must cite a supporting refer-
+                    Exp 2 — LLM quality     (b) GPT-4o-mini            Cloud API; cost-efficient
+                                            (c) GPT-4o                 Cloud API; capability upper bound                  ence passage before assigning each score, making every result
+                    Exp 3 — Robustness      23 edge cases              8 failure-mode types (Section V-C)                 traceable and reproducible. We report mean groundedness
+                    Exp 4 — TTS             (a) CustomVoice            Default preset voice
+                                            (b) VoiceDesign            Text-prompted voice style                          Gmean and Groundedness Rate (GR, fraction ≥2).
+                                                                                                                          (e) Robustness metrics. Each adversarial response is scored
+                    A. Experimental Setup                                                                                 by the same GPT-4o judge (T=0) on two dimensions:
+                                                                                                                          Appropriateness (A, 0–3: 0=completely off-topic or harm-
+                        Weevaluate on 73 Thai inputs from a customer-service sce-                                         ful; 1=poor but not harmful; 2=acceptable; 3=ideal) and
+                    nario in the Computer Engineering (CPE) department at King                                            Safety (S, binary: 1=no harmful or policy-violating content;
+             0=policy-violating content detected). We report mean ap-          C. Experiment 3: Edge-Case Robustness
+             propriateness A     , Acceptable-Response Rate (AR, fraction
+                             mean                                                 MANJU is evaluated on 23 adversarial inputs (115 trials;
+             with A≥2), and Safety Rate (SR, fraction with S=1).               Table VI), scored by the GPT-4o judge (Section IV-B) on
+                            V. RESULTS AND DISCUSSION                          Appropriateness (A, 0–3) and Safety (S, 0/1).
+             A. Experiment 1: Pipeline Latency                                 TABLE VI: Edge-case robustness (115 trials). Amean: mean
+               Table IV shows end-to-end latency across 750 trials (50         appropriateness (0–3). AR: Acceptable-Response Rate (A≥2).
+             queries × 3 conditions × 5 reps). All three conditions miss the   SR: Safety Rate (S=1).
+             SLA (C5<40%); the full-pipeline median is 6.07s. Pipeline         EC Type                     Inst.  A        AR (%)     SR (%)
+             completion was 100% in all conditions, so latency reflects                                             mean
+                                                        2                      Incomplete input               3    3.00      100        100
+             genuine synthesis overhead. Friedman: χ =37.4, p<0.0001;
+             post-hoc Wilcoxon (Bonferroni) shows Full > No-RAG                Sensitive / complaint          3    3.00      100        100
+             (p<0.0167) but No-RAG ≈ Single-agent (p=0.47).                    Out-of-scope                   3    2.67      100        100
+                                                                               Long / complex                 3    2.33      100        100
+             TABLE IV: End-to-end latency (n=250 per condition). C :           Code-switched (TH+EN)          3    2.33      100        100
+                                                                          5    Consistency / repeat           3    2.00       67        100
+             fraction of trials within 5s (2).                                 Ambiguous                      3    1.33       33        100
+             Config.           Median (s)   P95 (s)   C (%)     Friedman p     Invalid reference              2    0.00       0         100
+                                                        5
+             (a) Full pipeline    6.07       12.84      24.8                   Overall                       23    2.15       78        100
+             (b) No-RAG           5.54       12.54      36.4      <0.0001
+             (c) Single-agent     5.62       12.61      36.0                   Discussion: Safety is perfect across all 115 trials (SR=100%),
+                                                                               and five of eight categories achieve AR=100%, including
+             Discussion: The No-RAG/Single-agent near-tie confirms the         sensitive/complaint and incomplete-input types of greatest
+             routing graph adds negligible overhead; the bottleneck is         operational concern. Two categories reveal structural weak-
+             TTS(RTF=1.54, Experiment 4), which makes sub-5s latency           nesses: Invalid reference (AR=0%) produces confident hallu-
+             structurally unachievable on current hardware. Sentence-level     cination—the LLM fabricates plausible answers when FAISS
+             streaming mitigates perceived latency by delivering the first     returns zero chunks, passing the safety filter with no visible
+             audio chunk within ≈1.8s while subsequent sentences syn-          quality signal; Ambiguous inputs (AR=33%) are silently mis-
+             thesise concurrently. The RAG overhead (+0.53s) is modest         routed to the best-fit category without a clarification turn. Both
+             relative to the groundedness gain shown in Experiment 2.          are addressable without retraining (Section V-F).
+             B. Experiment 2: LLM Backend Quality and Cost                     D. Experiment 4: TTS Quality
+               Table V compares three backends (450 trials). Typhoon-             MOSratings were collected from three native Thai speakers
+             v2.5-30b leads on mean groundedness score Gmean (1.72) and        (aged 20–25, blind to voice mode) on a 1–5 scale across
+             Groundedness Rate (GR=62%), with 3.3× shorter Time to             four criteria: audio quality, prosody, word-choice naturalness,
+             First Token (TTFT, latency to first output token: 188 vs.         and intonation. Table VII compares two voice modes on ten
+             627ms) at zero API cost.                                          sentences. RTF and CER: n=30 runs per sentence per mode
+             TABLE V: LLM backend comparison (n=150 per backend).              (600 total); MOS: mean of 60 human ratings.
+             G :meangroundedness(0–3,GPT-4ojudge).GR:Ground-
+               mean                                                            TABLE VII: TTS quality and speed. RTF and CER: n=30
+             edness Rate (fraction ≥2). TTFT: median Time to First Token.      synthesis runs per sentence per mode (600 total). MOS: mean
+             LLM                        Gmean     GR (%)       TTFT (ms)       of 60 human ratings (1–5).
+             (a) Typhoon-v2.5-30b        1.72        62             188        Mode                          RTF (median)    CER (%)     MOS
+             (b) GPT-4o-mini             1.68        61             627        (a) Qwen3-TTS CustomVoice         1.538          20.7      3.80
+             (c) GPT-4o                  1.68        61             627        (b) Qwen3-TTS VoiceDesign         1.518          20.9      4.33
+             Discussion: GPT-4o and GPT-4o-mini score identically              Discussion: Both modes have RTF> 1, confirming TTS as
+             (GR=61%), confirming the bottleneck is retrieval preci-           the latency bottleneck; a server-grade GPU would bring RTF
+             sion, not generation capability. Typhoon-v2.5-30b is the cost-    below 1.0. VoiceDesign attains significantly higher naturalness
+             optimal default: equal groundedness, 3.3× shorter TTFT than       (MOS=4.33 vs. 3.80) at negligible speed cost and should be
+             cloud backends (188ms vs. 627ms), no per-token cost, and          the production default. The reported CER≈20% overestimates
+             full data sovereignty. Improving retrieval quality (chunk gran-   errors: numeric tokens are expanded to spoken form by
+             ularity, query expansion, or reranking) is the highest-leverage   TTS but collapsed to digits by Whisper, inflating mismatches
+             path to raising GR above 62%.                                     without reflecting true intelligibility failures.
+             E. Cross-Experiment Synthesis                                                 VII. CONCLUSION AND FUTURE WORK
+                The four experiments reveal a clear bottleneck hierarchy.          This paper presented MANJU, an end-to-end Thai voice
+             Retrieval quality—not generation capability—bounds ac-              customer-service platform combining LangGraph multi-agent
+             curacy: all three backends (Typhoon-v2.5-30b, GPT-4o-mini,          RAG orchestration, GPU-accelerated Qwen3-TTS, and a no-
+             GPT-4o) achieve near-identical GR (61–62%), so improving            code visual workflow editor. Three key findings emerge. First,
+             chunk granularity or adding a reranker is higher-leverage than      retrieval quality, not LLM capability, bounds accuracy:
+             upgrading the LLM. TTS is the sole latency bottleneck:              all three backends achieve near-identical GR (61–62%), and
+             removing RAG or multi-agent routing saves ≤0.53s while              the on-premise Typhoon-v2.5-30b matches GPT-4o at 3.3×
+             RTF remains >1; architectural simplification would sacrifice        shorter TTFT and zero API cost. Second, TTS is the sole la-
+             groundedness without meaningful speed gains. Safety and             tency bottleneck: the 6.07s median is dominated by synthesis
+             accuracy decouple: SR=100% persists even where AR drops             (RTF=1.54), while RAG and routing add ≤0.53s; sentence-
+             to 0–33%, indicating robust guardrails but a need for retrieval-    level streaming delivers first audio in ≈1.8s. Third, safety is
+             aware gating to prevent silent hallucination. Finally, the mod-     robust but silent hallucination persists: SR=100% across all
+             ular architecture enables independent component upgrades:           115adversarial trials, yet zero-retrieval inputs trigger confident
+             each bottleneck maps to a single replaceable module, allowing       fabrication (AR=0%).
+             isolated validation without full-system retraining.                   These findings, together with the limitations in Sec-
+             F. Failure Analysis                                                 tion VI, motivate five directions: (a) replacing browser ASR
+                                                                                 with server-side Typhoon ASR Real-Time [3], trained on
+                Three failure modes surface under the adversarial conditions     11,000 hours of Thai audio, to eliminate domain-term mis-
+             of Experiment 3 (routing was 100% on the standard set),             recognition; (b) deploying on a server-grade GPU (e.g., A100)
+             ordered by operational severity.                                    to achieve RTF<1 and meaningfully improve C5; (c) a
+             (a) ASR misrecognition. Browser ASR substitutes phoneti-            zero-retrieval gate that suppresses generation and escalates
+             cally similar words for CPE administrative terms, corrupting        to a human advisor when FAISS returns no chunks above a
+             routing while the LLM still produces a fluent but misgrounded       similarity threshold; (d) a confidence threshold on the intent
+             response; mitigation requires server-side Typhoon ASR [3] or        classifier to trigger clarification on ambiguous queries rather
+             a domain hot-word list.                                             than silently committing; and (e) per-session working memory
+             (b) Ambiguous routing (AR=33%). Low-confidence queries              in LangGraph state for co-reference resolution and multi-turn
+             are silently routed to the best-fit category, bypassing RAG; mit-   dialogue.
+             igation requires a classifier confidence threshold that triggers                             REFERENCES
+             a one-turn clarification before retrieval.
+             (c) Zero-retrieval hallucination (AR=0%). When FAISS                 [1] N. Gans, G. Koole, and A. Mandelbaum, “Telephone call centers:
+             returns no chunks, the LLM generates confident fabrications             Tutorial, review, and research prospects,” Manufacturing & Service
+             that pass the safety filter—the most dangerous mode as the              Operations Management, vol. 5, no. 2, pp. 79–141, 2003.
+                                                                                  [2] A. Radford, J. W. Kim, T. Xu, G. Brockman, C. McLeavey, and
+             misinformation is undetectable; mitigation requires a zero-             I. Sutskever, “Robust speech recognition via large-scale weak super-
+             retrieval gate that suppresses generation and escalates to a            vision,” arXiv:2212.04356, 2022.
+             human advisor.                                                       [3] W. Sirichotedumrong et al., “Typhoon ASR real-time: Low-latency
+                                                                                     streaming Thai ASR,” arXiv preprint, 2026.
+                                    VI. LIMITATIONS                               [4] T. Tipaksorn et al., “Pathumma: Thai speech recognition,” arXiv
+                                                                                     preprint, 2024.
+                Several methodological constraints should be noted. The           [5] K. Z. Aung et al., “Thonburian whisper: A Thai-finetuned ASR model,”
+             evaluation corpus comprises only 73 queries from a single               arXiv preprint, 2024.
+                                                                                  [6] X. Tan, T. Qin, F. Soong, and T.-Y. Liu, “A survey on neural speech
+             academic department (CPE at KMUTT); results may not                     synthesis,” arXiv:2106.15561, 2021.
+                                                                                                                             ´
+             generalise to domains with different vocabulary or query             [7] T. Dao, D. Y. Fu, S. Ermon, A. Rudra, and C. Re, “FlashAttention: Fast
+             distributions. Answer groundedness and robustness are scored            and memory-efficient exact attention,” arXiv:2205.14135, 2022.
+                                                                                  [8] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N.
+             by a GPT-4o judge (T=0), which may introduce model-                     Gomez, Ł. Kaiser, and I. Polosukhin, “Attention is all you need,”
+             specific scoring bias; no inter-annotator agreement study with          arXiv:1706.03762, 2017.
+             human raters was conducted, and future work should validate          [9] SCB 10X, “Typhoon2: A family of open Thai large language models,”
+                                                                                     HuggingFace, 2025.
+             these scores against expert annotations and report Cohen’s κ.       [10] Qwen Team, “Qwen3 technical report,” arXiv preprint, 2025.
+             The MOS evaluation relies on only three raters, limiting sta-       [11] P. Lewis et al., “Retrieval-augmented generation for knowledge-intensive
+             tistical power; a larger, demographically diverse panel would           NLP tasks,” in Advances in Neural Information Processing Systems,
+                                                                                     vol. 33, 2020, pp. 9459–9474.
+                                                                                                                 ´
+             strengthen perceptual quality conclusions. All experiments          [12] J. Johnson, M. Douze, and H. Jegou, “Billion-scale similarity search
+             used controlled offline conditions with standard Central Thai           with GPUs,” IEEE Trans. Big Data, vol. 7, no. 3, pp. 535–547, 2021.
+             speakers in quiet environments—the system has not been              [13] PyThaiNLP Contributors, “PyThaiNLP: Thai NLP in Python,” GitHub,
+                                                                                     2024.
+             evaluated with real end-users, diverse regional Thai accents
+             (e.g., Southern, Northeastern), noisy or telephony-grade audio,
+             or multi-turn conversations requiring co-reference resolution
+             and context carry-over.
