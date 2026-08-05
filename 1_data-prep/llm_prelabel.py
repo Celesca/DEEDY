@@ -85,11 +85,11 @@ class DramaGroundTruthAnnotation(BaseModel):
 # 3. System Prompts
 # ==========================================
 CRITIQUE_SYSTEM_PROMPT = """
-You are an expert Thai Social Listening Analyst. Analyze summarized posts regarding a Thai drama topic and extract:
+You are an expert Thai Social Listening Analyst. Analyze summarized posts and external social comments (if provided) regarding a Thai drama topic and extract:
 1. Macro summary (extractive summary, public reaction, key polarization axis).
 2. Micro annotations per post (sentiment: Positive/Neutral/Negative, stance, is_sarcastic boolean).
 
-Detect Thai irony/sarcasm carefully. Output ONLY valid JSON matching this schema:
+Detect Thai irony/sarcasm carefully. Use external social comments as additional context for understanding public sentiment and community reaction. Output ONLY valid JSON matching this schema:
 {
   "macro_summary": {
     "extractive_summary": "...",
@@ -122,6 +122,42 @@ Your task:
 # ==========================================
 # 4. Helper Functions
 # ==========================================
+def load_social_comments(jsonl_path: str) -> Dict[str, List[dict]]:
+    """Loads crawled social comments indexed by topic from JSONL file."""
+    comments_by_topic: Dict[str, List[dict]] = {}
+    if not os.path.exists(jsonl_path):
+        print(
+            f"[*] Social comments file '{jsonl_path}' not found. Continuing"
+            " without external comments."
+        )
+        return comments_by_topic
+
+    try:
+        with open(jsonl_path, "r", encoding="utf-8") as f:
+            for line in f:
+                if not line.strip():
+                    continue
+                try:
+                    obj = json.loads(line.strip())
+                    topic = str(obj.get("topic", "")).strip()
+                    comments = obj.get("comments", [])
+                    if topic and comments:
+                        if topic not in comments_by_topic:
+                            comments_by_topic[topic] = []
+                        comments_by_topic[topic].extend(comments)
+                except Exception:
+                    pass
+        total_comments = sum(len(c) for c in comments_by_topic.values())
+        print(
+            f"[+] Loaded {total_comments} external social comments across"
+            f" {len(comments_by_topic)} topics from '{jsonl_path}'."
+        )
+    except Exception as e:
+        print(f"[!] Error loading social comments from '{jsonl_path}': {e}")
+
+    return comments_by_topic
+
+
 def compute_sentiment_distribution(micro_annotations: List[dict]) -> dict:
     """Calculates deterministic sentiment ratios from micro annotations."""
     if not micro_annotations:
@@ -168,22 +204,46 @@ async def call_critique_agent(
 
 
 async def process_topic_ensemble(
-    drama_topic: str, posts_data: List[dict]
+    drama_topic: str,
+    posts_data: List[dict],
+    social_comments: Optional[List[dict]] = None,
 ) -> Optional[dict]:
     """Runs parallel critique models and synthesizes their outputs using GPT-5.6 Terra."""
-    formatted_input = {
+    formatted_posts = [
+        {
+            "platform": item.get("platform"),
+            "post_title": item.get("post_title"),
+            "summary": item.get("summary"),
+        }
+        for item in posts_data[:15]
+    ]
+
+    formatted_input: Dict[str, Any] = {
         "topic": drama_topic,
-        "summarized_posts": [
-            {
-                "platform": item.get("platform"),
-                "post_title": item.get("post_title"),
-                "summary": item.get("summary"),
-            }
-            for item in posts_data[:15]
-        ],
+        "summarized_posts": formatted_posts,
     }
 
-    payload_prompt = f"Topic and Summaries to Analyze:\n{json.dumps(formatted_input, ensure_ascii=False, indent=2)}"
+    if social_comments:
+        formatted_comments = []
+        for c in social_comments[:20]:  # Limit top 20 comments for context window
+            if isinstance(c, dict):
+                text = c.get("text", "").strip()
+                author = c.get("author", "User")
+                platform = c.get("platform", "")
+                likes = c.get("likes_count", 0)
+                if text:
+                    prefix = f"[{platform}] " if platform else ""
+                    formatted_comments.append(f"{prefix}{author} (Likes: {likes}): {text}")
+            elif isinstance(c, str) and c.strip():
+                formatted_comments.append(c.strip())
+
+        if formatted_comments:
+            formatted_input["external_social_comments"] = formatted_comments
+
+    payload_prompt = (
+        "Topic, Summaries, and Context to Analyze:\n"
+        + json.dumps(formatted_input, ensure_ascii=False, indent=2)
+    )
 
     # 1. Parallel Execution Across the 3 Critique Models
     tasks = [
@@ -266,12 +326,19 @@ Please synthesize these into the final ground truth JSON structure:
 # ==========================================
 # 5. Main Execution Pipeline
 # ==========================================
-async def run_ensemble_pipeline(csv_input_path: str, output_jsonl_path: str):
+async def run_ensemble_pipeline(
+    csv_input_path: str,
+    output_jsonl_path: str,
+    comments_jsonl_path: str = "./data/social_comments_crawled.jsonl",
+):
     print(
         "[+] Loading pre-summarized vLLM CSV dataset from"
         f" '{csv_input_path}'..."
     )
     df = pd.read_csv(csv_input_path)
+
+    # Load external social comments if available
+    social_comments_map = load_social_comments(comments_jsonl_path)
 
     # Filter strictly for relevant posts
     df_clean = df[df["is_related"] == True]
@@ -305,17 +372,23 @@ async def run_ensemble_pipeline(csv_input_path: str, output_jsonl_path: str):
     annotated_count = 0
     with open(output_jsonl_path, "a", encoding="utf-8") as out_f:
         for topic, group in tqdm(grouped_topics, desc="Ensemble Prelabeling"):
-            if topic in existing_topics:
+            str_topic = str(topic).strip()
+            if str_topic in existing_topics:
                 continue
 
             posts_data = group.to_dict(orient="records")
-            result = await process_topic_ensemble(str(topic), posts_data)
+            # Retrieve social comments for exact or stripped topic match
+            social_comments = social_comments_map.get(str_topic) or social_comments_map.get(str(topic))
+
+            result = await process_topic_ensemble(
+                str_topic, posts_data, social_comments=social_comments
+            )
 
             if result:
                 out_f.write(json.dumps(result, ensure_ascii=False) + "\n")
                 out_f.flush()
                 annotated_count += 1
-                existing_topics.add(str(topic))
+                existing_topics.add(str_topic)
 
     print(
         f"[✔] Successfully generated ground truth for {annotated_count} new"
@@ -326,8 +399,13 @@ async def run_ensemble_pipeline(csv_input_path: str, output_jsonl_path: str):
 if __name__ == "__main__":
     INPUT_CSV = "./data/summarized_post_content.csv"
     OUTPUT_JSONL = "./data/ensemble_ground_truth.jsonl"
+    COMMENTS_JSONL = "./data/social_comments_crawled.jsonl"
 
     if os.path.exists(INPUT_CSV):
-        asyncio.run(run_ensemble_pipeline(INPUT_CSV, OUTPUT_JSONL))
+        asyncio.run(
+            run_ensemble_pipeline(
+                INPUT_CSV, OUTPUT_JSONL, comments_jsonl_path=COMMENTS_JSONL
+            )
+        )
     else:
         print(f"[!] Input CSV '{INPUT_CSV}' not found.")
