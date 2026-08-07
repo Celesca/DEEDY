@@ -231,6 +231,73 @@ python facebook_comments.py search --help
 python facebook_comments.py post --help
 ```
 
+## 8. Analyze scraped comments
+
+Run the deterministic Thai/English analysis pipeline after collecting comments:
+
+```bash
+python comment_analysis.py \
+  --input output/parameter_all_facebook_comments.jsonl \
+  --output-dir output/parameter_analysis \
+  --min-high-comments 20
+```
+
+The pipeline writes four artifacts:
+
+- `*_annotated.jsonl` — each comment with normalized text, language, sentiment
+  score/label, stance, emotion, themes, keywords, and quality flags.
+- `*_analysis.json` — machine-readable aggregate counts and per-post metrics.
+- `*_report.md` — a human-readable report with sentiment, themes, emotions,
+  stance, keywords, and sentiment-by-theme tables.
+- `*_high_comment_annotated.jsonl` — comments from posts meeting the selected
+  visible-comment threshold.
+
+The baseline is local and deterministic: it does not require an API key or send
+comment text to an external model. It preserves suspicious merged DOM blocks in
+the annotated file while excluding them from aggregate metrics. Treat the
+sentiment and sarcasm labels as screening estimates and manually validate a
+sample before publication.
+
+## 9. LLM analysis and clustering
+
+For Thai sarcasm, context, mixed sentiment, and semantic clustering, use the
+LLM pipeline instead of the deterministic baseline. It uses an OpenAI-compatible
+endpoint (OpenRouter by default), sends comments in batches, validates structured
+JSON responses, and asks the model for an executive synthesis.
+
+Set the key in the environment; do not commit it:
+
+```bash
+export OPENROUTER_API_KEY="..."
+export LLM_MODEL="qwen/qwen3.7-flash"
+```
+
+Then run:
+
+```bash
+python llm_comment_analysis.py \
+  --input output/parameter_all_facebook_comments.jsonl \
+  --output-dir output/parameter_analysis_llm \
+  --batch-size 20 \
+  --max-concurrency 2 \
+  --min-high-comments 20
+```
+
+The LLM outputs are:
+
+- `*_llm_annotated.jsonl` — model sentiment, score, stance, emotion,
+  sarcasm, cluster, confidence, and short rationale per comment.
+- `*_llm_analysis.json` — exact aggregate counts, cluster taxonomy, failures,
+  and the model synthesis.
+- `*_llm_report.md` — executive summary, sentiment/stance/cluster tables,
+  sarcasm rate, high-engagement posts, and recommended actions.
+- `*_llm_high_comment.jsonl` — classified comments from high-engagement posts.
+
+The prompt treats comment text as untrusted data and never follows instructions
+inside comments. Failed batches are reported instead of silently filling in
+local-rule labels. Review provider costs, retention, and privacy terms before
+sending social comments to an external model.
+
 ## Troubleshooting
 
 ### Facebook redirects to login or checkpoint
