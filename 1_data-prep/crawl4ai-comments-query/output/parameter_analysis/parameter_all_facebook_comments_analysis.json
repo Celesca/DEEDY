@@ -1,0 +1,713 @@
+{
+  "topic": "PARAMETER gelato",
+  "method": "Crawl4AI-visible Facebook comments with deterministic lexicon/rule analysis",
+  "raw_records": 219,
+  "unique_records": 219,
+  "included_in_aggregate": 213,
+  "excluded_quality_records": 6,
+  "parse_errors": 0,
+  "duplicates_removed": 0,
+  "posts_analyzed": 7,
+  "sentiment": {
+    "neutral": {
+      "count": 99,
+      "percent": 46.5
+    },
+    "positive": {
+      "count": 89,
+      "percent": 41.8
+    },
+    "negative": {
+      "count": 25,
+      "percent": 11.7
+    }
+  },
+  "stance": {
+    "neutral": {
+      "count": 151,
+      "percent": 70.9
+    },
+    "supportive": {
+      "count": 28,
+      "percent": 13.1
+    },
+    "inquiry": {
+      "count": 20,
+      "percent": 9.4
+    },
+    "critical_question": {
+      "count": 6,
+      "percent": 2.8
+    },
+    "critical": {
+      "count": 6,
+      "percent": 2.8
+    },
+    "mixed": {
+      "count": 2,
+      "percent": 0.9
+    }
+  },
+  "emotion": {
+    "neutral": {
+      "count": 146,
+      "percent": 68.5
+    },
+    "joy": {
+      "count": 33,
+      "percent": 15.5
+    },
+    "fear_concern": {
+      "count": 11,
+      "percent": 5.2
+    },
+    "trust": {
+      "count": 10,
+      "percent": 4.7
+    },
+    "disappointment": {
+      "count": 7,
+      "percent": 3.3
+    },
+    "anger": {
+      "count": 4,
+      "percent": 1.9
+    },
+    "surprise": {
+      "count": 2,
+      "percent": 0.9
+    }
+  },
+  "language": {
+    "th-en": {
+      "count": 132,
+      "percent": 62.0
+    },
+    "th": {
+      "count": 76,
+      "percent": 35.7
+    },
+    "en": {
+      "count": 5,
+      "percent": 2.3
+    }
+  },
+  "themes": {
+    "other": {
+      "count": 99,
+      "percent": 46.5
+    },
+    "ownership_business": {
+      "count": 37,
+      "percent": 17.4
+    },
+    "service_experience": {
+      "count": 31,
+      "percent": 14.6
+    },
+    "taste_quality": {
+      "count": 24,
+      "percent": 11.3
+    },
+    "brand_communication": {
+      "count": 19,
+      "percent": 8.9
+    },
+    "price_value": {
+      "count": 18,
+      "percent": 8.5
+    },
+    "humor_sarcasm": {
+      "count": 18,
+      "percent": 8.5
+    },
+    "consumption_rules": {
+      "count": 17,
+      "percent": 8.0
+    },
+    "safety_incident": {
+      "count": 15,
+      "percent": 7.0
+    },
+    "comparison": {
+      "count": 6,
+      "percent": 2.8
+    }
+  },
+  "sentiment_by_theme": {
+    "consumption_rules": {
+      "positive": 8,
+      "neutral": 8,
+      "negative": 1
+    },
+    "price_value": {
+      "positive": 8,
+      "neutral": 3,
+      "negative": 7
+    },
+    "taste_quality": {
+      "positive": 17,
+      "negative": 4,
+      "neutral": 3
+    },
+    "comparison": {
+      "positive": 5,
+      "neutral": 1
+    },
+    "humor_sarcasm": {
+      "positive": 6,
+      "neutral": 12
+    },
+    "other": {
+      "positive": 36,
+      "negative": 5,
+      "neutral": 58
+    },
+    "service_experience": {
+      "positive": 13,
+      "neutral": 12,
+      "negative": 6
+    },
+    "ownership_business": {
+      "positive": 19,
+      "neutral": 16,
+      "negative": 2
+    },
+    "brand_communication": {
+      "neutral": 4,
+      "positive": 10,
+      "negative": 5
+    },
+    "safety_incident": {
+      "neutral": 3,
+      "positive": 1,
+      "negative": 11
+    }
+  },
+  "top_keywords": [
+    {
+      "keyword": "ดี",
+      "count": 25
+    },
+    {
+      "keyword": "อร่อย",
+      "count": 19
+    },
+    {
+      "keyword": "จริง",
+      "count": 18
+    },
+    {
+      "keyword": "เจ้าของ",
+      "count": 16
+    },
+    {
+      "keyword": "กิน",
+      "count": 15
+    },
+    {
+      "keyword": "ร้าน",
+      "count": 15
+    },
+    {
+      "keyword": "เจลาโต้",
+      "count": 12
+    },
+    {
+      "keyword": "ไอติม",
+      "count": 12
+    },
+    {
+      "keyword": "555",
+      "count": 11
+    },
+    {
+      "keyword": "เศษแก้ว",
+      "count": 11
+    },
+    {
+      "keyword": "แก้ว",
+      "count": 11
+    },
+    {
+      "keyword": "เชฟ",
+      "count": 10
+    },
+    {
+      "keyword": "พูด",
+      "count": 9
+    },
+    {
+      "keyword": "หุ้น",
+      "count": 9
+    },
+    {
+      "keyword": "ลูกค้า",
+      "count": 9
+    },
+    {
+      "keyword": "ราคา",
+      "count": 8
+    },
+    {
+      "keyword": "ปาก",
+      "count": 8
+    },
+    {
+      "keyword": "ชอบ",
+      "count": 8
+    },
+    {
+      "keyword": "บริษัท",
+      "count": 7
+    },
+    {
+      "keyword": "parameter",
+      "count": 7
+    },
+    {
+      "keyword": "5555",
+      "count": 6
+    },
+    {
+      "keyword": "ลงทุน",
+      "count": 6
+    },
+    {
+      "keyword": "คิว",
+      "count": 6
+    },
+    {
+      "keyword": "แพง",
+      "count": 6
+    },
+    {
+      "keyword": "กฤษณ์",
+      "count": 5
+    },
+    {
+      "keyword": "บาท",
+      "count": 4
+    },
+    {
+      "keyword": "ละคร",
+      "count": 4
+    },
+    {
+      "keyword": "รสชาติ",
+      "count": 3
+    },
+    {
+      "keyword": "เนื้อ",
+      "count": 3
+    },
+    {
+      "keyword": "รส",
+      "count": 3
+    }
+  ],
+  "posts": [
+    {
+      "post_url": "https://www.facebook.com/thestandardwealth/posts/pfbid0qn8vkPMGYtnj6sg5mqgyn9yYhYU4JbcwEpihhYXpdS7cX3Q35CC2ibswy3g6nRqNl",
+      "source": "thestandardwealth",
+      "visible_comment_count": 59,
+      "sentiment": {
+        "neutral": {
+          "count": 34,
+          "percent": 57.6
+        },
+        "positive": {
+          "count": 22,
+          "percent": 37.3
+        },
+        "negative": {
+          "count": 3,
+          "percent": 5.1
+        }
+      },
+      "themes": {
+        "taste_quality": 8,
+        "consumption_rules": 4,
+        "brand_communication": 4,
+        "other": 33,
+        "comparison": 1,
+        "ownership_business": 8,
+        "service_experience": 4,
+        "humor_sarcasm": 4,
+        "price_value": 1,
+        "safety_incident": 2
+      },
+      "high_engagement": true
+    },
+    {
+      "post_url": "https://www.facebook.com/bangkokbiznews/posts/pfbid0M3bF9g6TdVUurHhiehGAGXEEAv7WTrM3YkVkgaiLjnTzah2iwvM3P212GLjhKntcl",
+      "source": "bangkokbiznews",
+      "visible_comment_count": 47,
+      "sentiment": {
+        "neutral": {
+          "count": 24,
+          "percent": 51.1
+        },
+        "positive": {
+          "count": 18,
+          "percent": 38.3
+        },
+        "negative": {
+          "count": 5,
+          "percent": 10.6
+        }
+      },
+      "themes": {
+        "taste_quality": 10,
+        "humor_sarcasm": 5,
+        "price_value": 3,
+        "other": 17,
+        "ownership_business": 14,
+        "service_experience": 8,
+        "brand_communication": 1,
+        "consumption_rules": 4,
+        "safety_incident": 3
+      },
+      "high_engagement": true
+    },
+    {
+      "post_url": "https://www.facebook.com/CheckBait/posts/pfbid035UXjoNPk5ajNxEV5Mr9CjXinRdrpgbrL88dUtxuQ55LiaLZ6fpXHAZNmLVTT9fJql",
+      "source": "CheckBait",
+      "visible_comment_count": 42,
+      "sentiment": {
+        "neutral": {
+          "count": 23,
+          "percent": 54.8
+        },
+        "positive": {
+          "count": 13,
+          "percent": 31.0
+        },
+        "negative": {
+          "count": 6,
+          "percent": 14.3
+        }
+      },
+      "themes": {
+        "other": 28,
+        "consumption_rules": 4,
+        "service_experience": 5,
+        "humor_sarcasm": 3,
+        "brand_communication": 4,
+        "price_value": 1,
+        "safety_incident": 6
+      },
+      "high_engagement": true
+    },
+    {
+      "post_url": "https://www.facebook.com/thansettakij/posts/pfbid0NhhMTFuESJzeWz5S2Q3zdcRjkkVPjbqRbKcaXS3vbptWxQHQXvFguPtJroXtDtFKl",
+      "source": "thansettakij",
+      "visible_comment_count": 31,
+      "sentiment": {
+        "positive": {
+          "count": 18,
+          "percent": 58.1
+        },
+        "neutral": {
+          "count": 7,
+          "percent": 22.6
+        },
+        "negative": {
+          "count": 6,
+          "percent": 19.4
+        }
+      },
+      "themes": {
+        "consumption_rules": 5,
+        "price_value": 5,
+        "taste_quality": 4,
+        "comparison": 5,
+        "humor_sarcasm": 4,
+        "other": 5,
+        "service_experience": 8,
+        "ownership_business": 13,
+        "brand_communication": 8,
+        "safety_incident": 2
+      },
+      "high_engagement": true
+    },
+    {
+      "post_url": "https://www.facebook.com/PrachachatOnline/posts/pfbid02JBNZ3zVKDk9fvdn2yYn5Z29Zx5EFpqt4LbxhkvBkXZSPf3pJggcr3QwTRqfhKuqTl",
+      "source": "PrachachatOnline",
+      "visible_comment_count": 21,
+      "sentiment": {
+        "positive": {
+          "count": 10,
+          "percent": 47.6
+        },
+        "neutral": {
+          "count": 7,
+          "percent": 33.3
+        },
+        "negative": {
+          "count": 4,
+          "percent": 19.0
+        }
+      },
+      "themes": {
+        "price_value": 6,
+        "service_experience": 4,
+        "other": 9,
+        "taste_quality": 2,
+        "safety_incident": 2,
+        "brand_communication": 2
+      },
+      "high_engagement": true
+    },
+    {
+      "post_url": "https://www.facebook.com/ThairathMoney/posts/pfbid02w7xxJ8diuPXN6gVXNkR8Faza9vbBBpPETVanxUiKcRDppKsj1m85PM3JkwmBTE2Xl",
+      "source": "ThairathMoney",
+      "visible_comment_count": 12,
+      "sentiment": {
+        "positive": {
+          "count": 8,
+          "percent": 66.7
+        },
+        "neutral": {
+          "count": 3,
+          "percent": 25.0
+        },
+        "negative": {
+          "count": 1,
+          "percent": 8.3
+        }
+      },
+      "themes": {
+        "ownership_business": 2,
+        "price_value": 2,
+        "service_experience": 2,
+        "other": 6,
+        "humor_sarcasm": 2
+      },
+      "high_engagement": false
+    },
+    {
+      "post_url": "https://www.facebook.com/parameterthailand/posts/pfbid02tUgmMBjN2CpXp6Y5sHfbYXtQFQseTgSsavbE8va1ohzfstdg2qjhDFXzn5StMsjl",
+      "source": "parameterthailand",
+      "visible_comment_count": 1,
+      "sentiment": {
+        "neutral": {
+          "count": 1,
+          "percent": 100.0
+        }
+      },
+      "themes": {
+        "other": 1
+      },
+      "high_engagement": false
+    }
+  ],
+  "representative_comments": {
+    "price_value": [
+      {
+        "post_url": "https://www.facebook.com/bangkokbiznews/posts/pfbid0M3bF9g6TdVUurHhiehGAGXEEAv7WTrM3YkVkgaiLjnTzah2iwvM3P212GLjhKntcl",
+        "sentiment": "negative",
+        "stance": "critical",
+        "text": "มีลูกค้าเจอเศษแก้วในไอติมสุดแพงของพรี่พรี่รู้ยัง"
+      },
+      {
+        "post_url": "https://www.facebook.com/PrachachatOnline/posts/pfbid02JBNZ3zVKDk9fvdn2yYn5Z29Zx5EFpqt4LbxhkvBkXZSPf3pJggcr3QwTRqfhKuqTl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "Pornchai Wongmukdaporn · 2 วันขอที่2,3,4,5อะไรก็ได้ที่คุ้มค่ากับเวลาและเงินที่จ่ายไปถูกใจตอบกลับ"
+      },
+      {
+        "post_url": "https://www.facebook.com/bangkokbiznews/posts/pfbid0M3bF9g6TdVUurHhiehGAGXEEAv7WTrM3YkVkgaiLjnTzah2iwvM3P212GLjhKntcl",
+        "sentiment": "negative",
+        "stance": "critical",
+        "text": "Kom Kompeth · 2 สัปดาห์มีลูกค้าเจอเศษแก้วในไอติมสุดแพงของพรี่พรี่รู้ยัง ถูกใจตอบกลับ"
+      }
+    ],
+    "safety_incident": [
+      {
+        "post_url": "https://www.facebook.com/bangkokbiznews/posts/pfbid0M3bF9g6TdVUurHhiehGAGXEEAv7WTrM3YkVkgaiLjnTzah2iwvM3P212GLjhKntcl",
+        "sentiment": "negative",
+        "stance": "critical",
+        "text": "มีลูกค้าเจอเศษแก้วในไอติมสุดแพงของพรี่พรี่รู้ยัง"
+      },
+      {
+        "post_url": "https://www.facebook.com/bangkokbiznews/posts/pfbid0M3bF9g6TdVUurHhiehGAGXEEAv7WTrM3YkVkgaiLjnTzah2iwvM3P212GLjhKntcl",
+        "sentiment": "negative",
+        "stance": "critical",
+        "text": "Kom Kompeth · 2 สัปดาห์มีลูกค้าเจอเศษแก้วในไอติมสุดแพงของพรี่พรี่รู้ยัง ถูกใจตอบกลับ"
+      },
+      {
+        "post_url": "https://www.facebook.com/PrachachatOnline/posts/pfbid02JBNZ3zVKDk9fvdn2yYn5Z29Zx5EFpqt4LbxhkvBkXZSPf3pJggcr3QwTRqfhKuqTl",
+        "sentiment": "negative",
+        "stance": "inquiry",
+        "text": "แล้วเศษแก้วที่ปนมากับเนื้อไอติมนี่อยู่ในแผนด้วยรึเปล่าครับ?"
+      }
+    ],
+    "service_experience": [
+      {
+        "post_url": "https://www.facebook.com/bangkokbiznews/posts/pfbid0M3bF9g6TdVUurHhiehGAGXEEAv7WTrM3YkVkgaiLjnTzah2iwvM3P212GLjhKntcl",
+        "sentiment": "negative",
+        "stance": "critical",
+        "text": "มีลูกค้าเจอเศษแก้วในไอติมสุดแพงของพรี่พรี่รู้ยัง"
+      },
+      {
+        "post_url": "https://www.facebook.com/thestandardwealth/posts/pfbid0qn8vkPMGYtnj6sg5mqgyn9yYhYU4JbcwEpihhYXpdS7cX3Q35CC2ibswy3g6nRqNl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "Tanisa Amatayakul ผมว่าขายเท่าไหร่มันไม่ผิดหรอก จะเจลาโต หรือจะไอศครีมก็แล้วแต่ชอบครับ ประเด็นคือทัศนะคติของเจ้าร้านมากกว่า ต่อให้คุณอร่อยแค่ไหน ดีแค่ไหนในสายตาคุณมันก็ย่อมมีคนชอบและไม่ชอบ คนชอบก็ชมครับ คนไม่ชอบเขาก็มีสิทธิติ บ่น เพราะคุณเลือกจะออกสื่อ ต่อให้เป็นโครตเชฟก็ไม่สามาร"
+      },
+      {
+        "post_url": "https://www.facebook.com/bangkokbiznews/posts/pfbid0M3bF9g6TdVUurHhiehGAGXEEAv7WTrM3YkVkgaiLjnTzah2iwvM3P212GLjhKntcl",
+        "sentiment": "negative",
+        "stance": "critical",
+        "text": "Kom Kompeth · 2 สัปดาห์มีลูกค้าเจอเศษแก้วในไอติมสุดแพงของพรี่พรี่รู้ยัง ถูกใจตอบกลับ"
+      }
+    ],
+    "taste_quality": [
+      {
+        "post_url": "https://www.facebook.com/thestandardwealth/posts/pfbid0qn8vkPMGYtnj6sg5mqgyn9yYhYU4JbcwEpihhYXpdS7cX3Q35CC2ibswy3g6nRqNl",
+        "sentiment": "negative",
+        "stance": "mixed",
+        "text": "เก่ง การัณย์ ไม่อร่อยเลยครับ ไอติมกะทิ ขนมจีน แกงส้ม คืออาหารยอดแย่เลยสําหรับผม"
+      },
+      {
+        "post_url": "https://www.facebook.com/thestandardwealth/posts/pfbid0qn8vkPMGYtnj6sg5mqgyn9yYhYU4JbcwEpihhYXpdS7cX3Q35CC2ibswy3g6nRqNl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "Narong Neng Sae Lim · 2 สัปดาห์ต้องยอมรับว่าของเขาอร่อยจริง ชาวต่างชาติทุกคนที่ได้ลองกินถึงกับตาโต โดยเฉพาะตอนกัดโดนข้าวเหนียว และเคี้ยวถั่วลิสงอย่างเอร็ดอร่อยพร้อมกับนมราดอย่างเข้มข้น และตอนนี้ไอศกรีมไผ่ทองได้ถูกดันขึ้นเป็นอันดับหนึ่งในโซเชียลแล้วถูกใจตอบกลับ"
+      },
+      {
+        "post_url": "https://www.facebook.com/thansettakij/posts/pfbid0NhhMTFuESJzeWz5S2Q3zdcRjkkVPjbqRbKcaXS3vbptWxQHQXvFguPtJroXtDtFKl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "Integra Sato · 2 สัปดาห์อีกซักพัก อาจจะออกมาบอกว่า จริงๆแล้ว ผมเป็นประธานบริษัท ปลอมตัวมาเป็นเชฟ แต่แดรี่ควีน อร่อยนะครับถูกใจตอบกลับ"
+      }
+    ],
+    "consumption_rules": [
+      {
+        "post_url": "https://www.facebook.com/thestandardwealth/posts/pfbid0qn8vkPMGYtnj6sg5mqgyn9yYhYU4JbcwEpihhYXpdS7cX3Q35CC2ibswy3g6nRqNl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "Narong Neng Sae Lim · 2 สัปดาห์ต้องยอมรับว่าของเขาอร่อยจริง ชาวต่างชาติทุกคนที่ได้ลองกินถึงกับตาโต โดยเฉพาะตอนกัดโดนข้าวเหนียว และเคี้ยวถั่วลิสงอย่างเอร็ดอร่อยพร้อมกับนมราดอย่างเข้มข้น และตอนนี้ไอศกรีมไผ่ทองได้ถูกดันขึ้นเป็นอันดับหนึ่งในโซเชียลแล้วถูกใจตอบกลับ"
+      },
+      {
+        "post_url": "https://www.facebook.com/thestandardwealth/posts/pfbid0qn8vkPMGYtnj6sg5mqgyn9yYhYU4JbcwEpihhYXpdS7cX3Q35CC2ibswy3g6nRqNl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "ต้องยอมรับว่าของเขาอร่อยจริง ชาวต่างชาติทุกคนที่ได้ลองกินถึงกับตาโต โดยเฉพาะตอนกัดโดนข้าวเหนียว และเคี้ยวถั่วลิสงอย่างเอร็ดอร่อยพร้อมกับนมราดอย่างเข้มข้น และตอนนี้ไอศกรีมไผ่ทองได้ถูกดันขึ้นเป็นอันดับหนึ่งในโซเชียลแล้ว"
+      },
+      {
+        "post_url": "https://www.facebook.com/thansettakij/posts/pfbid0NhhMTFuESJzeWz5S2Q3zdcRjkkVPjbqRbKcaXS3vbptWxQHQXvFguPtJroXtDtFKl",
+        "sentiment": "positive",
+        "stance": "neutral",
+        "text": "ชัยชนะ รัตนะ · 2 สัปดาห์กินเเดรี่ควีนดีกว่าถูกใจตอบกลับ"
+      }
+    ],
+    "ownership_business": [
+      {
+        "post_url": "https://www.facebook.com/thansettakij/posts/pfbid0NhhMTFuESJzeWz5S2Q3zdcRjkkVPjbqRbKcaXS3vbptWxQHQXvFguPtJroXtDtFKl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "Integra Sato · 2 สัปดาห์อีกซักพัก อาจจะออกมาบอกว่า จริงๆแล้ว ผมเป็นประธานบริษัท ปลอมตัวมาเป็นเชฟ แต่แดรี่ควีน อร่อยนะครับถูกใจตอบกลับ"
+      },
+      {
+        "post_url": "https://www.facebook.com/thestandardwealth/posts/pfbid0qn8vkPMGYtnj6sg5mqgyn9yYhYU4JbcwEpihhYXpdS7cX3Q35CC2ibswy3g6nRqNl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "Tanisa Amatayakul ผมว่าขายเท่าไหร่มันไม่ผิดหรอก จะเจลาโต หรือจะไอศครีมก็แล้วแต่ชอบครับ ประเด็นคือทัศนะคติของเจ้าร้านมากกว่า ต่อให้คุณอร่อยแค่ไหน ดีแค่ไหนในสายตาคุณมันก็ย่อมมีคนชอบและไม่ชอบ คนชอบก็ชมครับ คนไม่ชอบเขาก็มีสิทธิติ บ่น เพราะคุณเลือกจะออกสื่อ ต่อให้เป็นโครตเชฟก็ไม่สามาร"
+      },
+      {
+        "post_url": "https://www.facebook.com/thansettakij/posts/pfbid0NhhMTFuESJzeWz5S2Q3zdcRjkkVPjbqRbKcaXS3vbptWxQHQXvFguPtJroXtDtFKl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "อีกซักพัก อาจจะออกมาบอกว่า จริงๆแล้ว ผมเป็นประธานบริษัท ปลอมตัวมาเป็นเชฟ แต่แดรี่ควีน อร่อยนะครับ"
+      }
+    ],
+    "comparison": [
+      {
+        "post_url": "https://www.facebook.com/thansettakij/posts/pfbid0NhhMTFuESJzeWz5S2Q3zdcRjkkVPjbqRbKcaXS3vbptWxQHQXvFguPtJroXtDtFKl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "Integra Sato · 2 สัปดาห์อีกซักพัก อาจจะออกมาบอกว่า จริงๆแล้ว ผมเป็นประธานบริษัท ปลอมตัวมาเป็นเชฟ แต่แดรี่ควีน อร่อยนะครับถูกใจตอบกลับ"
+      },
+      {
+        "post_url": "https://www.facebook.com/thansettakij/posts/pfbid0NhhMTFuESJzeWz5S2Q3zdcRjkkVPjbqRbKcaXS3vbptWxQHQXvFguPtJroXtDtFKl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "อีกซักพัก อาจจะออกมาบอกว่า จริงๆแล้ว ผมเป็นประธานบริษัท ปลอมตัวมาเป็นเชฟ แต่แดรี่ควีน อร่อยนะครับ"
+      },
+      {
+        "post_url": "https://www.facebook.com/thestandardwealth/posts/pfbid0qn8vkPMGYtnj6sg5mqgyn9yYhYU4JbcwEpihhYXpdS7cX3Q35CC2ibswy3g6nRqNl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "Narong Neng Sae Lim เจลาโตไม่ใช่ไอศครีมกรีม กระบวนการผลิตต่างกันใช้ความเย็นต่างกันและจะละลายเร็วมาก ที่เค้าแถลงไม่ได้แตกต่างไปจากความเป็นจริงในตําราแต่อย่างใด #เจลาโตไม่ใช่ไอศกรีม เปรียบเทียบกันไม่ได้ ต่างก็อร่อยแบบของตน แต่ไม่ได้มีคุณสมบัติเหมือนกันและวิธีรับประทานก็ไม่เหมือนกัน"
+      }
+    ],
+    "humor_sarcasm": [
+      {
+        "post_url": "https://www.facebook.com/bangkokbiznews/posts/pfbid0M3bF9g6TdVUurHhiehGAGXEEAv7WTrM3YkVkgaiLjnTzah2iwvM3P212GLjhKntcl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "Siradit Sabrachan · 2 สัปดาห์จะรั่วเลย ไปเรียนอิตาลีมา 5 ปี มั่นใจว่าดีสุดในโลก อร่อยกว่ามิชลิน อร่อยกว่าที่อิตาลี แต่ไปเป็นลูกจ้างเขาอะนะ 555555555555ถูกใจตอบกลับ"
+      },
+      {
+        "post_url": "https://www.facebook.com/thansettakij/posts/pfbid0NhhMTFuESJzeWz5S2Q3zdcRjkkVPjbqRbKcaXS3vbptWxQHQXvFguPtJroXtDtFKl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "ชัยชนะ รัตนะ อร่อยจริง ดลค เคยกลับหัวแล้วไอศครีมตกพื้นด้วย พนักงานไม่ได้กดแน่น ฮาเลย5555"
+      },
+      {
+        "post_url": "https://www.facebook.com/bangkokbiznews/posts/pfbid0M3bF9g6TdVUurHhiehGAGXEEAv7WTrM3YkVkgaiLjnTzah2iwvM3P212GLjhKntcl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "จะรั่วเลย ไปเรียนอิตาลีมา 5 ปี มั่นใจว่าดีสุดในโลก อร่อยกว่ามิชลิน อร่อยกว่าที่อิตาลี แต่ไปเป็นลูกจ้างเขาอะนะ 555555555555"
+      }
+    ],
+    "brand_communication": [
+      {
+        "post_url": "https://www.facebook.com/thestandardwealth/posts/pfbid0qn8vkPMGYtnj6sg5mqgyn9yYhYU4JbcwEpihhYXpdS7cX3Q35CC2ibswy3g6nRqNl",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "Tanisa Amatayakul ผมว่าขายเท่าไหร่มันไม่ผิดหรอก จะเจลาโต หรือจะไอศครีมก็แล้วแต่ชอบครับ ประเด็นคือทัศนะคติของเจ้าร้านมากกว่า ต่อให้คุณอร่อยแค่ไหน ดีแค่ไหนในสายตาคุณมันก็ย่อมมีคนชอบและไม่ชอบ คนชอบก็ชมครับ คนไม่ชอบเขาก็มีสิทธิติ บ่น เพราะคุณเลือกจะออกสื่อ ต่อให้เป็นโครตเชฟก็ไม่สามาร"
+      },
+      {
+        "post_url": "https://www.facebook.com/thestandardwealth/posts/pfbid0qn8vkPMGYtnj6sg5mqgyn9yYhYU4JbcwEpihhYXpdS7cX3Q35CC2ibswy3g6nRqNl",
+        "sentiment": "positive",
+        "stance": "neutral",
+        "text": "Good Day · 2 สัปดาห์คนไทย !! มีคําพูดนึงที่ว่าหากเห็นคนล้ม อย่าข้าม !!! รออยู่นะจ๊ะพ่อคนมีมายเซ็ทที่ดีที่สุดในประเทศไทยถูกใจตอบกลับ"
+      },
+      {
+        "post_url": "https://www.facebook.com/thansettakij/posts/pfbid0NhhMTFuESJzeWz5S2Q3zdcRjkkVPjbqRbKcaXS3vbptWxQHQXvFguPtJroXtDtFKl",
+        "sentiment": "negative",
+        "stance": "neutral",
+        "text": "วั๊ยยยยยย นอกกะลา กินเงินเดือนฉ่ําๆๆ ไม่ต้องแบกอะไร"
+      }
+    ],
+    "other": [
+      {
+        "post_url": "https://www.facebook.com/CheckBait/posts/pfbid035UXjoNPk5ajNxEV5Mr9CjXinRdrpgbrL88dUtxuQ55LiaLZ6fpXHAZNmLVTT9fJql",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "ชัยรัตน์ ภักดีบัณฑิต · 2 วัน · โดยผู้เขียนอ่านแว้บแรก นึกว่าชอบเล่นถูกใจตอบกลับ"
+      },
+      {
+        "post_url": "https://www.facebook.com/CheckBait/posts/pfbid035UXjoNPk5ajNxEV5Mr9CjXinRdrpgbrL88dUtxuQ55LiaLZ6fpXHAZNmLVTT9fJql",
+        "sentiment": "positive",
+        "stance": "supportive",
+        "text": "มะระ ข่มปี๋ · 2 วัน · โดยผู้เขียน3 รายการที่ผมชอบมากที่สุด1. อายุน้อยร้อยล้าน2. เคหสถานบานปลาย3. woody talkถูกใจตอบกลับ"
+      },
+      {
+        "post_url": "https://www.facebook.com/thansettakij/posts/pfbid0NhhMTFuESJzeWz5S2Q3zdcRjkkVPjbqRbKcaXS3vbptWxQHQXvFguPtJroXtDtFKl",
+        "sentiment": "negative",
+        "stance": "neutral",
+        "text": "ชัยชนะ รัตนะ สมูทพ่อง โคตรหยาบ"
+      }
+    ]
+  },
+  "limitations": [
+    "Counts represent comments visible to the authenticated Crawl4AI profile, not all Facebook comments.",
+    "Facebook ranking, moderation, privacy settings, and DOM changes can affect coverage.",
+    "Sentiment and sarcasm are rule-based Thai/English estimates; validate a sample manually before publication.",
+    "Large merged DOM blocks are preserved but excluded from aggregates when they resemble post text plus comments."
+  ]
+}

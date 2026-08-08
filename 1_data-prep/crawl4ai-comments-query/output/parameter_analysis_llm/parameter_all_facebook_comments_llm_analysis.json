@@ -1,0 +1,174 @@
+{
+  "model_annotations": 219,
+  "sentiment": {
+    "neutral": 86,
+    "negative": 101,
+    "positive": 32
+  },
+  "stance": {
+    "inquiry": 31,
+    "critical": 98,
+    "neutral": 58,
+    "supportive": 28,
+    "mixed": 4
+  },
+  "clusters": {
+    "ownership_business": 40,
+    "comparison": 12,
+    "price_value": 7,
+    "general_reaction": 62,
+    "service_experience": 3,
+    "brand_communication": 68,
+    "safety_incident": 12,
+    "taste_quality": 12,
+    "consumption_rules": 3
+  },
+  "emotions": {
+    "neutral": 81,
+    "concern": 51,
+    "disappointment": 48,
+    "surprise": 41,
+    "humor": 46,
+    "trust": 24,
+    "joy": 24,
+    "anger": 50
+  },
+  "sarcasm_count": 42,
+  "sarcasm_percent": 19.2,
+  "posts": [
+    {
+      "post_url": "https://www.facebook.com/thestandardwealth/posts/pfbid0qn8vkPMGYtnj6sg5mqgyn9yYhYU4JbcwEpihhYXpdS7cX3Q35CC2ibswy3g6nRqNl",
+      "source": "thestandardwealth",
+      "comment_count": 60,
+      "sentiment": {
+        "neutral": 21,
+        "positive": 13,
+        "negative": 26
+      },
+      "high_engagement": true
+    },
+    {
+      "post_url": "https://www.facebook.com/bangkokbiznews/posts/pfbid0M3bF9g6TdVUurHhiehGAGXEEAv7WTrM3YkVkgaiLjnTzah2iwvM3P212GLjhKntcl",
+      "source": "bangkokbiznews",
+      "comment_count": 48,
+      "sentiment": {
+        "neutral": 12,
+        "negative": 29,
+        "positive": 7
+      },
+      "high_engagement": true
+    },
+    {
+      "post_url": "https://www.facebook.com/CheckBait/posts/pfbid035UXjoNPk5ajNxEV5Mr9CjXinRdrpgbrL88dUtxuQ55LiaLZ6fpXHAZNmLVTT9fJql",
+      "source": "CheckBait",
+      "comment_count": 43,
+      "sentiment": {
+        "neutral": 23,
+        "positive": 9,
+        "negative": 11
+      },
+      "high_engagement": true
+    },
+    {
+      "post_url": "https://www.facebook.com/thansettakij/posts/pfbid0NhhMTFuESJzeWz5S2Q3zdcRjkkVPjbqRbKcaXS3vbptWxQHQXvFguPtJroXtDtFKl",
+      "source": "thansettakij",
+      "comment_count": 32,
+      "sentiment": {
+        "neutral": 11,
+        "negative": 19,
+        "positive": 2
+      },
+      "high_engagement": true
+    },
+    {
+      "post_url": "https://www.facebook.com/PrachachatOnline/posts/pfbid02JBNZ3zVKDk9fvdn2yYn5Z29Zx5EFpqt4LbxhkvBkXZSPf3pJggcr3QwTRqfhKuqTl",
+      "source": "PrachachatOnline",
+      "comment_count": 22,
+      "sentiment": {
+        "negative": 12,
+        "neutral": 9,
+        "positive": 1
+      },
+      "high_engagement": true
+    },
+    {
+      "post_url": "https://www.facebook.com/ThairathMoney/posts/pfbid02w7xxJ8diuPXN6gVXNkR8Faza9vbBBpPETVanxUiKcRDppKsj1m85PM3JkwmBTE2Xl",
+      "source": "ThairathMoney",
+      "comment_count": 13,
+      "sentiment": {
+        "neutral": 9,
+        "negative": 4
+      },
+      "high_engagement": false
+    },
+    {
+      "post_url": "https://www.facebook.com/parameterthailand/posts/pfbid02tUgmMBjN2CpXp6Y5sHfbYXtQFQseTgSsavbE8va1ohzfstdg2qjhDFXzn5StMsjl",
+      "source": "parameterthailand",
+      "comment_count": 1,
+      "sentiment": {
+        "neutral": 1
+      },
+      "high_engagement": false
+    }
+  ],
+  "raw_records": 219,
+  "parse_errors": 0,
+  "failed_batches": 0,
+  "model": "qwen/qwen3.7-flash",
+  "cluster_taxonomy": {
+    "price_value": "ราคา ความคุ้มค่า ความแพง และกำลังซื้อ",
+    "taste_quality": "รสชาติ คุณภาพ เนื้อสัมผัส และประสบการณ์การกิน",
+    "safety_incident": "ความปลอดภัย เศษแก้ว การบาดเจ็บ และความรับผิดชอบ",
+    "consumption_rules": "กติกาการกิน ห้ามเคี้ยว ห้ามถ่ายรูป อุณหภูมิ และการละลาย",
+    "brand_communication": "คำพูด mindset การสื่อสาร ภาพลักษณ์ และการดูถูกผู้บริโภค",
+    "ownership_business": "เจ้าของ หุ้น เชฟ บริษัท รายได้ ขาดทุน และการลงทุน",
+    "service_experience": "ร้าน พนักงาน บริการ คิว และประสบการณ์หน้าร้าน",
+    "comparison": "การเปรียบเทียบกับร้านหรือแบรนด์อื่น",
+    "general_reaction": "ปฏิกิริยาทั่วไปที่ไม่เข้ากลุ่มข้างต้น"
+  },
+  "synthesis": {
+    "executive_summary": "การวิเคราะห์ข้อมูลโซเชียลมีเดียชี้ให้เห็นว่ากระแสความสนใจต่อแบรนด์ PARAMETER Gelato มีแนวโน้มเชิงลบเป็นหลัก โดยกลุ่มผู้ใช้งานแสดงความกังวลและผิดหวังสูงที่สุด สาเหตุสำคัญมาจากความไม่ชัดเจนในโครงสร้างความเป็นเจ้าของ การสื่อสารที่สร้างภาพลักษณ์ขัดกับข้อเท็จจริง รวมถึงประเด็นความปลอดภัยและราคาที่ไม่สอดคล้องกับมูลค่าที่ได้รับ แม้จะมีเสียงชมเชยด้านรสชาติและประสบการณ์บริการบ้าง แต่ยังคงถูกบดบังด้วยกระแสวิพากษ์วิจารณ์และการใช้ภาษาประชดประชันอย่างกว้างขวาง",
+    "positive_drivers": [
+      "รสชาติและเนื้อสัมผัสผ่านเกณฑ์มาตรฐาน",
+      "ประสบการณ์บริการแบบขำขันสร้างความบันเทิง",
+      "การยืนยันข้อมูลจากแหล่งทางการเพิ่มความน่าเชื่อถือ",
+      "ความนิยมต่อเนื่องแม้มีกระแสวิพากษ์"
+    ],
+    "negative_drivers": [
+      "ความคลุมเครือเรื่องโครงสร้างผู้ถือหุ้นและบทบาทเจ้าของ",
+      "การสื่อสารแบรนด์ที่ดูโอ้อวดหรือขาดความจริงใจ",
+      "ราคาที่สูงเมื่อเทียบกับปริมาณและความคุ้มค่า",
+      "ประเด็นสิ่งแปลกปลอมเศษแก้วในผลิตภัณฑ์",
+      "การเปรียบเทียบกับคู่แข่งที่ได้เปรียบกว่าด้านมาตรฐาน",
+      "การใช้ภาษาหรือทัศนคติที่กระตุ้นอารมณ์โกรธ"
+    ],
+    "polarization_axes": [
+      "ตัวตนเจ้าของธุรกิจ versus ภาพลักษณ์เชฟมืออาชีพ",
+      "ราคาพรีเมียม versus ความคาดหวังผู้บริโภคทั่วไป",
+      "กระแสไวรัล versus คุณภาพและความปลอดภัยจริง",
+      "การอ้างสิทธิ์ระดับโลก versus ข้อเท็จจริงทางธุรกิจ"
+    ],
+    "sarcasm_patterns": [
+      "การยกย่องเกินจริงเพื่อเสียดสีการอ้างอันดับโลก",
+      "การเปรียบเทียบย้อนแย้งโดยชมคู่แข่งไปพร้อมกัน",
+      "การตั้งคำถามเชิงประชดเกี่ยวกับสถานะพนักงาน versus เจ้าของ",
+      "การเสนอแนะเชิงล้อเลียนให้ย้ายฐานการผลิตไปยังประเทศต้นตำรับ",
+      "การใช้คำขำขันลดทอนความน่าเชื่อถือของการสื่อสารแบรนด์"
+    ],
+    "recommended_actions": [
+      "ออกแถลงการณ์ชี้แจงโครงสร้างบริษัทและบทบาทผู้บริหารอย่างโปร่งใส",
+      "ตรวจสอบกระบวนการผลิตและตอบโต้กรณีเศษแก้วทันทีเพื่อฟื้นฟูความเชื่อมั่น",
+      "ทบทวนกลยุทธ์ราคาหรือเพิ่มคุณค่าที่จับต้องได้ให้สอดคล้องกับจุดขาย",
+      "ฝึกอบรมทีมสื่อสารและพนักงานหน้าร้านเรื่องการจัดการวิกฤตและน้ำเสียงที่เหมาะสม",
+      "ติดตามและแก้ไขข่าวลือโครงสร้างหุ้นอย่างรวดเร็วเพื่อป้องกันความเสียหายระยะยาว"
+    ],
+    "caveats": [
+      "ข้อมูลมาจากการจัดประเภทโดยโมเดล LLM จำนวน 219 รายการ ซึ่งอาจมีความคลาดเคลื่อนบ้าง",
+      "ตัวอย่างความคิดเห็นเป็นชุดย่อยและไม่ครอบคลุมทุกแพลตฟอร์ม",
+      "สัดส่วนเชิงลบสูงอาจได้รับอิทธิพลจากเพจข่าวที่มีอัตราการมีส่วนร่วมสูง",
+      "การตรวจจับภาษาประชดอาจพลาดบริบทหรือระดับความรุนแรงที่แท้จริง",
+      "ผลการวิเคราะห์สะท้อนช่วงเวลาเฉพาะและอาจเปลี่ยนแปลงตามพัฒนาการของกระแส"
+    ]
+  },
+  "failures": []
+}
