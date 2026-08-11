@@ -2,66 +2,45 @@
 
 ```mermaid
 flowchart TD
-    A["Topic Definition<br/><code>data/topic.json</code>"] --> B["1. Source Discovery<br/><code>discover_v2.py</code>"]
-    B -->|DDG, Bing RSS, Pantip API, TikTok| C["Discovery References<br/><code>data/drama_ref.jsonl</code>"]
-    C --> D["2. Content Scraping<br/><code>drama_crawler.py</code>"]
-    D -->|Wayback Machine Fallback, Markdownify| E["Raw Scraped Content<br/><code>data/scraped_content.jsonl</code>"]
-    E --> F["3. Text Cleansing<br/><code>text_cleansing.py</code>"]
-    F -->|Thai/English/Punctuation Filter| G["Summarized Post Content<br/><code>data/summarized_post_content.csv</code>"]
-    G --> H["4. LLM Pre-labeling<br/><code>llm_prelabel.py</code>"]
-    H -->|Multi-Model Critique & Synthesis Ensemble| I["Ground Truth Annotations<br/><code>data/ensemble_ground_truth.jsonl</code>"]
+    A["Topic & Reference URLs<br/><code>data/topic_ref.json</code>"] --> B["1. Apify Social Comment Scraping<br/><code>apify_crawler.py</code>"]
+    B -->|Facebook, Instagram, TikTok Actors| C["Raw Crawled Comments<br/><code>data/social_comments_crawled.jsonl</code>"]
+    C --> D["2. Dataset Flattening & CSV Export<br/><code>convert_comments_to_csv.py</code>"]
+    D -->|Tabular Format & UTF-8-SIG Encoding| E["Tabular Comments Dataset<br/><code>data/social_comments_crawled.csv</code>"]
+    C & E --> F["3. LLM Ensemble Marketing Analysis<br/><code>llm_prelabel.py</code>"]
+    F -->|Multi-Model Critique & Synthesis Ensemble| G["Campaign Analysis JSONL<br/><code>data/campaign_sentiment_analysis.jsonl</code>"]
+    F -->|Executive Summary Export| H["Campaign Summary CSV<br/><code>data/campaign_sentiment_summary.csv</code>"]
 ```
 
 ---
 
 ## 🛠️ Key Pipeline Stages
 
-### 1. Source Discovery (`discover_v2.py` / `source_discover.py`)
-Discovers relevant news articles, blog posts, forum discussions, and video links for each topic in `data/topic.json`.
-- **DuckDuckGo Search (`ddgs`)**: Primary keyless web & news discovery tailored to the Thailand region (`th-th`).
-- **Bing News RSS**: Secondary fallback feed mechanism.
-- **Pantip Search**: Direct native API endpoint (`https://pantip.com/api/forum-service/home/get_search`) with BeautifulSoup HTML parsing fallback for Thai forum topics.
-- **TikTok Web Search**: Constructs targeted video and comment search URLs.
+### 1. Apify Social Comment Crawler (`apify_crawler.py`)
+Scrapes user comments across social media platforms for targeted marketing campaign topics defined in `data/topic_ref.json`.
+- **Platform Auto-Detection**: Inspects URL patterns to automatically route target links to the appropriate scraper:
+  - **Facebook**: `apify/facebook-comments-scraper`
+  - **Instagram**: `apify/instagram-comment-scraper`
+  - **TikTok**: `clockworks/tiktok-comments-scraper`
+- **Data Normalization & Pydantic Validation**: Sanitizes raw actor payloads (handles nested user metadata, dict/primitive conversion, missing fields) into strict `ExtractedComment` and `SocialPostCommentsResult` schemas.
+- **Topic Comment Cap & Resumable Execution**: Caps comment extraction per topic (default 1,000 comments/topic) and skips already processed topics in `data/social_comments_crawled.jsonl`.
 
-### 2. Content Scraping (`drama_crawler.py`)
-Scrapes full article bodies and user comments from discovered URLs.
-- **Redirect Resolution**: Resolves Google News RSS redirect URLs using `googlenewsdecoder`.
-- **Wayback Machine Fallback**: Automatically fetches cached snapshots from Archive.org if a web source returns HTTP 403 or is blocked.
-- **Markdown Conversion**: Converts raw HTML DOM to structured Markdown via `BeautifulSoup` and `markdownify`.
-- **Custom Forum Scraper**: Specialized extraction for Pantip main posts and top comments.
+### 2. Comment Dataset Flattening & CSV Export (`convert_comments_to_csv.py`)
+Flattens nested JSONL comment payloads into a structured CSV file for data inspection and analysis.
+- **Tabular Column Mapping**: Extracts key fields: `Topic`, `comment`, `Author`, `Likes_Count`, `Platform`, `Post_URL`, `Comment_ID`, `Parent_Comment_ID`, and `Timestamp`.
+- **Unicode / Excel Compatibility**: Exports using `utf-8-sig` encoding to properly render Thai characters and symbols in Excel.
 
-### 3. Text Cleansing (`text_cleansing.py`)
-Cleans and normalizes the scraped Markdown data.
-- **Allowed Character Filtering**: Retains only:
-  - **Thai Unicode Characters** (`\u0e00-\u0e7f`)
-  - **English Letters** (`a-zA-Z`)
-  - **Digits** (`0-9`)
-  - **Standard ASCII & Markdown Punctuation** (`!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~`)
-  - **Whitespace & Newlines** (`\s`)
-- **Noise Stripping**: Removes emojis, foreign non-Latin scripts (Chinese, Cyrillic, etc.), control characters, and encoding artifacts.
-
-### 4. LLM Ground Truth Annotation (`llm_prelabel.py`)
-Generates structured NLP pre-labeling annotations using an asynchronous Multi-Model Critique & Synthesis Ensemble via OpenRouter.
+### 3. LLM Ensemble Marketing & Sentiment Analysis (`llm_prelabel.py`)
+Generates comprehensive marketing campaign insights and sentiment pre-labeling annotations via OpenRouter using an asynchronous Multi-Model Critique & Synthesis Ensemble.
 - **Stage 1: Multi-Model Parallel Critique**:
   - Concurrently queries 3 critique models per topic using `asyncio.gather`:
     - `deepseek/deepseek-v4-flash`
     - `qwen/qwen3.7-flash`
     - `google/gemini-3.5-flash-lite`
-  - Each critique model evaluates summarized posts for macro trends and micro post annotations.
+  - Each critique model evaluates comment samples for individual comment sentiment (`Positive`, `Neutral`, `Negative`), public reaction themes, marketing campaign next steps, and operational business adjustments.
 - **Stage 2: Meta-Synthesis**:
-  - Uses `openai/gpt-5.6-terra` as Lead Meta-Summarizer to synthesize all 3 critique reports into a single ground-truth JSON structure.
-  - Resolves minor sentiment and stance disagreements using majority consensus.
-- **Macro Trend Summary**:
-  - `extractive_summary`: Factual 2–3 sentence summary of what actually happened.
-  - `public_opinion_direction`: Summary of public reaction, debates, and dominant viewpoints.
-  - `key_polarization_axis`: Main conflict axis (e.g., *Authentic Ingredients vs. Food Innovation*).
-- **Deterministic Sentiment Ratios**: `estimated_sentiment_distribution` (`positive`, `neutral`, `negative`) computed directly in Python from final micro annotations.
-- **Micro Post Annotations**:
-  - `title_or_snippet`: Title or key sentence snippet.
-  - `sentiment_label`: `Positive`, `Neutral`, or `Negative`.
-  - `stance_label`: Core stance (e.g., *Purist*, *Pragmatist*, *Brand Defense*, *Skeptical*).
-  - `is_sarcastic`: Flag for Thai internet irony, double meaning, or sarcasm.
-- **Fault-Tolerant & Resumable Execution**: Resumable pipeline that checks `data/ensemble_ground_truth.jsonl` to skip previously annotated topics and flushes progress to disk.
+  - Uses `openai/gpt-5.6-terra` as Lead Marketing Strategist & Meta-Summarizer to synthesize all 3 critique reports into a unified consensus analysis.
+- **Exact Sentiment Ratios**: Calculates scaled positive, neutral, and negative comment counts along with percentage distributions.
+- **Resumable Output**: Saves detailed JSON records to `data/campaign_sentiment_analysis.jsonl` and flattens an executive summary report to `data/campaign_sentiment_summary.csv`.
 
 ---
 
@@ -70,19 +49,16 @@ Generates structured NLP pre-labeling annotations using an asynchronous Multi-Mo
 ```
 DEEDY/
 ├── data/
-│   ├── topic.json                    # Input topics & search keywords
-│   ├── drama_ref.jsonl               # Discovered reference URLs per topic
-│   ├── scraped_content.jsonl         # Raw scraped Markdown content
-│   ├── scraped_content_cleaned.jsonl # Cleaned Markdown text
-│   ├── summarized_post_content.csv   # Pre-summarized vLLM CSV dataset
-│   └── ensemble_ground_truth.jsonl   # Final LLM ensemble pre-labeled ground truth
-├── web_scraping/                     # Discovery and crawler modules
-│   ├── discover_v2.py                # Multi-source web discovery engine
-│   ├── drama_crawler.py              # Scraper with Wayback Machine fallback
-│   └── source_discover.py            # Legacy source discovery script
-├── text_cleansing.py                 # Text normalization & character filtering
-├── llm_prelabel.py                   # Multi-model critique & synthesis pre-labeling engine
-└── README.md                         # Documentation
+│   ├── topic_ref.json                   # Input campaign topics & social reference URLs
+│   ├── social_comments_crawled.jsonl    # Raw scraped social comments from Apify
+│   ├── social_comments_crawled.csv      # Exported tabular comments dataset
+│   ├── campaign_sentiment_analysis.jsonl# Full LLM ensemble marketing analysis
+│   └── campaign_sentiment_summary.csv  # Flattened executive summary CSV report
+├── apify_crawler.py                     # Apify comment scraper wrapper & pipeline
+├── convert_comments_to_csv.py           # JSONL comment flattening utility
+├── llm_prelabel.py                      # Multi-model critique & synthesis analysis engine
+├── .env                                 # API configuration (Apify & OpenRouter keys)
+└── README.md                            # Documentation
 ```
 
 ---
@@ -91,13 +67,14 @@ DEEDY/
 
 ### Prerequisites
 
-Install Python 3.10+ and required packages:
+Install Python 3.10+ and required dependencies:
 ```bash
-pip install requests beautifulsoup4 feedparser markdownify duckduckgo_search pydantic tqdm python-dotenv openai
+pip install apify-client pydantic pandas openai tqdm python-dotenv
 ```
 
-Set your OpenRouter API Key in a `.env` file in the project root:
+Set your API keys in a `.env` file in the project root:
 ```env
+APIFY_API_TOKEN="your-apify-api-token-here"
 OPENROUTER_API_KEY="your-openrouter-api-key-here"
 ```
 
@@ -105,52 +82,66 @@ OPENROUTER_API_KEY="your-openrouter-api-key-here"
 
 ## 💻 Running the Pipeline
 
-### Step 1: Discover Sources
+### Step 1: Scrape Social Comments via Apify
 ```bash
-python discover_v2.py
+python apify_crawler.py
 ```
 
-### Step 2: Scrape Content
+### Step 2: Convert Crawled Comments to CSV
 ```bash
-python drama_crawler.py
+python convert_comments_to_csv.py
 ```
 
-### Step 3: Clean & Normalize Text
-```bash
-python text_cleansing.py
-```
-
-### Step 4: Run LLM Pre-labeling Pipeline
+### Step 3: Run LLM Ensemble Marketing Analysis
 ```bash
 python llm_prelabel.py
 ```
 
 ---
 
-## 📊 Output Data Format
+## 📊 Output Data Formats
 
-Example JSON object in `data/ensemble_ground_truth.jsonl`:
+### 1. Crawled Comments (`data/social_comments_crawled.jsonl`)
 
 ```json
 {
-  "topic": "ผัดกะเพราที่แท้จริงต้องใส่แค่กะเพรา...",
-  "macro_summary": {
-    "extractive_summary": "ดราม่าเรื่องส่วนผสมของผัดกะเพราไทย...",
-    "public_opinion_direction": "ผู้บริโภคแบ่งออกเป็นกลุ่มอนุรักษ์นิยมและกลุ่มเน้นความสะดวก...",
-    "key_polarization_axis": "Authentic Ingredients vs. Commercial Innovation",
-    "estimated_sentiment_distribution": {
-      "positive": 0.20,
-      "neutral": 0.30,
-      "negative": 0.50
-    }
-  },
-  "micro_post_annotations": [
+  "topic": "Parameter Gelato",
+  "platform": "TikTok",
+  "post_url": "https://www.tiktok.com/@krissrepoomseth/video/7647915423660264722",
+  "total_comments": 45,
+  "comments": [
     {
-      "title_or_snippet": "KFC หยิบอินไซต์ 'กะเพราไม่แท้' ปั้นหนังสั้นโปรโมตเมนูใหม่",
-      "sentiment_label": "Neutral",
-      "stance_label": "Commercial Innovation",
-      "is_sarcastic": false
+      "comment_id": "7647920112345678901",
+      "platform": "TikTok",
+      "post_url": "https://www.tiktok.com/@krissrepoomseth/video/7647915423660264722",
+      "author": "IceCreamLover",
+      "text": "รสชาตินี้อร่อยมากครับ อยากให้ทำไซส์ใหญ่ขึ้น",
+      "likes_count": 12,
+      "parent_comment_id": null,
+      "timestamp": "2026-08-01T10:15:30Z"
     }
   ]
+}
+```
+
+### 2. Campaign Analysis (`data/campaign_sentiment_analysis.jsonl`)
+
+```json
+{
+  "topic": "Parameter Gelato",
+  "total_comments_analyzed": 45,
+  "sentiment_direction_analysis": "ผู้บริโภคส่วนใหญ่ให้ผลตอบรับเชิงบวกต่อรสชาติไอศกรีม...",
+  "sentiment_counts": {
+    "positive": 30,
+    "neutral": 10,
+    "negative": 5,
+    "positive_ratio": 0.6667,
+    "neutral_ratio": 0.2222,
+    "negative_ratio": 0.1111
+  },
+  "suggestions": {
+    "campaign_next_steps": "ขยายแคมเปญโปรโมตกลุ่มสินค้าใหม่ และร่วมมือกับอินฟลูเอนเซอร์สายอาหาร...",
+    "business_changes_needed": "เพิ่มกำลังการผลิต และปรับปรุงระบบการจัดส่งไอศกรีมให้คงความเย็นดียิ่งขึ้น"
+  }
 }
 ```
