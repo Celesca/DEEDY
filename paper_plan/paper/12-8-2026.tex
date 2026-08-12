@@ -55,91 +55,45 @@ NLP, GraphRAG, MiroFish, Apify
 
 \section{Introduction}
 
-Marketing campaigns on social media are not one-way messages. Consumers reply
-to a campaign post, react to one another, repeat or contest emerging claims,
-and carry interpretations across platform feeds. A favorable first response
-may be displaced by complaints about price, product quality, brand conduct, or
-the credibility of an influencer; conversely, a small positive narrative may
-grow through recommendation and peer endorsement. Counting likes or assigning
-sentiment to comments can summarize a snapshot, but it cannot by itself
-represent the interaction process through which campaign narratives emerge.
-Agent-based modeling (ABM) provides a bottom-up way to represent local exposure
-and response decisions and observe their collective consequences
-~\cite{macal2010tutorial}.
+Social-media campaigns develop through interaction: consumers respond to a
+post, influence one another, and amplify or contest emerging narratives.
+Engagement counts and independent sentiment labels summarize reaction but do
+not represent how exposure, replies, and recommendation produce collective
+outcomes. Agent-based modeling (ABM) instead models local decisions and their
+emergent effects~\cite{macal2010tutorial}.
 
-LLM agents extend ABM by allowing simulated actors to condition open-ended
-actions on a profile, memory, retrieved evidence, feed context, and earlier
-conversation. Generative Agents demonstrated memory-driven believable
-behavior~\cite{park2023generative}, while Social Simulacra showed how generated
-users and conversations can support social-computing prototypes
-~\cite{park2022social}. Systems including $S^3$, OASIS, and GenSim subsequently
-modeled social networks, recommendation, and multiple online actions at larger
-scales~\cite{gao2023s3,yang2024oasis,tang2025gensim}. These capabilities suggest
-a campaign-analysis application in which marketers can rehearse alternative
-message framing, audience composition, and feed conditions before interpreting
-the resulting differences as hypotheses for further testing.
+LLM agents add profile-, memory-, and context-conditioned language and actions
+to ABM. Prior systems demonstrate believable agents, populated social
+prototypes, and large-scale networked interaction
+~\cite{park2023generative,park2022social,gao2023s3,yang2024oasis,
+tang2025gensim}. This creates an opportunity to rehearse campaign framing and
+platform conditions as hypotheses for subsequent testing.
 
-\textbf{MiroFish} provides the application foundation for this work. The
-open-source project describes itself as a multi-agent prediction engine that
-constructs a parallel digital world from real-world seed material such as
-news, policy drafts, or analysis reports~\cite{mirofish2026}. Its workflow has
-five stages: graph building with seed extraction and GraphRAG memory injection;
-environment setup with entity, persona, and agent construction; dual-platform
-social simulation with temporal memory updates; report generation; and deep
-interaction with individual agents or the report agent. OASIS supplies the
-underlying social-simulation engine. MiroFish therefore offers a useful bridge
-from campaign documents to an inspectable simulated environment, but its
-outputs must still be validated before they are used to support marketing
-decisions.
+Thai campaign analysis nevertheless requires language- and culture-aware
+modeling of informal spelling, code-mixing, particles, emoji, and indirect or
+sarcastic responses~\cite{arreerard2022survey,kim2025thaicli}. Collection is
+also platform-dependent, so every result must retain its post, query limit,
+timestamp, and visibility constraints. Finally, plausible generated comments
+do not establish behavioral validity; authentic reactions must remain held out
+and stochastic simulations must be repeated~\cite{mooney2025coherent,
+schwager2026conditioned}.
 
-Applying this workflow to Thai campaigns introduces two challenges. First,
-Thai localization is more than translating an English prompt. Thai has no
-obligatory whitespace between words, and campaign comments frequently combine
-informal spelling, repeated characters, emoji, hashtags, transliterated
-English, regional language, sarcasm, indirect disagreement, and culturally
-specific politeness. Thai NLP resources and models have improved substantially
-~\cite{arreerard2022survey,phatthiyaphaibun2023pythainlp,
-lowphansirikul2021wangchanberta,pipatanakul2024typhoon2}, but cultural capability
-remains a distinct evaluation target~\cite{kim2025thaicli}. Second, social data
-collection is platform-dependent and incomplete. A reproducible study must
-record which campaign post was queried, the collection time, the requested
-limit, the returned count, and any access or visibility limitation.
-
-A further methodological problem is that plausible campaign comments do not
-prove behavioral fidelity. Demographically conditioned LLM samples can
-approximate some human distributions~\cite{argyle2023out}, yet recent work finds
-behavioral inconsistency across settings~\cite{mooney2025coherent}. Operational
-validation against authentic comments also shows that matching surface form
-can be separated from matching content~\cite{schwager2026conditioned}. For this
-reason, campaign context needed to construct the simulation must be separated
-from real consumer reactions used to test it, and stochastic conditions must
-be repeated rather than judged from a single persuasive-looking run.
-
-This paper presents \textbf{DEEDY}, a Thai-centric campaign-analysis
-application that combines an Apify data-preparation pipeline, the MiroFish core,
-and an explicit validation layer. Analysts provide campaign topics and public
-post URLs from Facebook, Instagram, or TikTok. DEEDY requests up to 1,000
-comments for each post, preserves provenance and conversation structure, and
-separates campaign context from held-out consumer reactions. Within the
-simulator, an analyst can compare a baseline campaign with counterfactual
-message framing, actor composition, network structure, or recommendation
-policy. The application reports where simulated and observed discourse agree
-or diverge; it does not claim to forecast the choices of a specific person or
-the Thai market as a whole.
+This paper presents \textbf{DEEDY}, a Thai-centric application for social-media
+marketing campaign analysis. It uses Apify to request up to 1,000 public
+comments per post from Facebook, Instagram, or TikTok, adapts the MiroFish
+multi-agent engine~\cite{mirofish2026}, and evaluates simulated campaign
+response against unseen observations. Analysts can compare message framing,
+audience composition, networks, or feed policies, but the results are treated
+as exploratory evidence rather than deterministic market forecasts.
 
 Our contributions are threefold:
 \begin{itemize}
-    \item We define an end-to-end Thai campaign-data pipeline that uses Apify
-    Actors to request up to 1,000 publicly accessible comments per campaign
-    post, normalize cross-platform fields, preserve provenance, and produce
-    Thai-aware views for analysis and simulation.
-    \item We adapt the MiroFish/OASIS workflow to social-media marketing through
-    campaign-grounded actor construction, Thai linguistic attributes,
-    configurable campaign interventions, and auditable simulation outputs.
-    \item We specify a leakage-resistant protocol that evaluates content,
-    population, and dynamic correspondence against held-out Thai campaign
-    reactions using repeated runs, native-Thai review, ablations, and
-    uncertainty reporting.
+    \item An Apify pipeline for collecting up to 1,000 comments per campaign
+    post with normalized fields, provenance, and Thai-aware data views.
+    \item A campaign-focused adaptation of MiroFish/OASIS with Thai actors,
+    configurable interventions, and auditable simulation outputs.
+    \item A leakage-resistant evaluation against held-out Thai reactions using
+    repeated runs, ablations, native-Thai review, and uncertainty reporting.
 \end{itemize}
 
 \section{Related Work}
@@ -161,13 +115,15 @@ empirical validation rather than maximum population size.
 
 \subsection{Grounding and Operational Validity}
 
-MiroFish extracts entities and relations from uploaded reality seeds, stores
-individual and collective memory in a graph-retrieval layer, generates OASIS
-profiles, runs social platforms, and uses a report agent to query simulation
-state~\cite{mirofish2026}. This workflow accelerates scenario construction, but
-the generated report is still evidence about the simulated world, not evidence
-that the world is valid. DEEDY therefore treats every simulation trace as a
-hypothesis to compare with unseen observations.
+MiroFish organizes document-grounded simulation into five stages: GraphRAG
+construction from uploaded reality seeds; entity, persona, and environment
+setup; OASIS-based social simulation with temporal memory updates; report
+generation; and post-run interaction with agents or the report agent
+~\cite{mirofish2026}. This workflow accelerates scenario construction and is
+therefore the application foundation adapted by DEEDY. However, a MiroFish
+report is evidence about the simulated world, not evidence that the world is
+behaviorally valid. DEEDY consequently compares its traces with unseen
+observations.
 
 Algorithmic fidelity compares LLM-generated and human subgroup distributions
 ~\cite{argyle2023out}. Conditioned Comment Prediction instead compares a

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Homebrew) (preloaded format=pdflatex 2026.3.4)  12 AUG 2026 17:36
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Homebrew) (preloaded format=pdflatex 2026.3.4)  12 AUG 2026 17:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -550,72 +550,72 @@ nc/dvips/base/8r.enc}
 
 
 ]
-<system_arch.png, id=179, 2062.70625pt x 1833.85126pt>
+<system_arch.png, id=173, 2062.70625pt x 1833.85126pt>
 File: system_arch.png Graphic file (type png)
 <use system_arch.png>
-Package pdftex.def Info: system_arch.png  used on input line 207.
+Package pdftex.def Info: system_arch.png  used on input line 163.
 (pdftex.def)             Requested size: 402.47937pt x 357.80943pt.
- [2]
-Underfull \hbox (badness 5077) in paragraph at lines 255--264
+
+Underfull \hbox (badness 5077) in paragraph at lines 211--220
  \T1/ptm/m/it/10 (+20) 2) Apify Com-ment Col-lec-tion: [][][] \T1/ptm/m/n/10 (+
 20) DEEDY uses Apify
  []
 
 
-Underfull \hbox (badness 1466) in paragraph at lines 255--264
+Underfull \hbox (badness 1466) in paragraph at lines 211--220
 \T1/ptm/m/n/10 (+20) main-tained browser crawler. An Ac-tor is a server-side
  []
 
 
-Underfull \hbox (badness 1642) in paragraph at lines 255--264
+Underfull \hbox (badness 1642) in paragraph at lines 211--220
 \T1/ptm/m/n/10 (+20) run, and writes re-sults to an Apify dataset ac-ces-si-ble
 
  []
 
 
-Underfull \hbox (badness 6300) in paragraph at lines 255--264
+Underfull \hbox (badness 6300) in paragraph at lines 211--220
 \T1/ptm/m/n/10 (+20) and in-vokes \T1/pcr/m/n/10 apify/facebook-comments-scrape
 r\T1/ptm/m/n/10 (+20) ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 255--264
+Underfull \hbox (badness 10000) in paragraph at lines 211--220
 \T1/pcr/m/n/10 apify/instagram-comment-scraper\T1/ptm/m/n/10 (+20) , or
  []
 
-[3 <./system_arch.png (PNG copy)>]
-Underfull \hbox (badness 6125) in paragraph at lines 310--316
+[2]
+Underfull \hbox (badness 6125) in paragraph at lines 266--272
  \T1/ptm/m/it/10 (+20) 4) Thai-Aware Data Views: [][][] \T1/ptm/m/n/10 (+20) Th
 e crawler pre-serves
  []
 
 
-Underfull \hbox (badness 6141) in paragraph at lines 310--316
+Underfull \hbox (badness 6141) in paragraph at lines 266--272
 \T1/ptm/m/n/10 (+20) the Uni-code com-ment text re-turned by each Ac-tor
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 310--316
+Underfull \hbox (badness 10000) in paragraph at lines 266--272
 \T1/ptm/m/n/10 (+20) in an im-mutable JSONL view. The im-ple-mented
  []
 
 
-Underfull \hbox (badness 2088) in paragraph at lines 310--316
+Underfull \hbox (badness 2088) in paragraph at lines 266--272
 \T1/pcr/m/n/10 convert_comments_to_csv.py \T1/ptm/m/n/10 (+20) then flat-tens n
 ested
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 341--351
+[3 <./system_arch.png (PNG copy)>]
+Underfull \hbox (badness 10000) in paragraph at lines 297--307
 []\T1/ptm/m/n/10 (+20) The frozen Apify records are passed to
  []
 
 [4]
-Underfull \hbox (badness 10000) in paragraph at lines 484--485
+Underfull \hbox (badness 10000) in paragraph at lines 440--441
 []\T1/ptm/m/n/8 (+20) Full Thai adap-ta-tion; trans-lated/unadapted
  []
 
-[5] [6] (./12-8-2026.bbl)
+[5] (./12-8-2026.bbl [6])
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -627,7 +627,9 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[7] (./12-8-2026.aux)
+[7
+
+] (./12-8-2026.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -638,11 +640,11 @@ Package rerunfilecheck Info: File `12-8-2026.out' has not changed.
 Here is how much of TeX's memory you used:
  12789 strings out of 467525
  205400 string characters out of 5408440
- 668304 words of memory out of 5000000
+ 668789 words of memory out of 5000000
  41165 multiletter control sequences out of 15000+600000
- 754330 words of font info for 357 fonts, out of 8000000 for 9000
+ 754428 words of font info for 357 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,10n,79p,1006b,457s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,10n,79p,1006b,609s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/type1/public/am
 sfonts/cm/cmex10.pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fo
 nts/type1/public/amsfonts/cm/cmmi10.pfb></opt/homebrew/Cellar/texlive/20260301/
@@ -660,10 +662,10 @@ s/type1/urw/times/utmb8a.pfb></opt/homebrew/Cellar/texlive/20260301/share/texmf
 -dist/fonts/type1/urw/times/utmbi8a.pfb></opt/homebrew/Cellar/texlive/20260301/
 share/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></opt/homebrew/Cellar/texlive
 /20260301/share/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on 12-8-2026.pdf (7 pages, 456803 bytes).
+Output written on 12-8-2026.pdf (7 pages, 454180 bytes).
 PDF statistics:
- 322 PDF objects out of 1000 (max. 8388607)
- 281 compressed objects within 3 object streams
+ 318 PDF objects out of 1000 (max. 8388607)
+ 277 compressed objects within 3 object streams
  63 named destinations out of 1000 (max. 500000)
  52470 words of extra memory for PDF output out of 61914 (max. 10000000)
 
