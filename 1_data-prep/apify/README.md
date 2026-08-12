@@ -2,13 +2,13 @@
 
 ```mermaid
 flowchart TD
-    A["Topic & Reference URLs<br/><code>data/topic_ref.json</code>"] --> B["1. Apify Social Comment Scraping<br/><code>apify_crawler.py</code>"]
-    B -->|Facebook, Instagram, TikTok Actors| C["Raw Crawled Comments<br/><code>data/social_comments_crawled.jsonl</code>"]
-    C --> D["2. Dataset Verification & Quota Audit<br/><code>verify_crawled_comments.py</code>"]
-    D -->|Audit Quotas & Shortfalls against Target (1,000/topic)| E["Verification Report<br/><code>Terminal Console Output</code>"]
-    C --> F["3. LLM Ensemble Marketing Analysis<br/><code>llm_prelabel.py</code>"]
-    F -->|Multi-Model Critique & Synthesis Ensemble| G["Campaign Analysis JSONL<br/><code>data/campaign_sentiment_analysis.jsonl</code>"]
-    F -->|Executive Summary Export| H["Campaign Summary CSV<br/><code>data/campaign_sentiment_summary.csv</code>"]
+    A["Topic & Reference URLs<br>data/topic_ref.json"] --> B["1. Apify Social Comment Scraping<br>apify_crawler.py"]
+    B -->|Facebook, Instagram, TikTok Actors| C["Raw Crawled Comments<br>data/social_comments_crawled.jsonl"]
+    C --> D["2. Dataset Verification & Quota Audit<br>verify_crawled_comments.py"]
+    D -->|Audit Quotas & Shortfalls against Target| E["Verification Report<br>Terminal Console Output"]
+    C --> F["3. LLM Ensemble Marketing Analysis<br>llm_prelabel.py"]
+    F -->|Multi-Model Critique & Synthesis Ensemble| G["Campaign Analysis JSONL<br>data/campaign_sentiment_analysis.jsonl"]
+    F -->|Executive Summary Export| H["Campaign Summary CSV<br>data/campaign_sentiment_summary.csv"]
 ```
 
 ---
