@@ -1,13 +1,14 @@
 # Fdb version 4
-["bibtex 12-8-2026"] 1786531999.94892 "12-8-2026.aux" "12-8-2026.bbl" "12-8-2026" 1786532001.04674 0
+["bibtex 12-8-2026"] 1786532349.18111 "12-8-2026.aux" "12-8-2026.bbl" "12-8-2026" 1786532350.23015 0
   "./deedy_references.bib" 1786530784.42671 9211 69c9ebe05123c590b2d951e74dbfc308 ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/bibtex/bst/ieeetran/IEEEtran.bst" 1772380719 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
-  "12-8-2026.aux" 1786532000.80211 7415 e664dafae625a3f7d464fadf14aad3f7 "pdflatex"
+  "12-8-2026.aux" 1786532349.96853 7559 1c87dc4262dc0871f9d091df2c5acf19 "pdflatex"
   (generated)
   "12-8-2026.bbl"
   "12-8-2026.blg"
   (rewritten before read)
-["pdflatex"] 1786532000.03991 "12-8-2026.tex" "12-8-2026.pdf" "12-8-2026" 1786532001.04695 0
+["pdflatex"] 1786532349.27042 "/Users/celesca/Desktop/DEEDY/paper_plan/paper/12-8-2026.tex" "12-8-2026.pdf" "12-8-2026" 1786532350.23032 0
+  "/Users/celesca/Desktop/DEEDY/paper_plan/paper/12-8-2026.tex" 1786532346.79525 34673 07b2cad751a01306ea89fbf3e401109c ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/enc/dvips/base/8r.enc" 1772380719 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/map/fontname/texfonts.map" 1772380719 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/fonts/map/pdftex/updmap/pdftex.map" 1772380719 5541360 f183aac233c4cd1e5ef882fcbe8e7096 ""
@@ -108,10 +109,10 @@
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/tex/latex/xurl/xurl.sty" 1772380719 4675 e4b8c405820368c2dfb03526e16d725a ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-dist/web2c/texmf.cnf" 1772380719 43633 14bbc273cebd985e64ab1a698333eaf9 ""
   "/opt/homebrew/Cellar/texlive/20260301/share/texmf-var/web2c/pdftex/pdflatex.fmt" 1772380719 3636956 5168b884cb430e6a6336cfea08fa659a ""
-  "12-8-2026.aux" 1786532000.80211 7415 e664dafae625a3f7d464fadf14aad3f7 "pdflatex"
-  "12-8-2026.bbl" 1786532000.03715 7554 fce8ca55b2109d684436fa2ea030fc64 "bibtex 12-8-2026"
-  "12-8-2026.out" 1786532000.80311 6218 7042e5eef51d91de1733e831f7cd9e73 "pdflatex"
-  "12-8-2026.tex" 1786531992.02047 32014 b0f3945f693e44f4c564e967c5dd9907 ""
+  "12-8-2026.aux" 1786532349.96853 7559 1c87dc4262dc0871f9d091df2c5acf19 "pdflatex"
+  "12-8-2026.bbl" 1786532349.26751 7428 b49dfaf9e3ea600b38d19fe4b689e7a8 "bibtex 12-8-2026"
+  "12-8-2026.out" 1786532349.96959 6218 7042e5eef51d91de1733e831f7cd9e73 "pdflatex"
+  "12-8-2026.tex" 1786532346.79525 34673 07b2cad751a01306ea89fbf3e401109c ""
   "system_arch.png" 1785587887.41436 256238 f755c5a3c9ac613d6f6c300fb91fc4f1 ""
   (generated)
   "12-8-2026.aux"

@@ -7,8 +7,7 @@
 \providecommand{\BIBentrySTDinterwordspacing}{\spaceskip=0pt\relax}
 \providecommand{\BIBentryALTinterwordstretchfactor}{4}
 \providecommand{\BIBentryALTinterwordspacing}{\spaceskip=\fontdimen2\font plus
-\BIBentryALTinterwordstretchfactor\fontdimen3\font minus
-  \fontdimen4\font\relax}
+\BIBentryALTinterwordstretchfactor\fontdimen3\font minus \fontdimen4\font\relax}
 \providecommand{\BIBforeignlanguage}[2]{{%
 \expandafter\ifx\csname l@#1\endcsname\relax
 \typeout{** WARNING: IEEEtran.bst: No hyphenation pattern has been}%
@@ -22,145 +21,83 @@
 \BIBdecl
 
 \bibitem{macal2010tutorial}
-C.~M. Macal and M.~J. North, ``Tutorial on agent-based modelling and
-  simulation,'' in \emph{Proceedings of the 2010 Winter Simulation Conference},
-  2010, pp. 151--162.
+C.~M. Macal and M.~J. North, ``Tutorial on agent-based modelling and simulation,'' in \emph{Proceedings of the 2010 Winter Simulation Conference}, 2010, pp. 151--162.
 
 \bibitem{park2023generative}
-J.~S. Park, J.~C. O'Brien, C.~J. Cai, M.~R. Morris, P.~Liang, and M.~S.
-  Bernstein, ``Generative agents: Interactive simulacra of human behavior,'' in
-  \emph{Proceedings of the 2023 CHI Conference on Human Factors in Computing
-  Systems}, 2023, pp. 1--22.
+J.~S. Park, J.~C. O'Brien, C.~J. Cai, M.~R. Morris, P.~Liang, and M.~S. Bernstein, ``Generative agents: Interactive simulacra of human behavior,'' in \emph{Proceedings of the 2023 CHI Conference on Human Factors in Computing Systems}, 2023, pp. 1--22.
 
 \bibitem{park2022social}
-J.~S. Park, L.~Popowski, C.~J. Cai, M.~R. Morris, P.~Liang, and M.~S.
-  Bernstein, ``Social simulacra: Creating populated prototypes for social
-  computing systems,'' in \emph{Proceedings of the 35th Annual ACM Symposium on
-  User Interface Software and Technology}, 2022, pp. 1--18.
+J.~S. Park, L.~Popowski, C.~J. Cai, M.~R. Morris, P.~Liang, and M.~S. Bernstein, ``Social simulacra: Creating populated prototypes for social computing systems,'' in \emph{Proceedings of the 35th Annual ACM Symposium on User Interface Software and Technology}, 2022, pp. 1--18.
 
 \bibitem{gao2023s3}
-C.~Gao, X.~Lan, Z.~Lu, J.~Mao, J.~Piao, H.~Wang, D.~Jin, and Y.~Li, ``{$S^3$:
-  Social-Network Simulation System with Large Language Model-Empowered
-  Agents},'' 2023.
+C.~Gao, X.~Lan, Z.~Lu, J.~Mao, J.~Piao, H.~Wang, D.~Jin, and Y.~Li, ``{$S^3$: Social-Network Simulation System with Large Language Model-Empowered Agents},'' 2023.
 
 \bibitem{yang2024oasis}
 \BIBentryALTinterwordspacing
-Z.~Yang, Z.~Zhang, Z.~Zheng, Y.~Jiang, Z.~Gan, Z.~Wang, Z.~Ling, J.~Chen,
-  M.~Ma, B.~Dong, P.~Gupta, S.~Hu, Z.~Yin, G.~Li, X.~Jia, L.~Wang, B.~Ghanem,
-  H.~Lu, C.~Lu, W.~Ouyang, Y.~Qiao, P.~Torr, and J.~Shao, ``{OASIS}: Open agent
-  social interaction simulations with one million agents,'' in \emph{Advances
-  in Neural Information Processing Systems}, 2024. [Online]. Available:
-  \url{https://arxiv.org/abs/2411.11581}
+Z.~Yang, Z.~Zhang, Z.~Zheng, Y.~Jiang, Z.~Gan, Z.~Wang, Z.~Ling, J.~Chen, M.~Ma, B.~Dong, P.~Gupta, S.~Hu, Z.~Yin, G.~Li, X.~Jia, L.~Wang, B.~Ghanem, H.~Lu, C.~Lu, W.~Ouyang, Y.~Qiao, P.~Torr, and J.~Shao, ``{OASIS}: Open agent social interaction simulations with one million agents,'' in \emph{Advances in Neural Information Processing Systems}, 2024. [Online]. Available: \url{https://arxiv.org/abs/2411.11581}
 \BIBentrySTDinterwordspacing
 
 \bibitem{tang2025gensim}
 \BIBentryALTinterwordspacing
-J.~Tang, H.~Gao, X.~Pan, L.~Wang, H.~Tan, D.~Gao, Y.~Chen, X.~Chen, Y.~Lin,
-  Y.~Li, B.~Ding, J.~Zhou, J.~Wang, and J.-R. Wen, ``{GenSim}: A general social
-  simulation platform with large language model based agents,'' in
-  \emph{Proceedings of the 2025 Conference of the Nations of the Americas
-  Chapter of the Association for Computational Linguistics: Human Language
-  Technologies (System Demonstrations)}, 2025, pp. 143--150. [Online].
-  Available: \url{https://aclanthology.org/2025.naacl-demo.15/}
-\BIBentrySTDinterwordspacing
-
-\bibitem{arreerard2022survey}
-\BIBentryALTinterwordspacing
-R.~Arreerard, S.~Mander, and S.~Piao, ``Survey on {T}hai {NLP} language
-  resources and tools,'' in \emph{Proceedings of the Thirteenth Language
-  Resources and Evaluation Conference}.\hskip 1em plus 0.5em minus 0.4em\relax
-  European Language Resources Association, 2022, pp. 6495--6505. [Online].
-  Available: \url{https://aclanthology.org/2022.lrec-1.697/}
-\BIBentrySTDinterwordspacing
-
-\bibitem{kim2025thaicli}
-\BIBentryALTinterwordspacing
-D.~Kim, S.~Lee, Y.~Kim, A.~Rutherford, and C.~Park, ``Representing the
-  under-represented: Cultural and core capability benchmarks for developing
-  thai large language models,'' in \emph{Proceedings of the 31st International
-  Conference on Computational Linguistics}, 2025, pp. 4114--4129. [Online].
-  Available: \url{https://aclanthology.org/2025.coling-main.278/}
-\BIBentrySTDinterwordspacing
-
-\bibitem{mooney2025coherent}
-J.~Mooney, J.~Woldense, Z.~R. Jia, S.~A. Hayati, M.~H. Nguyen, V.~Raheja, and
-  D.~Kang, ``Are {LLM} agents behaviorally coherent? latent profiles for social
-  simulation,'' 2025.
-
-\bibitem{schwager2026conditioned}
-\BIBentryALTinterwordspacing
-N.~Schwager, S.~M{\"u}nker, A.~Plum, and A.~Rettinger, ``Towards simulating
-  social media users with {LLM}s: Evaluating the operational validity of
-  conditioned comment prediction,'' in \emph{Proceedings of the 15th Workshop
-  on Computational Approaches to Subjectivity, Sentiment and Social Media
-  Analysis}, 2026, pp. 208--221. [Online]. Available:
-  \url{https://aclanthology.org/2026.wassa-1.16/}
+J.~Tang, H.~Gao, X.~Pan, L.~Wang, H.~Tan, D.~Gao, Y.~Chen, X.~Chen, Y.~Lin, Y.~Li, B.~Ding, J.~Zhou, J.~Wang, and J.-R. Wen, ``{GenSim}: A general social simulation platform with large language model based agents,'' in \emph{Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (System Demonstrations)}, 2025, pp. 143--150. [Online]. Available: \url{https://aclanthology.org/2025.naacl-demo.15/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{mirofish2026}
 \BIBentryALTinterwordspacing
-{MiroFish Contributors}, ``{MiroFish}: A simple and universal swarm
-  intelligence engine,'' Open-source software repository, 2026, accessed 12
-  August 2026. [Online]. Available: \url{https://github.com/666ghj/MiroFish}
+{MiroFish Contributors}, ``{MiroFish}: A simple and universal swarm intelligence engine,'' Open-source software repository, 2026, accessed 12 August 2026. [Online]. Available: \url{https://github.com/666ghj/MiroFish}
 \BIBentrySTDinterwordspacing
 
-\bibitem{argyle2023out}
-L.~P. Argyle, E.~C. Busby, N.~Fulda, J.~R. Gubler, C.~Rytting, and D.~Wingate,
-  ``Out of one, many: Using language models to simulate human samples,''
-  \emph{Political Analysis}, vol.~31, no.~3, pp. 337--351, 2023.
-
-\bibitem{cross2025validating}
-L.~Cross, N.~Haber, and D.~L.~K. Yamins, ``Validating generative agent-based
-  models of social norm enforcement: From replication to novel predictions,''
-  2025.
+\bibitem{arreerard2022survey}
+\BIBentryALTinterwordspacing
+R.~Arreerard, S.~Mander, and S.~Piao, ``Survey on {T}hai {NLP} language resources and tools,'' in \emph{Proceedings of the Thirteenth Language Resources and Evaluation Conference}.\hskip 1em plus 0.5em minus 0.4em\relax European Language Resources Association, 2022, pp. 6495--6505. [Online]. Available: \url{https://aclanthology.org/2022.lrec-1.697/}
+\BIBentrySTDinterwordspacing
 
 \bibitem{phatthiyaphaibun2023pythainlp}
 \BIBentryALTinterwordspacing
-W.~Phatthiyaphaibun, K.~Chaovavanich, C.~Polpanumas, A.~Suriyawongkul,
-  L.~Lowphansirikul, P.~Chormai, P.~Limkonchotiwat, T.~Suntorntip, and
-  C.~Udomcharoenchaikit, ``{PyThaiNLP}: Thai natural language processing in
-  python,'' in \emph{Proceedings of the 3rd Workshop for Natural Language
-  Processing Open Source Software}, 2023, pp. 25--36. [Online]. Available:
-  \url{https://aclanthology.org/2023.nlposs-1.4/}
+W.~Phatthiyaphaibun, K.~Chaovavanich, C.~Polpanumas, A.~Suriyawongkul, L.~Lowphansirikul, P.~Chormai, P.~Limkonchotiwat, T.~Suntorntip, and C.~Udomcharoenchaikit, ``{PyThaiNLP}: Thai natural language processing in python,'' in \emph{Proceedings of the 3rd Workshop for Natural Language Processing Open Source Software}, 2023, pp. 25--36. [Online]. Available: \url{https://aclanthology.org/2023.nlposs-1.4/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{lowphansirikul2021wangchanberta}
-L.~Lowphansirikul, C.~Polpanumas, A.~Rutherford, and S.~Nutanong,
-  ``{WangchanBERTa}: Pretraining transformer-based thai language models,''
-  2021.
+L.~Lowphansirikul, C.~Polpanumas, A.~Rutherford, and S.~Nutanong, ``{WangchanBERTa}: Pretraining transformer-based thai language models,'' 2021.
 
 \bibitem{pipatanakul2024typhoon2}
-K.~Pipatanakul, P.~Manakul, N.~Nitarach, W.~Sirichotedumrong, S.~Nonesung,
-  T.~Jaknamon, P.~Pengpun, P.~Taveekitworachai, A.~Na-Thalang,
-  S.~Sripaisarnmongkol, K.~Jirayoot, and K.~Tharnpipitchai, ``Typhoon 2: A
-  family of open text and multimodal thai large language models,'' 2024.
+K.~Pipatanakul, P.~Manakul, N.~Nitarach, W.~Sirichotedumrong, S.~Nonesung, T.~Jaknamon, P.~Pengpun, P.~Taveekitworachai, A.~Na-Thalang, S.~Sripaisarnmongkol, K.~Jirayoot, and K.~Tharnpipitchai, ``Typhoon 2: A family of open text and multimodal thai large language models,'' 2024.
+
+\bibitem{kim2025thaicli}
+\BIBentryALTinterwordspacing
+D.~Kim, S.~Lee, Y.~Kim, A.~Rutherford, and C.~Park, ``Representing the under-represented: Cultural and core capability benchmarks for developing thai large language models,'' in \emph{Proceedings of the 31st International Conference on Computational Linguistics}, 2025, pp. 4114--4129. [Online]. Available: \url{https://aclanthology.org/2025.coling-main.278/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{argyle2023out}
+L.~P. Argyle, E.~C. Busby, N.~Fulda, J.~R. Gubler, C.~Rytting, and D.~Wingate, ``Out of one, many: Using language models to simulate human samples,'' \emph{Political Analysis}, vol.~31, no.~3, pp. 337--351, 2023.
+
+\bibitem{mooney2025coherent}
+J.~Mooney, J.~Woldense, Z.~R. Jia, S.~A. Hayati, M.~H. Nguyen, V.~Raheja, and D.~Kang, ``Are {LLM} agents behaviorally coherent? latent profiles for social simulation,'' 2025.
+
+\bibitem{schwager2026conditioned}
+\BIBentryALTinterwordspacing
+N.~Schwager, S.~M{\"u}nker, A.~Plum, and A.~Rettinger, ``Towards simulating social media users with {LLM}s: Evaluating the operational validity of conditioned comment prediction,'' in \emph{Proceedings of the 15th Workshop on Computational Approaches to Subjectivity, Sentiment and Social Media Analysis}, 2026, pp. 208--221. [Online]. Available: \url{https://aclanthology.org/2026.wassa-1.16/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{cross2025validating}
+L.~Cross, N.~Haber, and D.~L.~K. Yamins, ``Validating generative agent-based models of social norm enforcement: From replication to novel predictions,'' 2025.
 
 \bibitem{hazarika2018cascade}
 \BIBentryALTinterwordspacing
-D.~Hazarika, S.~Poria, S.~Gorantla, E.~Cambria, R.~Zimmermann, and R.~Mihalcea,
-  ``{CASCADE}: Contextual sarcasm detection in online discussion forums,'' in
-  \emph{Proceedings of the 27th International Conference on Computational
-  Linguistics}, 2018, pp. 1837--1848. [Online]. Available:
-  \url{https://aclanthology.org/C18-1156/}
+D.~Hazarika, S.~Poria, S.~Gorantla, E.~Cambria, R.~Zimmermann, and R.~Mihalcea, ``{CASCADE}: Contextual sarcasm detection in online discussion forums,'' in \emph{Proceedings of the 27th International Conference on Computational Linguistics}, 2018, pp. 1837--1848. [Online]. Available: \url{https://aclanthology.org/C18-1156/}
 \BIBentrySTDinterwordspacing
 
 \bibitem{apify2026actors}
 \BIBentryALTinterwordspacing
-{Apify}, ``Actors documentation: Runs and builds,'' Online documentation, 2026,
-  accessed 12 August 2026. [Online]. Available:
-  \url{https://docs.apify.com/actors/running/runs-and-builds}
+{Apify}, ``Actors documentation: Runs and builds,'' Online documentation, 2026, accessed 12 August 2026. [Online]. Available: \url{https://docs.apify.com/actors/running/runs-and-builds}
 \BIBentrySTDinterwordspacing
 
 \bibitem{zhang2020bertscore}
 \BIBentryALTinterwordspacing
-T.~Zhang, V.~Kishore, F.~Wu, K.~Q. Weinberger, and Y.~Artzi, ``{BERTScore}:
-  Evaluating text generation with {BERT},'' in \emph{International Conference
-  on Learning Representations}, 2020. [Online]. Available:
-  \url{https://openreview.net/forum?id=SkeHuCVFDr}
+T.~Zhang, V.~Kishore, F.~Wu, K.~Q. Weinberger, and Y.~Artzi, ``{BERTScore}: Evaluating text generation with {BERT},'' in \emph{International Conference on Learning Representations}, 2020. [Online]. Available: \url{https://openreview.net/forum?id=SkeHuCVFDr}
 \BIBentrySTDinterwordspacing
 
 \bibitem{shi2024judging}
-L.~Shi, C.~Ma, W.~Liang, W.~Ma, and S.~Vosoughi, ``Judging the judges: A
-  systematic study of position bias in {LLM}-as-a-judge,'' 2024.
+L.~Shi, C.~Ma, W.~Liang, W.~Ma, and S.~Vosoughi, ``Judging the judges: A systematic study of position bias in {LLM}-as-a-judge,'' 2024.
 
 \end{thebibliography}
