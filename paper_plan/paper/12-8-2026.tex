@@ -98,15 +98,16 @@ collection is platform-dependent and incomplete. A reproducible study must
 record which campaign post was queried, the collection time, the requested
 limit, the returned count, and any access or visibility limitation.
 
-A further methodological problem is that plausible campaign comments do not
-prove behavioral fidelity. Demographically conditioned LLM samples can
-approximate some human distributions~\cite{argyle2023out}, yet recent work finds
-behavioral inconsistency across settings~\cite{mooney2025coherent}. Operational
-validation against authentic comments also shows that matching surface form
-can be separated from matching content~\cite{schwager2026conditioned}. For this
-reason, campaign context needed to construct the simulation must be separated
-from real consumer reactions used to test it, and stochastic conditions must
-be repeated rather than judged from a single persuasive-looking run.
+A further methodological problem is how to evaluate the simulation. A
+generated comment may read naturally and resemble the writing style of a real
+social-media user while still expressing the wrong stance, missing important
+consumer concerns, or producing an unrealistic balance of positive and
+negative reactions. Thus, realistic language alone does not show that the
+simulation reproduces consumer behavior~\cite{argyle2023out,
+mooney2025coherent,schwager2026conditioned}. DEEDY therefore keeps the real
+campaign comments hidden from the agents and uses them only as a held-out
+reference for evaluation. It also repeats each simulation under multiple
+random seeds, because one convincing result may be unstable or accidental.
 
 This paper presents \textbf{DEEDY}, a Thai-centric campaign-analysis
 application that combines an Apify data-preparation pipeline, the MiroFish core,
@@ -221,6 +222,32 @@ split so that a score can be traced back to its evidence.
 
 \subsection{Data Preparation Pipeline}
 
+DEEDY collects two distinct forms of evidence. First, campaign-construction
+data include the campaign brief, creative message, product information, and
+dated public reporting. They describe the situation given to the simulated agents.
+Second, real consumer comments are collected from selected public Facebook,
+Instagram, and TikTok posts through Apify, with a requested limit of 1,000
+comments for each post. These collected comments are the \emph{observed
+reference data}; they are not assumed to represent every Thai consumer or
+every comment visible on a platform.
+
+Realistic-looking generated comments do not necessarily mean that the
+simulation reproduces real consumer behavior. Therefore, the campaign
+information used to construct the simulated environment is kept separate from
+the real comments used for evaluation. DEEDY reserves those comments as a
+held-out reference set and does not show them to the simulated agents. It then
+compares simulated and observed sentiment, stance, narratives, and interaction
+patterns across multiple random runs, because one convincing run may be
+unstable or accidental.
+
+The collected comments and their human-verified labels serve different roles.
+The original comments are the observed reactions that the simulation is
+expected to approximate. Native Thai annotators verify labels such as
+sentiment, campaign stance, narrative, and sarcasm so that these characteristics
+can be scored consistently. The following stages describe how campaign posts
+are selected, how their comments are collected and preserved, and how the two
+evidence streams are separated before simulation and evaluation.
+
 \subsubsection{Campaign Definition and Post Selection}
 
 The input manifest \texttt{data/topic\_ref.json} defines one marketing campaign
@@ -234,13 +261,10 @@ manually checked for campaign relevance and resolved to a canonical post before
 collection. The sampling frame and inclusion rules are frozen before labels or
 simulation outputs are inspected.
 
-Campaign facts used to construct the simulated scenario are stored separately
-from consumer reactions. The factual packet may include the campaign brief,
-creative copy, product information, publication time, and dated public
-reporting. It does not include the target comments later used for evaluation.
-This distinction supports both retrospective campaign analysis and a stricter
-prospective design in which only information available at campaign launch is
-provided to the agents.
+Campaign facts used to construct the simulated scenario remain separate from
+consumer reactions. This distinction supports both retrospective campaign
+analysis and a stricter prospective design in which only information available
+at campaign launch is provided to the agents.
 
 \subsubsection{Apify Comment Collection}
 \label{sec:apify-collection}
