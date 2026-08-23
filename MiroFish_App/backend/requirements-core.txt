@@ -1,0 +1,2 @@
+# This file has been merged into requirements.txt
+# Please use requirements.txt for all backend dependencies.

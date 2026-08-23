@@ -1,0 +1,73 @@
+<h2>Preview: B + C (Glassmorphism + Gamified)</h2>
+<p class="subtitle">Here is a mockup of how a panel would look combining both styles.</p>
+
+<div class="mockup" style="background: #05050a; padding: 30px; border-radius: 12px; color: #fff; display:flex; justify-content:center;">
+  <div style="
+    width: 350px;
+    background: rgba(15, 20, 35, 0.4); 
+    backdrop-filter: blur(12px); 
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    border-top: 2px solid #00f0ff;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0,240,255,0.05);
+    position: relative;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+  ">
+    <!-- Diagonal stripes in the background for gamified feel -->
+    <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(255,0,255,0.03) 10px, rgba(255,0,255,0.03) 20px); pointer-events: none;"></div>
+    
+    <h3 style="margin-top:0; color: #00f0ff; text-shadow: 0 0 10px rgba(0,240,255,0.4); font-family: 'JetBrains Mono', monospace; display: flex; justify-content: space-between; align-items: center; letter-spacing: 1px;">
+      <span>AGENT STATUS</span>
+      <span style="font-size: 0.65em; background: rgba(255,0,255,0.15); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255,0,255,0.5); color: #ff00ff; text-shadow: 0 0 5px #ff00ff; box-shadow: 0 0 10px rgba(255,0,255,0.2);">ACTIVE</span>
+    </h3>
+    
+    <div style="margin-top: 25px;">
+      <div style="font-size: 0.75rem; color: #8892b0; margin-bottom: 8px; letter-spacing: 1px;">SYSTEM LOAD</div>
+      <div style="height: 10px; background: rgba(0,0,0,0.6); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);">
+        <div style="width: 75%; height: 100%; background: linear-gradient(90deg, #00f0ff, #ff00ff); box-shadow: 0 0 15px #ff00ff;"></div>
+      </div>
+    </div>
+    
+    <button style="
+      margin-top: 30px;
+      width: 100%;
+      background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(255, 0, 255, 0.1));
+      border: 1px solid rgba(255,255,255,0.2);
+      border-bottom: 2px solid #00f0ff;
+      color: #fff;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      cursor: pointer;
+      text-shadow: 0 0 8px rgba(255,255,255,0.5);
+      transition: all 0.3s ease;
+    ">INITIALIZE SEQUENCE</button>
+  </div>
+</div>
+
+<div class="options" style="margin-top: 20px;">
+  <div class="option" data-choice="yes" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content">
+      <h3>Looks Great!</h3>
+      <p>Proceed with this aesthetic (Glass + Game UI)</p>
+    </div>
+  </div>
+  <div class="option" data-choice="more-game" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>More Gamified</h3>
+      <p>Make it look even more like a game UI (Less glass, more texture)</p>
+    </div>
+  </div>
+  <div class="option" data-choice="more-glass" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>More Glassmorphism</h3>
+      <p>Make it cleaner, more like Apple/Premium UI (Less game lines)</p>
+    </div>
+  </div>
+</div>

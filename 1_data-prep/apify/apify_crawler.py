@@ -3,6 +3,15 @@ import json
 from typing import List, Dict, Any, Optional
 from pydantic import BaseModel, Field
 from apify_client import ApifyClient
+from dotenv import load_dotenv
+
+load_dotenv()
+
+import sys
+
+# Ensure UTF-8 output encoding for Windows terminal compatibility
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 # ==========================================
 # 1. Pydantic Output Schemas
@@ -324,18 +333,33 @@ class ApifySocialCommentCrawler:
         )
 
     def scrape_topic(
-        self, topic: str, urls: List[str], target_max_comments: int = 1000
+        self,
+        topic: str,
+        urls: List[str],
+        target_max_comments: int = 1000,
+        existing_crawled_urls: Optional[set] = None,
+        existing_topic_comments: int = 0
     ) -> List[SocialPostCommentsResult]:
         """
         Scrapes comments across multiple post URLs for a given topic.
+        Skips URLs that have already been crawled (passed via existing_crawled_urls).
         Terminates once `target_max_comments` (default 1000) is reached for the topic.
         """
         topic_results = []
-        topic_comments_count = 0
+        topic_comments_count = existing_topic_comments
+        crawled_urls = set(existing_crawled_urls) if existing_crawled_urls is not None else set()
+
+        if topic_comments_count >= target_max_comments:
+            print(f"[->] Topic '{topic}' already reached target comment limit ({topic_comments_count}/{target_max_comments}). Skipping topic.")
+            return topic_results
 
         for url in urls:
             url = url.strip() if isinstance(url, str) else ""
             if not url:
+                continue
+
+            if url in crawled_urls:
+                print(f"[->] Skipping already scraped URL for topic '{topic}': {url[:60]}...")
                 continue
 
             if topic_comments_count >= target_max_comments:
@@ -363,7 +387,8 @@ class ApifySocialCommentCrawler:
                 topic_results.append(res)
                 fetched_count = res.total_comments
                 topic_comments_count += fetched_count
-                print(f"  └─ Fetched {fetched_count} comments from {platform} (Total topic comments: {topic_comments_count}/{target_max_comments})")
+                crawled_urls.add(url)
+                print(f"  |- Fetched {fetched_count} comments from {platform} (Total topic comments: {topic_comments_count}/{target_max_comments})")
 
             except Exception as e:
                 print(f"[!] Error scraping URL {url}: {e}")
@@ -390,20 +415,28 @@ if __name__ == "__main__":
 
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
-    # Check for already completed topics to enable resuming
-    completed_topics = set()
+    # Check existing dataset to enable resuming and URL-level deduplication
+    crawled_urls = set()
+    topic_comment_counts = {}
+
     if os.path.exists(output_file):
         with open(output_file, "r", encoding="utf-8") as f:
             for line in f:
                 if line.strip():
                     try:
                         record = json.loads(line)
-                        if record.get("topic"):
-                            completed_topics.add(record["topic"])
+                        topic = record.get("topic")
+                        post_url = record.get("post_url")
+                        total_comments = record.get("total_comments", 0)
+
+                        if post_url:
+                            crawled_urls.add(post_url.strip())
+                        if topic:
+                            topic_comment_counts[topic] = topic_comment_counts.get(topic, 0) + total_comments
                     except Exception:
                         pass
-        if completed_topics:
-            print(f"[*] Found {len(completed_topics)} previously processed topic(s) in {output_file}.")
+        if crawled_urls:
+            print(f"[*] Found {len(crawled_urls)} previously scraped URL(s) across {len(topic_comment_counts)} topic(s) in {output_file}.")
 
     with open(ref_file_path, "r", encoding="utf-8") as f:
         target_topics = json.load(f)
@@ -421,26 +454,30 @@ if __name__ == "__main__":
             print(f"[-] Skipping topic with no reference URLs: {topic[:40]}...")
             continue
 
-        if topic in completed_topics:
-            print(f"[➜] Skipping already processed topic: '{topic}'")
-            continue
-
+        existing_comments = topic_comment_counts.get(topic, 0)
         print(f"\n==========================================")
-        print(f"[*] Processing Topic: '{topic}' with {len(refs)} reference URL(s)")
+        print(f"[*] Processing Topic: '{topic}' ({existing_comments}/1000 existing comments) with {len(refs)} reference URL(s)")
         print(f"==========================================")
 
-        topic_results = crawler.scrape_topic(topic=topic, urls=refs, target_max_comments=1000)
+        topic_results = crawler.scrape_topic(
+            topic=topic,
+            urls=refs,
+            target_max_comments=1000,
+            existing_crawled_urls=crawled_urls,
+            existing_topic_comments=existing_comments
+        )
 
         # Immediately save results after each topic completes
         if topic_results:
             with open(output_file, "a", encoding="utf-8") as f:
                 for res in topic_results:
                     f.write(json.dumps(res.model_dump(), ensure_ascii=False) + "\n")
+                    crawled_urls.add(res.post_url)
+                    topic_comment_counts[topic] = topic_comment_counts.get(topic, 0) + res.total_comments
             
             total_scraped_posts += len(topic_results)
-            completed_topics.add(topic)
-            print(f"  [✔] Saved {len(topic_results)} post result(s) for topic '{topic}' to {output_file}")
+            print(f"  [OK] Saved {len(topic_results)} new post result(s) for topic '{topic}' to {output_file}")
         else:
-            print(f"  [-] No comments extracted for topic '{topic}'.")
+            print(f"  [-] No new comments extracted for topic '{topic}'.")
 
-    print(f"\n[✔] Finished social comment extraction via Apify! Results flushed & updated in {output_file}")
+    print(f"\n[OK] Finished social comment extraction via Apify! Results flushed & updated in {output_file}")

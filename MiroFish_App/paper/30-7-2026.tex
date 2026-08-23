@@ -1,0 +1,345 @@
+\documentclass[10pt,twocolumn]{article}
+
+\usepackage[margin=0.72in,columnsep=0.25in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0pt}
+\setlist[enumerate]{leftmargin=*,itemsep=2pt,topsep=3pt}
+
+\title{\textbf{DEEDY: A Thai-Centric Multi-Agent Framework for Modeling\\
+Emergent Public Sentiment Dynamics}}
+\author{Sawit Koseeyaumporn, \\
+\small Affiliation\\
+\small \texttt{email@example.com}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Large language model (LLM) agents enable researchers to examine how local
+interactions may produce population-level phenomena such as narrative
+formation, polarization, and information diffusion. However, linguistically
+plausible agent behavior does not by itself establish that a simulation is a
+valid proxy for human behavior, particularly in a culturally and
+linguistically specific setting. This paper proposes DEEDY---Digital
+Environment for Emergent Dynamics and Yield---a Thai-centric multi-agent
+framework for modeling and evaluating emergent public sentiment dynamics.
+DEEDY extends the MiroFish/OASIS pipeline with Thai-language data processing,
+culturally grounded actor construction, and validation against observed online
+discussions. The framework transforms news and social-trend data into a
+graph-grounded environment, generates heterogeneous actors, executes
+multi-round social interactions, and produces auditable simulation traces and
+reports. For each event, only scenario-construction data are exposed to the
+simulation, while real posts and comments are held out as ground truth.
+Simulated and observed discourse are compared at the content, population, and
+diffusion levels using sentiment and stance distributions, narrative
+correspondence, temporal propagation, interaction structure, and Thai
+linguistic and cultural appropriateness. DEEDY is therefore positioned as an
+empirically testable instrument for exploratory social simulation rather than
+as an unquestioned substitute for Thai participants or a point predictor of
+public opinion.
+\end{abstract}
+
+\noindent\textbf{Keywords:} LLM agents, agent-based modeling, social
+simulation, public sentiment, Thai NLP, information diffusion
+
+\section{Introduction}
+\label{sec:introduction}
+
+Public sentiment on social media is not merely the sum of independent
+opinions. It develops through repeated exposure, interpersonal influence,
+platform recommendation, and feedback between individual actions and the
+information environment. Consequently, phenomena such as narrative formation,
+polarization, herding, and misinformation diffusion are emergent: they arise
+from many local interactions and may not be recoverable by analyzing isolated
+messages alone. Agent-based modeling (ABM) offers a bottom-up approach to this
+problem by representing heterogeneous actors, their environment, and the rules
+through which interactions accumulate into population-level outcomes
+\citep{macal2010tutorial,gao2024survey}.
+
+Traditional ABMs usually encode behavior through explicit rules, transition
+probabilities, or utility functions. These mechanisms are interpretable but
+can be difficult to specify for open-ended communication, where action depends
+on long conversational histories, social roles, and contextual meaning. LLM
+agents provide a complementary mechanism: an agent can condition its actions
+on a persona, memory, retrieved evidence, and the current social environment.
+Early systems showed that such agents can generate believable routines and
+coordinated group behavior \citep{park2023generative}, while social-media
+prototypes demonstrated the generation of posts, replies, and moderation
+interactions at community scale \citep{park2022social}. These capabilities
+make LLM agents attractive for studying discourse dynamics that are difficult
+to express as fixed behavioral rules.
+
+Scalable social simulation systems have subsequently broadened this approach.
+$S^3$ modeled emotion, attitude, and interaction behavior using real social
+network data \citep{gao2023s3}. OASIS introduced a dynamic social-media
+environment with configurable recommendation mechanisms, diverse actions, and
+support for simulations of up to one million agents
+\citep{yang2024oasis}. GenSim emphasized reusable scenario functions,
+large-scale execution, and error correction \citep{tang2025gensim}, while
+AgentSociety coupled generative agents with social, urban, and economic
+environments \citep{piao2025agentsociety}. MiroFish builds on OASIS as an
+open-source scenario pipeline that extracts entities and relationships from
+``reality seed'' documents, constructs graph-based memory, generates agent
+personas, runs social simulations, and synthesizes a report
+\citep{mirofish2026}.
+
+Despite this progress, two gaps limit the direct use of these systems for Thai
+public-sentiment research. First, localization is not equivalent to translating
+prompts into Thai. Thai is commonly written without explicit word boundaries,
+and social-media text adds slang, non-standard spelling, emoji, transliterated
+loanwords, and Thai--English code-mixing. Thai NLP remains comparatively
+under-resourced, especially for downstream semantic tasks
+\citep{arreerard2022survey,phatthiyaphaibun2023pythainlp}. Thai-specific
+models such as WangchanBERTa and Typhoon demonstrate that language-specific
+pretraining, tokenization, and instruction tuning improve Thai processing
+\citep{lowphansirikul2021wangchanberta,pipatanakul2023typhoon}. Nevertheless,
+recent benchmarking also finds that performance can decline substantially for
+Northern, Northeastern, and Southern Thai varieties compared with Standard
+Thai \citep{limkonchotiwat2025dialects}. A simulation that ignores these
+features may produce fluent Standard Thai while misrepresenting the linguistic
+and social heterogeneity of the population of interest.
+
+Second, believable interaction is not evidence of behavioral validity. LLMs
+can sometimes reproduce subgroup-level response distributions when carefully
+conditioned \citep{argyle2023out}, and interview-grounded agents have shown
+promising agreement with the survey responses of the individuals they
+represent \citep{park2024thousand}. However, other studies report diminished
+diversity and sensitivity to prompting or answer order
+\citep{park2024diversity}. A critical review of generative ABMs concludes that
+many studies still rely on face validity or outcome measures that are only
+loosely connected to the mechanisms being modeled
+\citep{larooij2026validation}. Thus, a Thai-language simulation should not be
+treated as a proxy for Thai society unless its outputs are compared with
+held-out observations at both micro and macro levels.
+
+To address these gaps, we propose \textbf{DEEDY} (\textbf{D}igital
+\textbf{E}nvironment for \textbf{E}mergent \textbf{D}ynamics and
+\textbf{Y}ield), a Thai-centric extension of the MiroFish/OASIS workflow.
+DEEDY separates \emph{scenario-construction evidence} from
+\emph{validation evidence}. News reports and pre-event contextual material are
+used to construct the knowledge graph, actors, and environment; the
+corresponding real social posts, comments, and temporal interaction records are
+withheld from the agents and used only after simulation. This design reduces
+direct answer leakage and makes it possible to ask whether emergent simulation
+outcomes correspond to observed Thai discourse.
+
+DEEDY evaluates correspondence across multiple levels rather than relying on a
+single LLM-as-a-judge score. Content-level evaluation measures sentiment,
+stance, topic, narrative, and linguistic properties. Population-level
+evaluation compares distributions, subgroup differences, polarization, and
+uncertainty across repeated runs. Dynamic evaluation compares diffusion scale,
+depth, breadth, timing, and interaction structure, following the broader
+principle of validating generative ABMs against real ground truth
+\citep{gao2024survey,yang2024oasis}. Thai human assessment and LLM-assisted
+judging complement, but do not replace, quantitative comparison. The intended
+claim is therefore bounded: DEEDY is designed to reveal when a Thai-centric
+LLM-agent simulation reproduces observed patterns, when it fails, and how
+those conclusions change under alternative models and simulation settings.
+
+\section{Research Objectives and Contributions}
+\label{sec:objectives}
+
+This study has three contribution-level objectives:
+
+\begin{enumerate}
+    \item \textbf{Develop a Thai-centric multi-agent framework.}
+    Extend the MiroFish/OASIS pipeline with Thai-aware data processing,
+    graph-grounded actor and environment construction, and representations of
+    linguistic and sociocultural heterogeneity, including informal language,
+    code-mixing, and regional varieties where supported by the data.
+
+    \item \textbf{Model emergent Thai public-sentiment dynamics.}
+    Use interactions among heterogeneous LLM agents to examine how individual
+    exposure and response may aggregate into sentiment change, stance
+    formation, narrative competition, polarization, and information diffusion
+    under different social-network and recommendation conditions.
+
+    \item \textbf{Establish an empirical validation framework.}
+    Evaluate simulated outcomes against held-out Thai posts, comments, and
+    interaction traces using content-, population-, and diffusion-level
+    metrics, repeated runs, uncertainty reporting, and Thai human evaluation,
+    thereby identifying both the framework's useful operating conditions and
+    its limitations as a proxy for human behavior.
+\end{enumerate}
+
+\section{Background}
+\label{sec:background}
+
+\subsection{Agent-Based and Generative Social Simulation}
+
+An ABM specifies a population of autonomous units whose states and actions
+change through interaction with one another and with an environment. The
+researcher observes whether macro-level regularities emerge from these
+micro-level mechanisms \citep{macal2010tutorial}. In a social-media setting,
+an agent may read recommended content, create a post, reply, follow another
+user, or remain inactive. The platform environment stores content and
+relationships, advances time, and determines which information each agent can
+observe. Recommendation policies are part of the model because they mediate
+exposure and can therefore affect diffusion and polarization.
+
+LLM-based ABMs replace or augment some hand-written decision rules with
+language-model inference. The usual architecture combines a relatively stable
+profile, a changing state, memory, perception of available content, and an
+action-selection prompt. This improves expressive capacity but introduces new
+sources of uncertainty. Behavior can change with the base model, prompt
+wording, decoding parameters, memory design, or action ordering. Furthermore,
+agents produced by a shared model may be less heterogeneous than their persona
+descriptions suggest \citep{park2024diversity}. Repeated simulation,
+sensitivity analysis, and explicit reporting of model configurations are
+therefore part of the scientific method rather than implementation details.
+
+\subsection{The OASIS and MiroFish Foundations}
+
+OASIS is the simulation substrate most directly relevant to DEEDY. Its
+environment maintains user profiles, posts, and social relationships; its
+information filter and recommendation modules determine visible content; and
+its agents select among social actions over discrete time steps
+\citep{yang2024oasis}. OASIS evaluated information propagation using scale,
+depth, maximum breadth, and normalized root-mean-square error against real
+propagation curves. It also studied polarization and herding, illustrating the
+importance of combining behavioral experiments with real-data comparison.
+
+MiroFish adds a document-to-simulation workflow on top of this substrate. Its
+official implementation describes four stages: graph building from seed
+material, environment and persona construction, multi-agent simulation, and
+report generation \citep{mirofish2026}. This workflow is useful for rapid
+scenario construction, but a generated report is an interpretation of the
+simulated world, not an independent validation of it. DEEDY therefore retains
+the graph-grounded construction and social-simulation components while adding
+a formal separation between inputs and held-out ground truth, Thai-specific
+representations, repeated-run analysis, and explicit validation artifacts.
+
+\subsection{Thai Language and Online Discourse}
+
+Thai presents both computational and sociolinguistic challenges. The absence
+of explicit word delimiters makes segmentation a substantive modeling choice,
+not a neutral preprocessing step \citep{chormai2020segmentation}. Social-media
+messages further contain creative spelling, repeated characters, emoji,
+hashtags, abbreviations, and mixed scripts. Code-switching can also serve
+pragmatic functions such as expressing identity, politeness, group membership,
+or emphasis \citep{kongkerd2016codeswitching}; consequently, normalizing every
+message into formal monolingual Thai may erase socially meaningful signals.
+
+The Thai NLP ecosystem nevertheless provides important foundations.
+PyThaiNLP offers open tools and resources for tokenization and other Thai NLP
+tasks \citep{phatthiyaphaibun2023pythainlp}. WangchanBERTa showed the value of
+Thai-specific preprocessing and pretraining on data that include news and
+social media \citep{lowphansirikul2021wangchanberta}; Typhoon extended this
+direction to instruction-following Thai LLMs
+\citep{pipatanakul2023typhoon}. The Wisesight Sentiment Corpus provides
+26,737 informal Thai messages labeled as positive, neutral, negative, or
+question \citep{wisesight2020}. These resources can support preprocessing,
+sentiment measurement, and baseline evaluation, but they do not by themselves
+model longitudinal interaction or guarantee representativeness of Thai public
+opinion. DEEDY consequently treats language resources as measurement
+instruments and calibration aids, while constructing event-specific validation
+sets from observed discussions under documented sampling and privacy
+procedures.
+
+\section{Related Work}
+\label{sec:related}
+
+\subsection{LLM Agents for Individual and Social Behavior}
+
+Generative Agents introduced a memory--reflection--planning architecture that
+produced believable individual routines and emergent coordination in a small
+interactive world \citep{park2023generative}. Social Simulacra applied related
+capabilities to populated prototypes of online communities, generating
+members, posts, replies, and antisocial behavior in response to a system
+description \citep{park2022social}. These systems established the expressive
+potential of LLM-mediated simulation but primarily evaluated believability and
+design utility.
+
+Research on simulated human samples provides a complementary line of evidence.
+Argyle et al.\ introduced \emph{algorithmic fidelity}, comparing
+demographically conditioned model responses with human subgroup distributions
+\citep{argyle2023out}. Park et al.\ constructed agents from qualitative
+interviews with 1,052 individuals and evaluated them using survey,
+personality, and experimental measures \citep{park2024thousand}. These studies
+show that empirical grounding can improve correspondence, but they primarily
+concern individual response replication rather than the evolution of public
+discourse through networked interaction.
+
+\subsection{Large-Scale Social-Media Simulation}
+
+$S^3$ was among the early systems to connect LLM-based perception and action
+with emotion, attitude, and social-network interaction
+\citep{gao2023s3}. OASIS expanded scalability and modeled platform mechanisms,
+including dynamic networks and recommendation systems
+\citep{yang2024oasis}. GenSim provided abstractions for diverse scenarios and
+mechanisms for correcting simulation errors
+\citep{tang2025gensim}, whereas AgentSociety integrated broader social, urban,
+and economic spaces \citep{piao2025agentsociety}. DEEDY does not compete with
+these systems primarily on agent count. Its intended contribution is a
+language- and culture-specific construction-and-validation layer for Thai
+public discourse, implemented as an extension of the MiroFish/OASIS workflow.
+
+\subsection{Thai Sentiment and Language Modeling}
+
+Prior Thai NLP research has concentrated on resources, tokenization, text
+classification, and language-model adaptation. Surveys describe strong
+progress in upstream processing but fewer resources for downstream semantic
+analysis \citep{arreerard2022survey}. Thai social-text models demonstrate that
+domain-specific pretraining and preprocessing improve classification
+\citep{horsuwan2019socialtext}, and WangchanBERTa provides a widely used
+Thai-specific encoder \citep{lowphansirikul2021wangchanberta}. More recent Thai
+LLMs improve generation and instruction following
+\citep{pipatanakul2023typhoon}, yet dialect benchmarks indicate persistent
+performance disparities \citep{limkonchotiwat2025dialects}.
+
+Most of this work evaluates isolated texts or task responses. Sentiment
+classification can label a message, but it does not explain how exposure,
+reply structure, social influence, or recommendation produce a population
+trajectory. DEEDY connects Thai NLP measurement with an interactive
+multi-agent environment and evaluates both the generated language and the
+resulting collective dynamics.
+
+\subsection{Validation of Generative Social Simulation}
+
+Validation remains the central methodological distinction between a compelling
+demo and a scientific simulation. OASIS compared simulated and real
+propagation curves and reported structural limitations in reproducing
+diffusion depth \citep{yang2024oasis}. Broader surveys recommend validation at
+both individual and population levels using real ground truth
+\citep{gao2024survey}. Conversely, evidence of low response diversity and
+order sensitivity shows why surface realism or a single successful run is
+insufficient \citep{park2024diversity}. The systematic review by Larooij and
+T\"ornberg further argues that black-box mechanisms, cultural bias, and
+stochasticity can make generative ABMs harder rather than easier to validate
+\citep{larooij2026validation}.
+
+DEEDY operationalizes these lessons through event-level holdout, repeated
+runs, quantitative comparisons, human assessment, and sensitivity analysis.
+Its evaluation is designed to distinguish at least three questions: whether
+individual outputs are linguistically and culturally plausible; whether
+aggregate sentiment, stance, and narrative distributions correspond to the
+observed population; and whether the temporal and network processes that
+produce those outcomes resemble real diffusion. This separation prevents a
+high score on textual naturalness from being misinterpreted as evidence that
+the simulated social process is valid.
+
+\section{Scope Statement}
+\label{sec:scope}
+
+DEEDY is intended for exploratory and comparative analysis of Thai online
+discourse. Unless supported by prospective validation across multiple events,
+its outputs should not be described as forecasts of how Thai people will
+behave. The framework models the sampled online environment, not the entire
+Thai population, and any empirical study must document data provenance,
+platform coverage, demographic limitations, de-identification, and compliance
+with applicable research-ethics and platform requirements.
+
+\bibliographystyle{unsrtnat}
+\bibliography{deedy_references}
+
+\end{document}
