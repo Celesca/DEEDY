@@ -685,6 +685,147 @@ trace-enriched campaigns, improvement on at least two cascade metrics without
 material degradation on the others. Failure remains a reportable result and
 defines the application's operating boundary.
 
+\section{Automated Pilot Results}
+\label{sec:pilot-results}
+
+\subsection{Execution Scope and Reproducibility}
+
+An automated pilot was executed on 28 August 2026 to verify that the revised
+MiroFish application, non-generative ABM baseline, parameter sweep, provenance
+capture, and report path run end to end. The Docker image was built locally
+after adding the missing FastAPI runtime dependencies and switching the launch
+path to the current \texttt{frontend-v2} application. With cloud credentials
+absent, the web shell remained available while LLM- and Zep-dependent operations
+remained disabled. The backend health endpoint and frontend both returned HTTP
+200 during the recorded run.
+
+The pilot used seeds 1--10, 12 rounds, requested mean degree 6, and populations
+of 200, 500, and 1,000. Experiment~4 comprised 900 runs
+($5$ campaigns $\times 3$ feed policies $\times 2$ network assumptions
+$\times 3$ population sizes $\times 10$ seeds). The automated portion of
+Experiment~5 added 100 runs ($5$ campaigns $\times 2$ message conditions
+$\times 10$ seeds) at $N=500$. Input SHA-256 hashes, parameters, run-level
+records, aggregate tables, smoke-test responses, and interpretation limits are
+stored in \texttt{MiroFish\_App/result/manifest.json} and the accompanying
+machine-readable files. The runner writes no comment text, author identifier,
+or post URL to the result bundle.
+
+Table~\ref{tab:pilot-coverage} distinguishes executed work from the evaluation
+still required for the paper's main claims. In particular, this pilot does not
+substitute synthetic scores for unavailable LLM outputs, native-Thai ratings,
+or analyst judgments.
+
+\begin{table*}[t]
+\caption{Coverage of the planned experiments in the automated pilot.}
+\label{tab:pilot-coverage}
+\centering
+\footnotesize
+\begin{tabular}{@{}p{0.16\textwidth}p{0.74\textwidth}@{}}
+\toprule
+Experiment & Pilot status \\
+\midrule
+Exp. 1: Grounding & Not run: the checkout contained neither independent
+scenario seed packets nor an available LLM endpoint. \\
+Exp. 2: Thai adaptation & Not run: matched model conditions and native-Thai
+reference ratings were unavailable. \\
+Exp. 3: Core model & The simple non-generative ABM component was run; no claim
+is made about an LLM comparison or the hybrid cognitive tier. \\
+Exp. 4: Social mechanism & The full automated feed, network-assumption, and
+population-size sensitivity sweep was run with ten seeds. \\
+Exp. 5: Application & Docker health, result provenance, and a paired internal
+message-frame counterfactual were run; analyst usefulness and presentation
+effects were not rated. \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Dataset and Trace Audit}
+
+The supplied aggregate file and crawl contained five campaigns and exactly
+5,000 comments from 33 posts. Each campaign contributed 1,000 comments. The
+campaign-specific unique-author counts ranged from 946 to 981. However, all
+5,000 records had a null \texttt{parent\_comment\_id}. An observed reply graph
+and empirical cascade tree therefore could not be reconstructed. In accordance
+with the missing-trace rule in the experimental design, the pilot does not
+report observed cascade correspondence. For the mechanism sensitivity test,
+the planned observed-network condition was replaced by an explicitly labeled
+\emph{post-affiliation proxy}: agents sampled from the same source-post stratum
+received local ties. Its comparator was a random graph with the same number of
+edges. Neither graph should be described as an observed Thai interaction
+network.
+
+The sentiment distribution used to initialize each campaign was the summary
+over all collected comments. Consequently, the Jensen--Shannon distance in this
+section measures drift from a calibration target, not accuracy on held-out
+reactions. This circular calibration would be invalid as evidence for RQ1 or
+RQ2; it is retained only to diagnose whether the social mechanisms destabilize
+the supplied aggregate proportions.
+
+\subsection{Social-Mechanism Sensitivity}
+
+Table~\ref{tab:pilot-exp4} reports the $N=500$ slice, averaging five campaigns
+and ten seeds (50 runs per row). Results were strongly sensitive to the assumed
+graph. The edge-matched random network produced mean action rates of
+0.968--0.970 and reach of 0.997, whereas the post-affiliation proxy produced
+action rates of 0.400--0.402 and reach of 0.461--0.463. This difference is a
+property of the simulated propagation paths and is not an estimate of a
+platform effect. Population-size sensitivity was smaller within each topology:
+across the full sweep, mean action rates ranged from 0.965 to 0.970 for the
+random graph and from 0.400 to 0.419 for the post-affiliation proxy.
+
+The chronological feed had the lowest calibration drift at $N=500$
+($d_{\mathrm{JS}}=0.077$ on the random graph and 0.082 on the proxy), followed
+by the interest feed (0.102 and 0.097) and popularity feed (0.120 and 0.115).
+Popularity also produced lower polarization in the random-graph condition.
+These are descriptive sensitivity results from the non-generative rule set;
+they do not establish that a real chronological feed is more accurate or less
+polarizing.
+
+\begin{table*}[t]
+\caption{Experiment~4 automated pilot at $N=500$. Entries are means over five
+campaigns and ten seeds. JSD is distance from the all-comment calibration
+distribution, not held-out accuracy.}
+\label{tab:pilot-exp4}
+\centering
+\footnotesize
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+Feed & Network assumption & Action rate & Reach & JSD & Polarization & Largest cascade \\
+\midrule
+Chronological & Matched random & 0.968 & 0.997 & 0.077 & 0.172 & 0.251 \\
+Interest & Matched random & 0.970 & 0.997 & 0.102 & 0.138 & 0.224 \\
+Popularity & Matched random & 0.968 & 0.997 & 0.120 & 0.126 & 0.239 \\
+Chronological & Post-affiliation proxy & 0.402 & 0.463 & 0.082 & 0.169 & 0.159 \\
+Interest & Post-affiliation proxy & 0.400 & 0.463 & 0.097 & 0.163 & 0.161 \\
+Popularity & Post-affiliation proxy & 0.400 & 0.461 & 0.115 & 0.164 & 0.159 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Conditional Message-Frame Smoke Test}
+
+The application pilot compared the baseline with a positive-clarity signal of
+0.8 inside the model, using the interest feed, post-affiliation proxy, and
+$N=500$. Across 50 campaign-seed pairs, the positive-frame condition increased
+mean positive share from 0.443 to 0.667 and mean sentiment from 0.306 to 0.615.
+The paired positive-share change was 0.225, with a 2.5--97.5 percentile interval
+of 0.106--0.364 across the 50 pairs. Action rate changed by only 0.017, and its
+empirical interval ($-0.039$ to 0.085) included zero.
+
+The same intervention increased mean calibration JSD from 0.097 to 0.266; the
+paired change was 0.169 (empirical interval 0.054--0.291). Thus, the smoke test
+shows that a counterfactual travels through the pipeline and materially changes
+internal outputs, but it does not show an improvement. Indeed, it moves the
+simulation farther from the distribution used for calibration. Because the
+signal and response rule are model assumptions, these changes are conditional
+model behavior rather than causal effects on Thai consumers.
+
+Overall, the automated pilot satisfies the engineering portion of application
+completion and provenance, but it cannot yet evaluate the pre-registered
+linguistic, held-out correspondence, observed-cascade, or analyst-usefulness
+criteria. Those acceptance decisions remain open rather than being inferred
+from the proxy results.
+
 \section{Limitations and Ethical Considerations}
 
 The campaign corpus is a convenience sample of manually selected public posts
@@ -716,10 +857,26 @@ participatory research with Thai communities.
 
 \section{Conclusion and Future Work}
 
-\emph{Placeholder---to be completed after the data pipeline, MiroFish core,
-and experiments are finalized. The final conclusion will summarize measured
-findings, supported application claims, failure cases, and next steps without
-introducing results that are not reported in the paper.}
+This work specifies DEEDY as a Thai campaign-simulation adaptation of MiroFish
+and implements a reproducible application and non-generative pilot path. The
+repaired Docker stack served both the FastAPI backend and current React
+frontend, and 1,000 automated runs were completed with run-level provenance.
+The pilot exposed a substantive operating boundary: propagation outcomes were
+far more sensitive to the assumed network than to population size, while the
+available crawl provided no reply links with which to validate either network
+or its cascades. A positive message-frame counterfactual changed simulated
+sentiment as designed but increased distance from the calibration distribution;
+it therefore demonstrates pipeline sensitivity, not campaign effectiveness.
+
+These findings do not validate the paper's central claims about Thai linguistic
+fidelity or the hybrid LLM architecture. Completing that evaluation requires
+freezing independent scenario packets and campaign-level train/development/test
+splits, collecting reply- and timestamp-preserving traces, configuring matched
+Thai and multilingual LLM conditions, and obtaining blinded native-Thai and
+analyst ratings. The resulting experiments should retain the manifest and
+privacy controls established here, replace the post-affiliation proxy with
+observable trace-enriched graphs where available, and report failures whenever
+the pre-registered acceptance criteria are not met.
 
 \bibliographystyle{IEEEtran}
 \bibliography{deedy_references}

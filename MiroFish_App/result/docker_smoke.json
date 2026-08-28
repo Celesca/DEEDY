@@ -1,0 +1,14 @@
+{
+  "api": {
+    "url": "http://deedy:5001/health",
+    "status": "ok",
+    "http_status": 200,
+    "body_prefix": "{\"status\":\"ok\",\"service\":\"MiroFish Backend (FastAPI)\"}"
+  },
+  "frontend": {
+    "url": "http://deedy:3000/",
+    "status": "ok",
+    "http_status": 200,
+    "body_prefix": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } from \"/@react-refresh\";\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$RefreshSig$ = () => (type) => type;</script>\n\n    <script type=\"module\" src=\"/@vite/client\"></script>\n\n    <meta charset=\"UTF-8\" />\n    <link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>frontend-v2</title>\n "
+  }
+}

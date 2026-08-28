@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": "2026-08-28T07:46:44.273885+00:00",
+  "runner": {
+    "path": "experiments/run_paper_pilot.py",
+    "sha256": "a244db722de1ef42c2ad627d355f4e31d66b14d1b5df46e99232878b96fd1c90"
+  },
+  "python": "3.11.16 (main, Aug 25 2026, 03:43:29) [GCC 14.2.0]",
+  "platform": "Linux-7.0.14-orbstack-00380-ga7e0a2dc9535-aarch64-with-glibc2.41",
+  "inputs": {
+    "campaign_summary": {
+      "path": "/data-prep/apify/data/campaign_sentiment_summary.csv",
+      "sha256": "8586a2868f5b91099cc4b99e11a4458e423aae04d71607d0ea6948bf6f4ec135"
+    },
+    "social_threads": {
+      "path": "/data-prep/apify/data/social_comments_crawled.jsonl",
+      "sha256": "1b745d3c1737ce89da9ada0c447376485c66f7d311e8bcf2d32c8fee3416a04a"
+    }
+  },
+  "parameters": {
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "rounds": 12,
+    "populations": [
+      200,
+      500,
+      1000
+    ],
+    "feeds": [
+      "chronological",
+      "popularity",
+      "interest"
+    ],
+    "networks": [
+      "post_affiliation_proxy",
+      "matched_random"
+    ],
+    "mean_degree": 6,
+    "counterfactual": {
+      "population": 500,
+      "feed": "interest",
+      "network": "post_affiliation_proxy",
+      "positive_clarity_frame_signal": 0.8
+    }
+  },
+  "coverage": {
+    "exp1_grounding": "not_run_missing_independent_seed_packets_and_llm_credentials",
+    "exp2_thai_adaptation": "not_run_missing_model_conditions_and_native_thai_ratings",
+    "exp3_core_model": "non_generative_abm_component_only",
+    "exp4_social_mechanism": "completed_as_proxy_sensitivity_sweep",
+    "exp5_application": "automated_counterfactual_and_traceability_smoke_only"
+  },
+  "data_findings": {
+    "campaigns": 5,
+    "comments": 5000,
+    "reply_links": 0,
+    "network_substitution": "post_affiliation_proxy_for_unavailable_observed_reply_graph"
+  },
+  "interpretation_limits": [
+    "The calibration sentiment distribution comes from all collected comments; JSD measures simulation drift, not held-out accuracy.",
+    "The source export contains no parent reply links, so no observed cascade or reply-network correspondence is reported.",
+    "No LLM calls, Thai human ratings, or analyst study were performed.",
+    "The message-frame comparison is conditional inside this ABM and is not a causal estimate for Thai consumers.",
+    "No comment text, author identifiers, or post URLs are written to result artifacts."
+  ],
+  "row_counts": {
+    "exp4_runs": 900,
+    "exp5_runs": 100,
+    "exp5_pairs": 50
+  },
+  "smoke_test": {
+    "api": {
+      "url": "http://deedy:5001/health",
+      "status": "ok",
+      "http_status": 200,
+      "body_prefix": "{\"status\":\"ok\",\"service\":\"MiroFish Backend (FastAPI)\"}"
+    },
+    "frontend": {
+      "url": "http://deedy:3000/",
+      "status": "ok",
+      "http_status": 200,
+      "body_prefix": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <script type=\"module\">import { injectIntoGlobalHook } from \"/@react-refresh\";\ninjectIntoGlobalHook(window);\nwindow.$RefreshReg$ = () => {};\nwindow.$RefreshSig$ = () => (type) => type;</script>\n\n    <script type=\"module\" src=\"/@vite/client\"></script>\n\n    <meta charset=\"UTF-8\" />\n    <link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>frontend-v2</title>\n "
+    }
+  },
+  "artifacts": {
+    "dataset_audit.csv": {
+      "sha256": "662598362f2ebdcbb1eee70fceb081ff56a4011fcce4d48bdac365246e601d98"
+    },
+    "exp4_runs.jsonl": {
+      "sha256": "4fee08fb7ccd69fbd18748413290e44ebd94bc0195aa8b851ccb426490999754"
+    },
+    "exp4_campaign_summary.csv": {
+      "sha256": "f44136de0b43203e51a9902b46fb9dbe9a41bf1190bd75756b2449c472180ffc"
+    },
+    "exp4_overall_summary.csv": {
+      "sha256": "1c387ccf9b4c17ce5241ccb27976fa6041a36bda57c6818f21849f2dea486a25"
+    },
+    "exp5_runs.jsonl": {
+      "sha256": "ee3b4fe33b97b388a57e5f94037623158d341a96aadb5ce2370d08b3bc09f8e4"
+    },
+    "exp5_campaign_summary.csv": {
+      "sha256": "ceecb04cbba7cf3e7e6c78e329920f8284e845712759f12a07c92ceaf39f7d78"
+    },
+    "exp5_overall_summary.csv": {
+      "sha256": "9427da41c5c295a622699e3bbd9a241ff5fa4ea32fac250df3a1592cebba1b59"
+    },
+    "exp5_paired_deltas.csv": {
+      "sha256": "c11490262822956e4d72fd4acf0ca03b7068d3cb56c3180d7448cecd6e24c760"
+    },
+    "exp5_effect_summary.csv": {
+      "sha256": "804ecdb1ef81f7edbfa8d7eff64a47512d313e6479806b37ea0c0816c196ca64"
+    },
+    "docker_smoke.json": {
+      "sha256": "56388d45d54f9b2588da7b17b25f5109d5e650a8610206bc6bcf3985bb8aa704"
+    },
+    "RESULTS.md": {
+      "sha256": "5615770397a2402f68bc64e2e8c3e903bc5280c80830e7ebb342bd6e9e33f679"
+    }
+  }
+}

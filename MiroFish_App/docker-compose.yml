@@ -1,14 +1,59 @@
 services:
   deedy:
-    image: ghcr.io/Celesca/deedy:latest
-    # 加速镜像（如拉取缓慢可替换上方地址）
-    # image: ghcr.nju.edu.cn/Celesca/deedy:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: deedy:local
     container_name: deedy
+    # The web shell can start without cloud credentials. LLM/Zep operations
+    # still validate their keys at request time, while offline experiments and
+    # health checks remain available in a clean checkout.
     env_file:
-      - .env
+      - path: .env
+        required: false
     ports:
-      - "3000:3000"
+      - "3100:3000"
       - "5001:5001"
     restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:5001/health', timeout=5)
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
     volumes:
       - ./backend/uploads:/app/backend/uploads
+
+  paper-experiments:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: deedy:local
+    profiles:
+      - experiments
+    depends_on:
+      deedy:
+        condition: service_healthy
+    working_dir: /app
+    entrypoint:
+      - /app/backend/.venv/bin/python
+      - /app/experiments/run_paper_pilot.py
+    command:
+      - --summary
+      - /data-prep/apify/data/campaign_sentiment_summary.csv
+      - --threads
+      - /data-prep/apify/data/social_comments_crawled.jsonl
+      - --output
+      - /app/result
+      - --api-health-url
+      - http://deedy:5001/health
+      - --frontend-url
+      - http://deedy:3000/
+    volumes:
+      - ../1_data-prep:/data-prep:ro
+      - ./experiments:/app/experiments:ro
+      - ./result:/app/result

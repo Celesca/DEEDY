@@ -12,9 +12,17 @@ dependencies = [
     # 核心框架
     "flask>=3.0.0",
     "flask-cors>=6.0.0",
+    "fastapi>=0.110.0",
+    "uvicorn>=0.27.0",
     
     # LLM 相关
-    "openai>=1.0.0",
+    "openai>=1.86.0,<2",
+
+    # Memory, Thai retrieval, and network simulation
+    "chromadb>=1.0.0",
+    "sentence-transformers>=3.0.0",
+    "networkx>=3.0",
+    "pythainlp>=4.0.0",
     
     # Zep Cloud
     "zep-cloud==3.25.0",

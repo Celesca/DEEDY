@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "description": "DEEDY - เครื่องยนต์ Agent สองชั้นทำงานได้จริง",
   "scripts": {
-    "setup": "npm install && cd frontend && npm install",
+    "setup": "npm install && cd frontend-v2 && npm install",
     "setup:backend": "cd backend && uv sync",
     "setup:all": "npm run setup && npm run setup:backend",
     "dev": "concurrently --kill-others -n \"backend,frontend\" -c \"green,cyan\" \"npm run backend\" \"npm run frontend\"",
     "backend": "cd backend && uv run python run.py",
-    "frontend": "cd frontend && npm run dev",
-    "build": "cd frontend && npm run build"
+    "frontend": "cd frontend-v2 && npm run dev -- --host 0.0.0.0 --port 3000",
+    "build": "cd frontend-v2 && npm run build",
+    "test:paper-pilot": "cd backend && uv run python ../tests/test_paper_pilot.py"
   },
   "devDependencies": {
     "concurrently": "^9.2.4"

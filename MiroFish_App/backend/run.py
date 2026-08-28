@@ -24,14 +24,15 @@ from app.config import Config
 
 def main():
     """主函数"""
-    # 验证配置
+    # Validate cloud integrations, but keep the application shell and health
+    # endpoint available for local/Docker smoke tests. Individual LLM and Zep
+    # operations still fail closed when their credentials are required.
     errors = Config.validate()
     if errors:
-        print("配置错误:")
+        print("配置警告（云端功能将在调用时保持禁用）:")
         for err in errors:
             print(f"  - {err}")
-        print("\n请检查 .env 文件中的配置")
-        sys.exit(1)
+        print("\n如需 LLM/Zep 功能，请检查 .env 文件中的配置")
     
     # 创建应用 (ensure config is loaded if necessary)
     
@@ -45,4 +46,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
