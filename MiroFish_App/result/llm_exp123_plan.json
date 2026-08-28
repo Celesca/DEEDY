@@ -1,0 +1,38 @@
+{
+  "models": [
+    "deepseek/deepseek-v4-flash-0731",
+    "qwen/qwen3-8b"
+  ],
+  "conditions": [
+    "seed_only_thai_context",
+    "ungrounded",
+    "leaky_all_source",
+    "translated_unadapted",
+    "normalization_no_context"
+  ],
+  "campaigns": [
+    "Parameter Gelato",
+    "KFC Bucket Ware",
+    "MK Buffet",
+    "วิ่งแลกแว่น | Top Charoen",
+    "ไทยช่วยไทยพลัส"
+  ],
+  "seeds": 10,
+  "samples_per_call": 12,
+  "unique_calls": 500,
+  "expanded_experiment_rows_expected": 750,
+  "estimated_worst_case_cost_usd": 0.47864032000000006,
+  "max_cost_usd": 5.0,
+  "credentials_present": false,
+  "pricing_per_token": {
+    "deepseek/deepseek-v4-flash-0731": {
+      "prompt": 3.5e-08,
+      "completion": 2.8e-07
+    },
+    "qwen/qwen3-8b": {
+      "prompt": 1.17e-07,
+      "completion": 4.5500000000000004e-07
+    }
+  },
+  "leakage_guard": "Only leaky_all_source receives observed aggregate ratios/analysis; no raw comments or URLs are used."
+}

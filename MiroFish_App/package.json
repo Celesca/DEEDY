@@ -10,7 +10,8 @@
     "backend": "cd backend && uv run python run.py",
     "frontend": "cd frontend-v2 && npm run dev -- --host 0.0.0.0 --port 3000",
     "build": "cd frontend-v2 && npm run build",
-    "test:paper-pilot": "cd backend && uv run python ../tests/test_paper_pilot.py"
+    "test:paper-pilot": "cd backend && uv run python ../tests/test_paper_pilot.py",
+    "test:llm-exp123": "cd backend && uv run python ../tests/test_llm_exp123.py"
   },
   "devDependencies": {
     "concurrently": "^9.2.4"

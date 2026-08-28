@@ -249,11 +249,12 @@ class SimulationConfigGenerator:
         self.model_name = model_name or Config.LLM_MODEL_NAME
         
         if not self.api_key:
-            raise ValueError("LLM_API_KEY 未配置")
+            raise ValueError("OPENROUTER_API_KEY 未配置")
         
         self.client = OpenAI(
             api_key=self.api_key,
-            base_url=self.base_url
+            base_url=self.base_url,
+            default_headers=Config.LLM_DEFAULT_HEADERS,
         )
     
     def generate_config(
@@ -1021,4 +1022,3 @@ class SimulationConfigGenerator:
                 "influence_weight": 1.0
             }
     
-

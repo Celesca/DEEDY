@@ -10,16 +10,25 @@ import re
 
 async def generate_agent_action(prompt: str, model: str = None) -> dict:
     if model is None:
-        model = os.environ.get("LLM_MODEL_NAME", "qwen/qwen3.7-flash")
-    api_key = os.environ.get("LLM_API_KEY", "")
+        model = os.environ.get("LLM_MODEL_NAME", "deepseek/deepseek-v4-flash-0731")
+    api_key = (
+        os.environ.get("OPENROUTER_API_KEY")
+        or os.environ.get("LLM_API_KEY")
+        or os.environ.get("OPENAI_API_KEY", "")
+    )
     base_url = os.environ.get("LLM_BASE_URL", "https://openrouter.ai/api/v1")
+    headers = {"Authorization": f"Bearer {api_key}"}
+    if os.environ.get("OPENROUTER_HTTP_REFERER"):
+        headers["HTTP-Referer"] = os.environ["OPENROUTER_HTTP_REFERER"]
+    if os.environ.get("OPENROUTER_APP_TITLE"):
+        headers["X-OpenRouter-Title"] = os.environ["OPENROUTER_APP_TITLE"]
     
     async with llm_semaphore:
         async with httpx.AsyncClient() as client:
             try:
                 response = await client.post(
                     f"{base_url}/chat/completions",
-                    headers={"Authorization": f"Bearer {api_key}"},
+                    headers=headers,
                     json={
                         "model": model,
                         "messages": [{"role": "user", "content": prompt}],
@@ -46,9 +55,18 @@ async def generate_agent_action(prompt: str, model: str = None) -> dict:
 
 async def generate_reflection(metrics_summary: str, model: str = None) -> str:
     if model is None:
-        model = os.environ.get("LLM_MODEL_NAME", "qwen/qwen3.7-flash")
-    api_key = os.environ.get("LLM_API_KEY", "")
+        model = os.environ.get("LLM_MODEL_NAME", "deepseek/deepseek-v4-flash-0731")
+    api_key = (
+        os.environ.get("OPENROUTER_API_KEY")
+        or os.environ.get("LLM_API_KEY")
+        or os.environ.get("OPENAI_API_KEY", "")
+    )
     base_url = os.environ.get("LLM_BASE_URL", "https://openrouter.ai/api/v1")
+    headers = {"Authorization": f"Bearer {api_key}"}
+    if os.environ.get("OPENROUTER_HTTP_REFERER"):
+        headers["HTTP-Referer"] = os.environ["OPENROUTER_HTTP_REFERER"]
+    if os.environ.get("OPENROUTER_APP_TITLE"):
+        headers["X-OpenRouter-Title"] = os.environ["OPENROUTER_APP_TITLE"]
     
     prompt = (
         "You are a Senior Marketing Analyst. Review the following simulation metrics and agent comments "
@@ -62,7 +80,7 @@ async def generate_reflection(metrics_summary: str, model: str = None) -> str:
         try:
             response = await client.post(
                 f"{base_url}/chat/completions",
-                headers={"Authorization": f"Bearer {api_key}"},
+                headers=headers,
                 json={
                     "model": model,
                     "messages": [{"role": "user", "content": prompt}],

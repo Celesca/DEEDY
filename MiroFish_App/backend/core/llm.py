@@ -48,11 +48,12 @@ class LLMClient:
         if self._client is None:
             if not self.config.is_configured():
                 raise LLMError(
-                    "ยังไม่ได้ตั้งค่า API key — ใส่ LLM_API_KEY ใน .env"
+                    "ยังไม่ได้ตั้งค่า API key — ใส่ OPENROUTER_API_KEY ใน .env"
                 )
             self._client = OpenAI(
                 api_key=self.config.api_key,
                 base_url=self.config.base_url,
+                default_headers=self.config.default_headers(),
                 timeout=self.config.timeout,
                 max_retries=0,  # จัดการ retry เอง จะได้คุม backoff ได้
             )

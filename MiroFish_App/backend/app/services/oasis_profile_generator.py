@@ -264,11 +264,12 @@ class OasisProfileGenerator:
         self.model_name = model_name or Config.LLM_MODEL_NAME
         
         if not self.api_key:
-            raise ValueError("LLM_API_KEY 未配置")
+            raise ValueError("OPENROUTER_API_KEY 未配置")
         
         self.client = OpenAI(
             api_key=self.api_key,
-            base_url=self.base_url
+            base_url=self.base_url,
+            default_headers=Config.LLM_DEFAULT_HEADERS,
         )
         
         # Zep客户端用于检索丰富上下文

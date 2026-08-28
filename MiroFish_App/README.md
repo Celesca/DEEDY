@@ -28,12 +28,13 @@ pip install -r requirements.txt
 
 ### 2. Environment Variables
 
-Create a `.env` file in the `backend` directory with your LLM configuration:
+Create a `.env` file in the project root with your OpenRouter configuration:
 
 ```ini
-LLM_API_KEY="your_api_key_here"
-LLM_BASE_URL="https://api.openai.com/v1"  # Or your local/vLLM/OpenRouter endpoint
-LLM_MODEL_NAME="openai/gpt-4o-mini"       # Or your preferred model like qwen3.7-flash
+OPENROUTER_API_KEY="sk-or-v1-your-key-here"
+LLM_BASE_URL="https://openrouter.ai/api/v1"
+LLM_MODEL_NAME="deepseek/deepseek-v4-flash-0731"
+LLM_COMPARISON_MODEL_NAME="qwen/qwen3-8b"
 ```
 
 ### 3. Run the Server

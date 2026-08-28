@@ -53,13 +53,24 @@ def _env_float(name: str, default: float) -> float:
 @dataclass
 class LLMConfig:
     api_key: Optional[str] = field(default_factory=lambda: (
-        os.environ.get("LLM_API_KEY") or os.environ.get("OPENAI_API_KEY")
+        os.environ.get("OPENROUTER_API_KEY")
+        or os.environ.get("LLM_API_KEY")
+        or os.environ.get("OPENAI_API_KEY")
     ))
     base_url: str = field(default_factory=lambda: os.environ.get(
         "LLM_BASE_URL", "https://openrouter.ai/api/v1"
     ))
     model: str = field(default_factory=lambda: os.environ.get(
-        "LLM_MODEL_NAME", "qwen/qwen3-30b-a3b-instruct-2507"
+        "LLM_MODEL_NAME", "deepseek/deepseek-v4-flash-0731"
+    ))
+    comparison_model: str = field(default_factory=lambda: os.environ.get(
+        "LLM_COMPARISON_MODEL_NAME", "qwen/qwen3-8b"
+    ))
+    http_referer: str = field(default_factory=lambda: os.environ.get(
+        "OPENROUTER_HTTP_REFERER", ""
+    ))
+    app_title: str = field(default_factory=lambda: os.environ.get(
+        "OPENROUTER_APP_TITLE", "DEEDY Thai Campaign Simulation"
     ))
     temperature: float = field(default_factory=lambda: _env_float("LLM_TEMPERATURE", 0.85))
     max_tokens: int = field(default_factory=lambda: _env_int("LLM_MAX_TOKENS", 700))
@@ -76,6 +87,16 @@ class LLMConfig:
 
     def is_configured(self) -> bool:
         return bool(self.api_key) and "your_" not in (self.api_key or "")
+
+    def default_headers(self) -> dict[str, str]:
+        return {
+            key: value
+            for key, value in {
+                "HTTP-Referer": self.http_referer,
+                "X-OpenRouter-Title": self.app_title,
+            }.items()
+            if value
+        }
 
 
 @dataclass

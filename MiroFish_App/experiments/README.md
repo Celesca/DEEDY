@@ -26,3 +26,22 @@ Scope is intentionally strict:
 The crawl has no reply-parent links. The runner therefore labels its clustered
 graph `post_affiliation_proxy`; it must not be described as an observed reply
 network.
+
+## OpenRouter Experiments 1--3
+
+Configure `OPENROUTER_API_KEY` in the project-root `.env`, then run:
+
+```sh
+docker compose --profile experiments run --rm llm-experiments
+```
+
+The primary model is pinned to `deepseek/deepseek-v4-flash-0731`; the
+cost-efficient comparator is `qwen/qwen3-8b`. A dry run writes the exact call
+plan and cost estimate without sending a model request:
+
+```sh
+docker compose --profile experiments run --rm llm-experiments --dry-run
+```
+
+The live runner validates the key, enforces a USD cost cap, writes each
+completed call immediately, and resumes only incomplete jobs after interruption.

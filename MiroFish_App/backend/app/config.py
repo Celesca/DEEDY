@@ -25,9 +25,27 @@ class Config:
     JSON_AS_ASCII = False
     
     # LLM配置（统一使用OpenAI格式）
-    LLM_API_KEY = os.environ.get('LLM_API_KEY')
-    LLM_BASE_URL = os.environ.get('LLM_BASE_URL', 'https://api.openai.com/v1')
-    LLM_MODEL_NAME = os.environ.get('LLM_MODEL_NAME', 'gpt-4o-mini')
+    LLM_API_KEY = (
+        os.environ.get('OPENROUTER_API_KEY')
+        or os.environ.get('LLM_API_KEY')
+        or os.environ.get('OPENAI_API_KEY')
+    )
+    LLM_BASE_URL = os.environ.get('LLM_BASE_URL', 'https://openrouter.ai/api/v1')
+    LLM_MODEL_NAME = os.environ.get(
+        'LLM_MODEL_NAME', 'deepseek/deepseek-v4-flash-0731'
+    )
+    LLM_COMPARISON_MODEL_NAME = os.environ.get(
+        'LLM_COMPARISON_MODEL_NAME', 'qwen/qwen3-8b'
+    )
+    OPENROUTER_HTTP_REFERER = os.environ.get('OPENROUTER_HTTP_REFERER', '')
+    OPENROUTER_APP_TITLE = os.environ.get(
+        'OPENROUTER_APP_TITLE', 'DEEDY Thai Campaign Simulation'
+    )
+    LLM_DEFAULT_HEADERS = {}
+    if OPENROUTER_HTTP_REFERER:
+        LLM_DEFAULT_HEADERS['HTTP-Referer'] = OPENROUTER_HTTP_REFERER
+    if OPENROUTER_APP_TITLE:
+        LLM_DEFAULT_HEADERS['X-OpenRouter-Title'] = OPENROUTER_APP_TITLE
     
     # Zep配置
     ZEP_API_KEY = os.environ.get('ZEP_API_KEY')
@@ -65,7 +83,7 @@ class Config:
         """验证必要配置"""
         errors: list[str] = []
         if not cls.LLM_API_KEY:
-            errors.append("LLM_API_KEY 未配置")
+            errors.append("OPENROUTER_API_KEY 未配置")
         if not cls.ZEP_API_KEY:
             errors.append("ZEP_API_KEY 未配置")
         if os.environ.get("ZEP_API_URL"):
