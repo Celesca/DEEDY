@@ -43,5 +43,11 @@ plan and cost estimate without sending a model request:
 docker compose --profile experiments run --rm llm-experiments --dry-run
 ```
 
+Before the full matrix, one live request per model can be checked with:
+
+```sh
+docker compose --profile experiments run --rm llm-experiments --smoke-test
+```
+
 The live runner validates the key, enforces a USD cost cap, writes each
 completed call immediately, and resumes only incomplete jobs after interruption.

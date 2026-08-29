@@ -11,6 +11,9 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 
+\setlength{\textfloatsep}{9pt plus 2pt minus 2pt}
+\setlength{\dbltextfloatsep}{9pt plus 2pt minus 2pt}
+
 \graphicspath{{./}{paper/}}
 
 \title{DEEDY: A Thai-Centric Multi-Agent Framework for\\
@@ -43,7 +46,10 @@ framing, audience composition, and platform mechanisms may shape simulated
 reaction, diffusion, and narrative formation. We propose leakage-resistant
 evaluation against held-out Thai comments using sentiment and stance
 distribution distance, narrative coverage, response diversity, propagation
-error, repeated runs, and native-Thai human assessment. DEEDY is positioned as
+error, repeated runs, and native-Thai human assessment. An OpenRouter pilot
+completed 500 calls across DeepSeek V4 Flash 0731 and Qwen3 8B, but its paired
+diagnostic intervals did not establish a grounding or model-fidelity advantage.
+DEEDY is positioned as
 an exploratory campaign-planning and social-listening instrument, not as a
 deterministic forecast of consumer behavior or a replacement for field
 research.
@@ -473,8 +479,13 @@ caricatured dialect. They preserve uncertainty, allow silence, and prohibit
 fabricated quotations or demographic claims. Conversation context is included
 for reply generation because Thai stance and sarcasm may depend on an earlier
 turn~\cite{hazarika2018cascade}. The language model is configurable: a
-Thai-optimized model such as Typhoon 2 and a strong multilingual model are
-compared under identical action rules rather than assuming either is superior.
+Thai-optimized model such as Typhoon 2 can be compared with multilingual
+models under identical action rules rather than assuming that any model is
+superior. In the executable pilot, the OpenAI-compatible OpenRouter endpoint
+was configured with pinned \texttt{deepseek/deepseek-v4-flash-0731} and
+\texttt{qwen/qwen3-8b} revisions. Neither is treated as a Thai-specialized
+control; their comparison tests the configured model path and cost--quality
+trade-off, while the native-Thai model comparison remains future work.
 
 \subsubsection{Information-Operations Stress Testing}
 
@@ -576,8 +587,9 @@ scenario pipeline rather than parametric knowledge or target leakage. \\
 Exp. 2: Thai adaptation & Full Thai adaptation; translated/unadapted MiroFish;
 normalization without context features & Measure sentiment/stance distance,
 narrative coverage, Thai quality, sarcasm, code-mixing, and diversity. \\
-Exp. 3: Core model & Thai-optimized LLM; matched multilingual LLM; simple
-non-generative ABM baseline & Separate the contribution of the language model
+Exp. 3: Core model & DeepSeek V4 Flash 0731; Qwen3 8B; simple non-generative
+ABM baseline in the pilot, followed by a matched Thai-specialized comparison
+in the confirmatory study & Separate the contribution of the language model
 from the graph, population, and platform mechanisms. \\
 Exp. 4: Social mechanism & Chronological, popularity, and interest feeds;
 observed versus random network; multiple population sizes & Test cascade,
@@ -666,6 +678,15 @@ opened. We report medians and 95\% bootstrap confidence intervals across
 campaigns. Paired conditions use a campaign-level permutation test or Wilcoxon
 signed-rank test with Holm correction. Effect sizes accompany $p$-values.
 
+The OpenRouter pilot fixes temperature at 0.8, the completion ceiling at 2,200
+tokens, reasoning mode off, concurrency at 12, and ten requested seeds. Each
+call asks for 12 structured synthetic Thai reactions. Five campaigns, five
+prompt conditions, two models, and ten seeds yield 500 unique calls. The
+seed-only condition is reused when expanding Experiments~1--3, producing 750
+metric rows without making duplicate provider requests. Model-returned
+sentiment labels are diagnostic self-reports rather than independent
+annotations.
+
 The main comparison is the full DEEDY pipeline versus translated/unadapted
 MiroFish. Component ablations remove graph retrieval, Thai context features,
 thread context, or observed population weights one at a time. The deliberately
@@ -695,25 +716,30 @@ MiroFish application, non-generative ABM baseline, parameter sweep, provenance
 capture, and report path run end to end. The Docker image was built locally
 after adding the missing FastAPI runtime dependencies and switching the launch
 path to the current \texttt{frontend-v2} application. With cloud credentials
-absent, the web shell remained available while LLM- and Zep-dependent operations
-remained disabled. The backend health endpoint and frontend both returned HTTP
-200 during the recorded run.
+absent during the first run, the web shell remained available while LLM- and
+Zep-dependent operations remained disabled. The backend health endpoint and
+frontend both returned HTTP 200 during the recorded run. A second Dockerized
+run on 29 August 2026 (Bangkok time) exercised the OpenRouter LLM path for
+Experiments~1--3. Zep-dependent graph-memory operations were not required for
+this bounded prompt-level pilot.
 
 The pilot used seeds 1--10, 12 rounds, requested mean degree 6, and populations
 of 200, 500, and 1,000. Experiment~4 comprised 900 runs
 ($5$ campaigns $\times 3$ feed policies $\times 2$ network assumptions
 $\times 3$ population sizes $\times 10$ seeds). The automated portion of
 Experiment~5 added 100 runs ($5$ campaigns $\times 2$ message conditions
-$\times 10$ seeds) at $N=500$. Input SHA-256 hashes, parameters, run-level
-records, aggregate tables, smoke-test responses, and interpretation limits are
-stored in \texttt{MiroFish\_App/result/manifest.json} and the accompanying
-machine-readable files. The runner writes no comment text, author identifier,
-or post URL to the result bundle.
+$\times 10$ seeds) at $N=500$. Experiments~1--3 added 500 unique OpenRouter
+calls and 750 expanded metric rows. Input SHA-256 hashes, parameters, run-level
+records, aggregate tables, smoke-test responses, provider pricing, and
+interpretation limits are stored in \texttt{MiroFish\_App/result/manifest.json},
+\texttt{llm\_exp123\_manifest.json}, and the accompanying machine-readable
+files. No authentic comment text, author identifier, or post URL was placed in
+the result bundle or sent to OpenRouter.
 
 Table~\ref{tab:pilot-coverage} distinguishes executed work from the evaluation
 still required for the paper's main claims. In particular, this pilot does not
-substitute synthetic scores for unavailable LLM outputs, native-Thai ratings,
-or analyst judgments.
+substitute model self-labels or character ratios for independent held-out
+labels, native-Thai ratings, or analyst judgments.
 
 \begin{table*}[t]
 \caption{Coverage of the planned experiments in the automated pilot.}
@@ -724,12 +750,14 @@ or analyst judgments.
 \toprule
 Experiment & Pilot status \\
 \midrule
-Exp. 1: Grounding & Not run: the checkout contained neither independent
-scenario seed packets nor an available LLM endpoint. \\
-Exp. 2: Thai adaptation & Not run: matched model conditions and native-Thai
-reference ratings were unavailable. \\
-Exp. 3: Core model & The simple non-generative ABM component was run; no claim
-is made about an LLM comparison or the hybrid cognitive tier. \\
+Exp. 1: Grounding & Seed-only, ungrounded, and deliberately leaky prompt
+conditions were run for two models; independent held-out scenario packets
+remain unavailable. \\
+Exp. 2: Thai adaptation & Three prompt-level conditions were run for two
+models; native-Thai reference ratings remain unavailable. \\
+Exp. 3: Core model & DeepSeek V4 Flash 0731, Qwen3 8B, and the simple
+non-generative ABM were run; the Thai-specialized and full hybrid-tier
+comparison remains pending. \\
 Exp. 4: Social mechanism & The full automated feed, network-assumption, and
 population-size sensitivity sweep was run with ten seeds. \\
 Exp. 5: Application & Docker health, result provenance, and a paired internal
@@ -760,6 +788,81 @@ section measures drift from a calibration target, not accuracy on held-out
 reactions. This circular calibration would be invalid as evidence for RQ1 or
 RQ2; it is retained only to diagnose whether the social mechanisms destabilize
 the supplied aggregate proportions.
+
+\subsection{OpenRouter LLM Diagnostics: Experiments 1--3}
+
+All 500 provider calls completed. DeepSeek returned 2,983 of 3,000 requested
+reactions; Qwen returned 3,000 of 3,000. Across all five prompt conditions,
+DeepSeek's 250 calls averaged 35.51 seconds and cost \$0.0276, whereas Qwen's
+250 calls averaged 15.17 seconds and cost \$0.1109. The complete run cost
+\$0.1386. Thus, Qwen was faster in this execution, but DeepSeek was about four
+times less expensive. These totals depend on the provider route, token counts,
+and prices recorded in the manifest and are not universal model benchmarks.
+
+Table~\ref{tab:pilot-exp12} reports sentiment JSD and a character-level Thai
+ratio. In Experiment~1, the paired seed-only-minus-ungrounded JSD was $-0.0063$
+for DeepSeek (empirical 2.5--97.5 percentile interval $-0.1483$ to $0.1756$)
+and $0.0471$ for Qwen ($-0.3313$ to $0.3484$). Both intervals span zero. The
+leaky condition had lower mean JSD, but this expected result is invalid as
+system performance because target aggregates were supplied to its prompt.
+
+\begin{table*}[t]
+\caption{Experiments~1--2 OpenRouter diagnostics. Each cell averages five
+campaigns and ten seeds. Sentiment JSD is distance from an all-comment
+calibration target, not held-out accuracy; the leaky row is invalid by design.}
+\label{tab:pilot-exp12}
+\centering
+\footnotesize
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Experiment & Condition & DeepSeek JSD & Qwen JSD & DeepSeek Thai ratio & Qwen Thai ratio \\
+\midrule
+Exp. 1 & Seed only & 0.2572 & 0.2859 & 0.9822 & 0.9922 \\
+Exp. 1 & Ungrounded & 0.2635 & 0.2388 & 0.9734 & 0.9561 \\
+Exp. 1 & Leaky invalid bound & 0.2031 & 0.1966 & 0.9894 & 0.9927 \\
+Exp. 2 & Thai-context prompt & 0.2572 & 0.2859 & 0.9822 & 0.9922 \\
+Exp. 2 & Translated/unadapted & 0.2604 & 0.2523 & 0.9978 & 0.9611 \\
+Exp. 2 & Normalization, no context & 0.2460 & 0.2548 & 0.9797 & 0.9736 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+For Experiment~2, Thai-context-minus-translated JSD was $-0.0032$ for
+DeepSeek ($-0.1444$ to $0.1344$) and $0.0337$ for Qwen ($-0.1988$ to $0.3302$).
+The Thai-context-minus-normalization intervals also spanned zero. Thai-context
+responses were longer than normalization-only responses for 49 of 50 DeepSeek
+pairs and all 50 Qwen pairs, but had lower character-bigram diversity on
+average. These prompt proxies therefore do not establish that Thai adaptation
+improved quality. Thai-character ratios of 0.956--0.998 show script use, not
+naturalness, cultural appropriateness, sarcasm fidelity, or code-mixing quality.
+
+Table~\ref{tab:pilot-exp3} compares the shared seed-only condition with the
+uniform non-generative baseline. DeepSeek-minus-Qwen JSD was $-0.0287$
+($-0.3592$ to $0.2179$). DeepSeek-minus-ABM was $-0.0207$ ($-0.2341$ to
+$0.1955$), and Qwen-minus-ABM was $0.0081$ ($-0.3765$ to $0.4340$). All
+intervals span zero, so this pilot establishes no fidelity advantage for an
+LLM tier or for either LLM. Qwen produced every requested schema item; the
+DeepSeek seed-only rows were 0.9833 schema-valid and contained no exact
+duplicates. Blinded native-Thai scoring and independent campaign holdouts are
+still required.
+
+\begin{table*}[t]
+\caption{Experiment~3 core-model diagnostic over five campaigns and ten
+seeds. Cost is mean provider cost per campaign-seed row. The ABM emits states,
+not language.}
+\label{tab:pilot-exp3}
+\centering
+\footnotesize
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Condition & Sentiment JSD & Thai ratio & Valid share & Latency (s) & Cost/run \\
+\midrule
+DeepSeek V4 Flash 0731 & 0.2572 & 0.9822 & 0.9833 & 31.49 & \$0.000116 \\
+Qwen3 8B & 0.2859 & 0.9922 & 1.0000 & 16.53 & \$0.000476 \\
+Uniform non-generative ABM & 0.2779 & -- & 1.0000 & 0.00 & \$0.000000 \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 \subsection{Social-Mechanism Sensitivity}
 
@@ -821,7 +924,8 @@ signal and response rule are model assumptions, these changes are conditional
 model behavior rather than causal effects on Thai consumers.
 
 Overall, the automated pilot satisfies the engineering portion of application
-completion and provenance, but it cannot yet evaluate the pre-registered
+completion and provenance and exercises the two configured OpenRouter models.
+Its self-labeled prompt diagnostics do not satisfy the pre-registered
 linguistic, held-out correspondence, observed-cascade, or analyst-usefulness
 criteria. Those acceptance decisions remain open rather than being inferred
 from the proxy results.
@@ -849,7 +953,12 @@ platform terms and institutional research-ethics requirements.
 
 Finally, LLM agents share training data, architecture, and prompt conventions;
 agreement between them may reflect a common model prior rather than social
-consensus. Counterfactual campaign findings are conditional on the scenario,
+consensus. Self-reported sentiment can also reflect compliance with output
+instructions rather than a stable latent reaction. Provider routing, model
+revision, quantization, load, and pricing may change latency, cost, and output
+even when the public model identifier remains fixed; the run manifest is
+therefore necessary but cannot eliminate provider-side uncertainty.
+Counterfactual campaign findings are conditional on the scenario,
 actor sampling, network, recommender, and model version. DEEDY is therefore an
 instrument for exploratory comparison and hypothesis generation, not a
 replacement for campaign experiments, customer research, surveys, or
@@ -858,25 +967,29 @@ participatory research with Thai communities.
 \section{Conclusion and Future Work}
 
 This work specifies DEEDY as a Thai campaign-simulation adaptation of MiroFish
-and implements a reproducible application and non-generative pilot path. The
+and implements reproducible generative and non-generative pilot paths. The
 repaired Docker stack served both the FastAPI backend and current React
-frontend, and 1,000 automated runs were completed with run-level provenance.
-The pilot exposed a substantive operating boundary: propagation outcomes were
-far more sensitive to the assumed network than to population size, while the
-available crawl provided no reply links with which to validate either network
-or its cascades. A positive message-frame counterfactual changed simulated
-sentiment as designed but increased distance from the calibration distribution;
-it therefore demonstrates pipeline sensitivity, not campaign effectiveness.
+frontend; 1,000 non-generative runs and 500 OpenRouter calls completed with
+run-level provenance. DeepSeek V4 Flash 0731 cost less in this run and Qwen3 8B
+returned all requested items faster, but paired sentiment-JSD intervals did not
+establish a fidelity advantage for grounding, either model, or the LLM tier.
+The mechanism pilot exposed a separate operating boundary: propagation outcomes
+were far more sensitive to the assumed network than to population size, while
+the available crawl provided no reply links with which to validate either
+network or its cascades. A positive message-frame counterfactual changed
+simulated sentiment as designed but increased distance from the calibration
+distribution; it therefore demonstrates pipeline sensitivity, not campaign
+effectiveness.
 
 These findings do not validate the paper's central claims about Thai linguistic
 fidelity or the hybrid LLM architecture. Completing that evaluation requires
 freezing independent scenario packets and campaign-level train/development/test
-splits, collecting reply- and timestamp-preserving traces, configuring matched
-Thai and multilingual LLM conditions, and obtaining blinded native-Thai and
-analyst ratings. The resulting experiments should retain the manifest and
-privacy controls established here, replace the post-affiliation proxy with
-observable trace-enriched graphs where available, and report failures whenever
-the pre-registered acceptance criteria are not met.
+splits, collecting reply- and timestamp-preserving traces, adding a matched
+Thai-specialized model condition, and obtaining blinded native-Thai and analyst
+ratings. The resulting experiments should retain the manifest and privacy
+controls established here, replace the post-affiliation proxy with observable
+trace-enriched graphs where available, and report failures whenever the
+pre-registered acceptance criteria are not met.
 
 \bibliographystyle{IEEEtran}
 \bibliography{deedy_references}

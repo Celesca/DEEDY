@@ -123,12 +123,15 @@ def load_env() -> None:
     env_path = root / ".env"
     if not env_path.exists():
         return
+    parsed: dict[str, str] = {}
     for line in env_path.read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if not line or line.startswith("#") or "=" not in line:
             continue
         key, value = line.split("=", 1)
-        os.environ.setdefault(key.strip(), value.strip())
+        parsed[key.strip()] = value.strip()
+    for key, value in parsed.items():
+        os.environ.setdefault(key, value)
 
 
 def api_key() -> str:
@@ -710,6 +713,11 @@ def build_results_markdown(summary: Sequence[dict], paired: Sequence[dict], call
         lines.append("")
     total_cost = sum(float(record.get("cost_usd") or 0) for record in call_records)
     failures = sum(record.get("status") != "ok" for record in call_records)
+    paired_jsd = [
+        float(row["sentiment_js_distance_deepseek_minus_qwen"])
+        for row in paired
+        if row.get("sentiment_js_distance_deepseek_minus_qwen") is not None
+    ]
     lines.extend(
         [
             "## Execution summary",
@@ -718,6 +726,31 @@ def build_results_markdown(summary: Sequence[dict], paired: Sequence[dict], call
             f"- Failed calls: {failures}",
             f"- Recorded model cost: ${total_cost:.4f}",
             f"- Matched DeepSeek/Qwen pairs in Exp. 3: {len(paired)}",
+            "",
+            "## Measured interpretation",
+            "",
+            (
+                "In Experiment 3, DeepSeek minus Qwen sentiment JSD was "
+                f"{statistics.fmean(paired_jsd):.4f} with an empirical 2.5--97.5% "
+                f"interval of {quantile(paired_jsd, 0.025):.4f} to "
+                f"{quantile(paired_jsd, 0.975):.4f}. Because the interval spans "
+                "zero, this pilot does not establish a fidelity advantage for either model."
+            ),
+            "",
+        ]
+    )
+    for model in (PRIMARY_MODEL, COMPARISON_MODEL):
+        model_calls = [record for record in call_records if record.get("model") == model]
+        lines.append(
+            f"- {short_model(model)}: {len(model_calls)} calls, "
+            f"{sum(int(record.get('returned_samples') or 0) for record in model_calls)}/"
+            f"{sum(int(record.get('requested_samples') or 0) for record in model_calls)} "
+            f"requested samples returned, mean latency "
+            f"{statistics.fmean(float(record['latency_seconds']) for record in model_calls):.2f} s, "
+            f"cost ${sum(float(record.get('cost_usd') or 0) for record in model_calls):.4f}."
+        )
+    lines.extend(
+        [
             "",
             "The deliberately leaky Exp. 1 row is an invalid diagnostic bound and must never be reported as DEEDY performance. The non-generative ABM emits sentiment states only, so Thai-language and text-diversity cells are intentionally absent.",
             "",
@@ -728,10 +761,22 @@ def build_results_markdown(summary: Sequence[dict], paired: Sequence[dict], call
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--summary", required=True, type=Path)
-    parser.add_argument("--threads", required=True, type=Path)
-    parser.add_argument("--analysis", required=True, type=Path)
-    parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument(
+        "--summary",
+        type=Path,
+        default=Path("/data-prep/apify/data/campaign_sentiment_summary.csv"),
+    )
+    parser.add_argument(
+        "--threads",
+        type=Path,
+        default=Path("/data-prep/apify/data/social_comments_crawled.jsonl"),
+    )
+    parser.add_argument(
+        "--analysis",
+        type=Path,
+        default=Path("/data-prep/apify/data/campaign_sentiment_analysis.jsonl"),
+    )
+    parser.add_argument("--output", type=Path, default=Path("/app/result"))
     parser.add_argument("--seeds", type=int, default=10)
     parser.add_argument("--samples", type=int, default=12)
     parser.add_argument("--max-tokens", type=int, default=2200)
@@ -741,6 +786,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-cost-usd", type=float, default=5.0)
     parser.add_argument("--models", nargs="+", default=None)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--smoke-test",
+        action="store_true",
+        help="Run one seed-only request per model, then stop with normal artifacts.",
+    )
     parser.add_argument("--limit-calls", type=int)
     return parser.parse_args()
 
@@ -766,6 +816,17 @@ def main() -> int:
         for campaign in campaigns
         for seed in range(1, args.seeds + 1)
     ]
+    if args.smoke_test:
+        jobs = [
+            next(
+                job
+                for job in jobs
+                if job.model == model
+                and job.condition == "seed_only_thai_context"
+                and job.seed == 1
+            )
+            for model in models
+        ]
     if args.limit_calls:
         jobs = jobs[: args.limit_calls]
     pricing = fetch_pricing(base_url, models)
