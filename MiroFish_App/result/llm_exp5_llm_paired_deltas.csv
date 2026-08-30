@@ -1,0 +1,101 @@
+﻿model,campaign,seed,jsd_clarity_minus_baseline,positive_share_clarity_minus_baseline,visible_action_rate_clarity_minus_baseline
+deepseek/deepseek-v4-flash-0731,KFC Bucket Ware,1,-0.06581283673476471,0.0,0.125
+deepseek/deepseek-v4-flash-0731,KFC Bucket Ware,2,0.0,0.0,-0.125
+deepseek/deepseek-v4-flash-0731,KFC Bucket Ware,3,0.0815261539994091,-0.125,0.0
+deepseek/deepseek-v4-flash-0731,KFC Bucket Ware,4,-0.1788680673966871,0.25,-0.125
+deepseek/deepseek-v4-flash-0731,KFC Bucket Ware,5,-0.0815261539994091,0.125,0.375
+deepseek/deepseek-v4-flash-0731,KFC Bucket Ware,6,0.0,0.0,0.0
+deepseek/deepseek-v4-flash-0731,KFC Bucket Ware,7,0.0815261539994091,-0.125,0.0
+deepseek/deepseek-v4-flash-0731,KFC Bucket Ware,8,0.07233483442949806,0.0,0.0
+deepseek/deepseek-v4-flash-0731,KFC Bucket Ware,9,-0.0815261539994091,0.125,-0.125
+deepseek/deepseek-v4-flash-0731,KFC Bucket Ware,10,0.09734191339727799,-0.125,0.125
+deepseek/deepseek-v4-flash-0731,MK Buffet,1,-0.015099368950428738,0.125,-0.125
+deepseek/deepseek-v4-flash-0731,MK Buffet,2,-0.015099368950428738,0.125,0.0
+deepseek/deepseek-v4-flash-0731,MK Buffet,3,-0.21998421382283856,-0.125,0.0
+deepseek/deepseek-v4-flash-0731,MK Buffet,4,-0.052270539332353094,0.125,0.0
+deepseek/deepseek-v4-flash-0731,MK Buffet,5,0.0,0.0,0.0
+deepseek/deepseek-v4-flash-0731,MK Buffet,6,0.26603161904463385,-0.25,0.125
+deepseek/deepseek-v4-flash-0731,MK Buffet,7,0.0,0.0,0.125
+deepseek/deepseek-v4-flash-0731,MK Buffet,8,-0.015099368950428738,0.125,0.125
+deepseek/deepseek-v4-flash-0731,MK Buffet,9,0.0,0.0,-0.125
+deepseek/deepseek-v4-flash-0731,MK Buffet,10,-0.26057191394605694,0.125,0.0
+deepseek/deepseek-v4-flash-0731,Parameter Gelato,1,0.0,0.0,0.125
+deepseek/deepseek-v4-flash-0731,Parameter Gelato,2,-0.03810383170386772,-0.25,0.125
+deepseek/deepseek-v4-flash-0731,Parameter Gelato,3,0.04223930192515596,0.125,0.0
+deepseek/deepseek-v4-flash-0731,Parameter Gelato,4,0.0,0.0,0.25
+deepseek/deepseek-v4-flash-0731,Parameter Gelato,5,0.027839429037779917,0.125,0.0
+deepseek/deepseek-v4-flash-0731,Parameter Gelato,6,0.0,0.0,0.125
+deepseek/deepseek-v4-flash-0731,Parameter Gelato,7,0.0,0.0,0.25
+deepseek/deepseek-v4-flash-0731,Parameter Gelato,8,0.07007873096293588,0.25,0.125
+deepseek/deepseek-v4-flash-0731,Parameter Gelato,9,0.0,0.0,-0.125
+deepseek/deepseek-v4-flash-0731,Parameter Gelato,10,-0.07007873096293588,-0.25,0.25
+deepseek/deepseek-v4-flash-0731,วิ่งแลกแว่น | Top Charoen,1,-0.006679439838947365,0.0,0.125
+deepseek/deepseek-v4-flash-0731,วิ่งแลกแว่น | Top Charoen,2,-0.021617740792036017,-0.25,0.125
+deepseek/deepseek-v4-flash-0731,วิ่งแลกแว่น | Top Charoen,3,0.08745681252877985,0.125,0.0
+deepseek/deepseek-v4-flash-0731,วิ่งแลกแว่น | Top Charoen,4,0.07209039910580939,-0.125,0.125
+deepseek/deepseek-v4-flash-0731,วิ่งแลกแว่น | Top Charoen,5,0.021957813295636397,0.125,0.0
+deepseek/deepseek-v4-flash-0731,วิ่งแลกแว่น | Top Charoen,6,-0.10015779977273193,-0.25,0.125
+deepseek/deepseek-v4-flash-0731,วิ่งแลกแว่น | Top Charoen,7,-0.028637253134583762,-0.125,0.0
+deepseek/deepseek-v4-flash-0731,วิ่งแลกแว่น | Top Charoen,8,0.158977359166928,0.25,-0.125
+deepseek/deepseek-v4-flash-0731,วิ่งแลกแว่น | Top Charoen,9,-0.18761461230151177,-0.375,0.0
+deepseek/deepseek-v4-flash-0731,วิ่งแลกแว่น | Top Charoen,10,0.0,0.0,0.0
+deepseek/deepseek-v4-flash-0731,ไทยช่วยไทยพลัส,1,0.0,0.0,0.0
+deepseek/deepseek-v4-flash-0731,ไทยช่วยไทยพลัส,2,0.05214537893964044,-0.125,-0.125
+deepseek/deepseek-v4-flash-0731,ไทยช่วยไทยพลัส,3,-0.05214537893964044,0.125,0.125
+deepseek/deepseek-v4-flash-0731,ไทยช่วยไทยพลัส,4,0.0,0.0,0.0
+deepseek/deepseek-v4-flash-0731,ไทยช่วยไทยพลัส,5,-0.18987836798604493,0.0,0.125
+deepseek/deepseek-v4-flash-0731,ไทยช่วยไทยพลัส,6,0.0,0.0,0.125
+deepseek/deepseek-v4-flash-0731,ไทยช่วยไทยพลัส,7,0.1521006778043384,-0.375,0.0
+deepseek/deepseek-v4-flash-0731,ไทยช่วยไทยพลัส,8,0.0,0.0,0.0
+deepseek/deepseek-v4-flash-0731,ไทยช่วยไทยพลัส,9,-0.02716100582215142,0.125,0.0
+deepseek/deepseek-v4-flash-0731,ไทยช่วยไทยพลัส,10,0.05214537893964044,-0.125,0.0
+qwen/qwen3-8b,KFC Bucket Ware,1,0.0,0.0,0.0
+qwen/qwen3-8b,KFC Bucket Ware,2,0.0,0.0,0.0
+qwen/qwen3-8b,KFC Bucket Ware,3,0.0,0.0,0.0
+qwen/qwen3-8b,KFC Bucket Ware,4,0.0,0.0,0.0
+qwen/qwen3-8b,KFC Bucket Ware,5,0.0,0.0,0.0
+qwen/qwen3-8b,KFC Bucket Ware,6,0.0,0.0,0.0
+qwen/qwen3-8b,KFC Bucket Ware,7,0.0,0.0,0.0
+qwen/qwen3-8b,KFC Bucket Ware,8,0.0,0.0,0.0
+qwen/qwen3-8b,KFC Bucket Ware,9,0.0,0.0,0.0
+qwen/qwen3-8b,KFC Bucket Ware,10,0.0,0.0,-0.125
+qwen/qwen3-8b,MK Buffet,1,0.0,0.0,-0.125
+qwen/qwen3-8b,MK Buffet,2,-0.015099368950428738,0.125,0.125
+qwen/qwen3-8b,MK Buffet,3,0.0,0.0,-0.125
+qwen/qwen3-8b,MK Buffet,4,0.052270539332353094,-0.125,0.0
+qwen/qwen3-8b,MK Buffet,5,0.06736990828278183,-0.25,0.125
+qwen/qwen3-8b,MK Buffet,6,0.0,0.0,0.0
+qwen/qwen3-8b,MK Buffet,7,0.0,0.0,0.0
+qwen/qwen3-8b,MK Buffet,8,0.052270539332353094,-0.125,0.0
+qwen/qwen3-8b,MK Buffet,9,0.052270539332353094,-0.125,0.0
+qwen/qwen3-8b,MK Buffet,10,-0.11856319923546388,-0.125,0.0
+qwen/qwen3-8b,Parameter Gelato,1,-0.010264402666087802,-0.125,0.0
+qwen/qwen3-8b,Parameter Gelato,2,0.0,0.0,0.0
+qwen/qwen3-8b,Parameter Gelato,3,0.0,0.0,0.0
+qwen/qwen3-8b,Parameter Gelato,4,0.0,0.0,0.0
+qwen/qwen3-8b,Parameter Gelato,5,0.0,0.0,0.0
+qwen/qwen3-8b,Parameter Gelato,6,-0.02122189621995474,-0.375,0.0
+qwen/qwen3-8b,Parameter Gelato,7,-0.03810383170386772,-0.25,0.0
+qwen/qwen3-8b,Parameter Gelato,8,0.08034313362902368,0.375,0.0
+qwen/qwen3-8b,Parameter Gelato,9,-0.010264402666087802,-0.125,0.0
+qwen/qwen3-8b,Parameter Gelato,10,0.0,0.0,0.0
+qwen/qwen3-8b,วิ่งแลกแว่น | Top Charoen,1,0.0,0.0,0.0
+qwen/qwen3-8b,วิ่งแลกแว่น | Top Charoen,2,0.0,0.0,0.125
+qwen/qwen3-8b,วิ่งแลกแว่น | Top Charoen,3,0.028637253134583762,0.125,0.125
+qwen/qwen3-8b,วิ่งแลกแว่น | Top Charoen,4,0.0,0.0,-0.125
+qwen/qwen3-8b,วิ่งแลกแว่น | Top Charoen,5,0.07152054663814816,0.125,0.25
+qwen/qwen3-8b,วิ่งแลกแว่น | Top Charoen,6,0.028888056843214244,-0.25,0.0
+qwen/qwen3-8b,วิ่งแลกแว่น | Top Charoen,7,0.028888056843214244,-0.25,0.0
+qwen/qwen3-8b,วิ่งแลกแว่น | Top Charoen,8,0.028637253134583762,0.125,0.0
+qwen/qwen3-8b,วิ่งแลกแว่น | Top Charoen,9,0.0,0.0,0.125
+qwen/qwen3-8b,วิ่งแลกแว่น | Top Charoen,10,-0.006679439838947365,0.0,0.0
+qwen/qwen3-8b,ไทยช่วยไทยพลัส,1,0.0,0.0,0.0
+qwen/qwen3-8b,ไทยช่วยไทยพลัส,2,-0.07279429304254653,0.125,0.0
+qwen/qwen3-8b,ไทยช่วยไทยพลัส,3,-0.12493967198218697,0.25,0.0
+qwen/qwen3-8b,ไทยช่วยไทยพลัส,4,0.0,0.0,0.0
+qwen/qwen3-8b,ไทยช่วยไทยพลัส,5,0.0,0.0,0.0
+qwen/qwen3-8b,ไทยช่วยไทยพลัส,6,-0.07279429304254653,0.125,-0.125
+qwen/qwen3-8b,ไทยช่วยไทยพลัส,7,0.0,0.0,0.0
+qwen/qwen3-8b,ไทยช่วยไทยพลัส,8,-0.07279429304254653,0.125,0.0
+qwen/qwen3-8b,ไทยช่วยไทยพลัส,9,0.07279429304254653,-0.125,0.0
+qwen/qwen3-8b,ไทยช่วยไทยพลัส,10,0.07279429304254653,-0.125,0.0

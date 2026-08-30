@@ -85,3 +85,29 @@ services:
       - ../1_data-prep:/data-prep:ro
       - ./experiments:/app/experiments:ro
       - ./result:/app/result
+
+  llm-experiments-45:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: deedy:local
+    profiles:
+      - experiments
+    env_file:
+      - path: .env
+        required: false
+    working_dir: /app
+    entrypoint:
+      - /app/backend/.venv/bin/python
+      - /app/experiments/run_llm_exp45.py
+    command:
+      - --scenarios
+      - /app/experiments/exp45_scenarios.json
+      - --summary
+      - /data-prep/apify/data/campaign_sentiment_summary.csv
+      - --output
+      - /app/result
+    volumes:
+      - ../1_data-prep:/data-prep:ro
+      - ./experiments:/app/experiments:ro
+      - ./result:/app/result

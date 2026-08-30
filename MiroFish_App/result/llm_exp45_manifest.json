@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": "2026-08-30T12:57:25.870308+00:00",
+  "runner": {
+    "path": "experiments/run_llm_exp45.py",
+    "sha256": "1e4151ac4a77da8e766437aeaa9eabce176bcfcdf32482fb6dbccfa190b1340c"
+  },
+  "inputs": {
+    "scenarios": {
+      "sha256": "03d4866fa5b73e18a1d9606c1f2e630ec58fb176dfe33d1c0b98c6bac9e81289",
+      "prompt_input": true
+    },
+    "ground_truth_summary": {
+      "sha256": "8586a2868f5b91099cc4b99e11a4458e423aae04d71607d0ea6948bf6f4ec135",
+      "prompt_input": false,
+      "use": "post-generation scoring only"
+    }
+  },
+  "openrouter": {
+    "base_url": "https://openrouter.ai/api/v1",
+    "models": [
+      "deepseek/deepseek-v4-flash-0731",
+      "qwen/qwen3-8b"
+    ],
+    "key_validated": true
+  },
+  "parameters": {
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "agents_per_call": 8,
+    "feeds": [
+      "chronological",
+      "popularity",
+      "interest"
+    ],
+    "networks": [
+      "post_affiliation_proxy",
+      "matched_random"
+    ],
+    "exp5_variants": [
+      "baseline",
+      "clarity_frame"
+    ],
+    "reasoning_enabled": false,
+    "temperature": 0.8
+  },
+  "row_counts": {
+    "calls": 800,
+    "metrics": 800,
+    "exp5_pairs": 100
+  },
+  "actual_cost_usd": 0.358576255,
+  "interpretation_limits": [
+    "Rationale summaries are model-stated observable explanations, not private chain-of-thought.",
+    "Experiment 4 is a prompt-conditioned cognitive panel, not a full OASIS network trajectory.",
+    "The post-affiliation graph is a proxy because the crawl contains no reply-parent links.",
+    "The aggregate real-data target is scoring-only but is not an independent campaign holdout.",
+    "No authentic comment text, author identifier, post URL, real sentiment ratio, or real-data summary was sent to the LLM."
+  ],
+  "artifacts": {
+    "llm_exp45_plan.json": {
+      "sha256": "7202a4c899b834fa31c4620198f511224f26de0d896b1c85f2600bf9f7db3a68"
+    },
+    "llm_exp45_calls.jsonl": {
+      "sha256": "cafea426503b7d52b1b820f9abbf34e4dbea549ba4b5afdc55065c87af38aac5"
+    },
+    "llm_exp45_metrics.jsonl": {
+      "sha256": "758bdef1fa08a995416218cd7dbe0ad5e8fc8199667cfcf272def8ced275bee1"
+    },
+    "llm_exp45_overall_summary.csv": {
+      "sha256": "383e1e4f72cf83e85269ea0d2abfe75c12a81afc6b777e4d1864a082043131a5"
+    },
+    "llm_exp45_campaign_summary.csv": {
+      "sha256": "5db2a777667597bc872bac288ce0167a15b847c9e393e7536ee1b3ed2efecf21"
+    },
+    "llm_exp5_llm_paired_deltas.csv": {
+      "sha256": "9695d09ca65613e910e4f014808ad277a5cfc0b3da3749d3ce7139eb5eec0267"
+    },
+    "LLM_EXP45_RESULTS.md": {
+      "sha256": "b4c933b506ca44e8e031e383354a686f453b6d75e6e2534f72f427b9b70e0c6c"
+    }
+  }
+}

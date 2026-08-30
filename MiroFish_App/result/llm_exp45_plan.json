@@ -1,0 +1,57 @@
+{
+  "models": [
+    "deepseek/deepseek-v4-flash-0731",
+    "qwen/qwen3-8b"
+  ],
+  "campaigns": [
+    "Parameter Gelato",
+    "KFC Bucket Ware",
+    "MK Buffet",
+    "วิ่งแลกแว่น | Top Charoen",
+    "ไทยช่วยไทยพลัส"
+  ],
+  "scenario_sources": {
+    "Parameter Gelato": [
+      "https://www.siamparagon.co.th/editors-pick/parameter-thailands-first-classic-refined-gelato-119",
+      "https://fridaybangkok.com/v/parameter-gelato"
+    ],
+    "KFC Bucket Ware": [
+      "https://www.facebook.com/kfcth/photos/1190461663260065/",
+      "https://www.sanook.com/travel/1453211/"
+    ],
+    "MK Buffet": [
+      "https://www.youtube.com/watch?v=28HpMkYrijo",
+      "https://en.thairath.co.th/lifestyle/food/2938489"
+    ],
+    "วิ่งแลกแว่น | Top Charoen": [
+      "https://page.line.me/fjq1171g/media/225151397499883/item/1178290040659524600",
+      "https://www.facebook.com/TopCharoenOpticalOfficial/posts/1451301307031340/"
+    ],
+    "ไทยช่วยไทยพลัส": [
+      "https://thailand.go.th/issue-focus-detail/-6040--2569----?hl=th",
+      "https://www.thaigov.go.th/th/news/166739"
+    ]
+  },
+  "exp4_conditions": {
+    "feeds": [
+      "chronological",
+      "popularity",
+      "interest"
+    ],
+    "networks": [
+      "post_affiliation_proxy",
+      "matched_random"
+    ]
+  },
+  "exp5_variants": [
+    "baseline",
+    "clarity_frame"
+  ],
+  "seeds": 10,
+  "agents_per_call": 8,
+  "unique_calls": 800,
+  "estimated_worst_case_cost_usd": 0.9884512,
+  "max_cost_usd": 5.0,
+  "credentials_present": true,
+  "leakage_guard": "Prompts are built only from exp45_scenarios.json and mechanism/persona settings. The ground-truth CSV is loaded only after all LLM calls complete."
+}

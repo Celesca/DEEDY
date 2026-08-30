@@ -1,0 +1,78 @@
+[
+  {
+    "name": "Parameter Gelato",
+    "baseline_message": "PARAMETER เป็นแบรนด์ Classic Refined Gelato ที่ชั้น G สยามพารากอน เน้นการคัดเลือกวัตถุดิบและการปรับสูตรอย่างละเอียดเพื่อให้ได้เนื้อสัมผัสแบบเจลาโต้อิตาเลียน มีรสคลาสสิกที่คัดสรร เช่น นมและครีม ช็อกโกแลต มัทฉะ เฮเซลนัต พิสตาชิโอ และถั่วญี่ปุ่น",
+    "clarity_message": "รู้จัก PARAMETER Classic Refined Gelato ที่ชั้น G สยามพารากอน จุดเด่นคือวัตถุดิบที่ระบุแหล่งที่มาและกระบวนการปรับสูตรเพื่อเนื้อสัมผัสเนียน เลือกได้จาก 6 รสคลาสสิก ได้แก่ นมและครีม ช็อกโกแลต มัทฉะ เฮเซลนัต พิสตาชิโอ และถั่วญี่ปุ่น โปรดตรวจสอบราคาและขนาดเสิร์ฟที่หน้าร้านก่อนสั่งซื้อ",
+    "scenario_details": {
+      "category": "premium gelato launch and product storytelling",
+      "location": "G Floor, Siam Paragon, Bangkok",
+      "known_offer": "six curated classic gelato flavours",
+      "uncertainties": "price, serving size, and availability may vary and are not supplied to the agents"
+    },
+    "source_urls": [
+      "https://www.siamparagon.co.th/editors-pick/parameter-thailands-first-classic-refined-gelato-119",
+      "https://fridaybangkok.com/v/parameter-gelato"
+    ]
+  },
+  {
+    "name": "KFC Bucket Ware",
+    "baseline_message": "KFC Thailand นำเสนอ Bucket Ware กล่องบักเก็ตอเนกประสงค์แบบลิมิเต็ดสำหรับใช้ซ้ำ โดยลูกค้าที่ซื้อสินค้าที่ร่วมรายการครบ 299 บาทมีสิทธิแลกซื้อ Bucket Ware ราคา 99 บาท ภายใต้ช่วงเวลา สาขา และจำนวนสินค้าที่กำหนด",
+    "clarity_message": "เงื่อนไข KFC Bucket Ware: ซื้อสินค้าที่ร่วมรายการครบ 299 บาท แล้วแลกซื้อกล่องบักเก็ตอเนกประสงค์แบบลิมิเต็ดได้ในราคา 99 บาท สิทธิขึ้นอยู่กับช่วงโปรโมชัน สาขาที่ร่วมรายการ และสินค้าคงเหลือ กรุณาตรวจสอบสต็อกและเงื่อนไขของสาขาก่อนสั่งซื้อ",
+    "scenario_details": {
+      "category": "limited reusable food-container promotion",
+      "threshold_baht": 299,
+      "redemption_price_baht": 99,
+      "uncertainties": "participating branches, promotion dates, and stock are condition-dependent"
+    },
+    "source_urls": [
+      "https://www.facebook.com/kfcth/photos/1190461663260065/",
+      "https://www.sanook.com/travel/1453211/"
+    ]
+  },
+  {
+    "name": "MK Buffet",
+    "baseline_message": "MK Restaurants นำเสนอ MK Buffet ราคา 299 บาทสุทธิ พร้อมเมนูรวม 33 รายการและเมนูซีฟู้ด 4 รายการแบบเติมได้ที่สาขาที่ร่วมรายการ มีตัวเลือกเพิ่มกุ้งสด 59 บาท หรือเพิ่มชุดซีฟู้ด 3 รายการ 129 บาท",
+    "clarity_message": "รายละเอียด MK Buffet: ราคาเริ่มต้น 299 บาทสุทธิ ไม่มี VAT หรือ service charge รวม 33 เมนูและซีฟู้ด 4 รายการแบบเติมได้ หากต้องการเพิ่มกุ้งสดจ่าย 59 บาท หรือเพิ่มกุ้งสด กุ้งแม่น้ำ และปลาหมึกสดจ่าย 129 บาท ให้บริการเฉพาะสาขาที่ร่วมรายการและเป็นไปตามช่วงเวลาหรือสินค้าคงเหลือ",
+    "scenario_details": {
+      "category": "restaurant buffet value campaign",
+      "base_price_baht_net": 299,
+      "menu_count": 33,
+      "optional_upgrades_baht": [59, 129],
+      "uncertainties": "participating branches and availability apply"
+    },
+    "source_urls": [
+      "https://www.youtube.com/watch?v=28HpMkYrijo",
+      "https://en.thairath.co.th/lifestyle/food/2938489"
+    ]
+  },
+  {
+    "name": "วิ่งแลกแว่น | Top Charoen",
+    "baseline_message": "แว่นท็อปเจริญจัดแคมเปญเดิน-วิ่งแลกแว่นเพื่อสุขภาพ ผู้ร่วมกิจกรรมเลือกเป้าหมายระยะทาง ทำกิจกรรมและบันทึกหลักฐานตามช่องทางที่กำหนด แล้วนำสิทธิไปใช้กับกรอบหรือเลนส์ที่ร่วมรายการ ณ สาขา ภายใต้เงื่อนไขและระยะเวลาโครงการ",
+    "clarity_message": "ขั้นตอนแคมเปญเดิน-วิ่งแลกแว่น: ตรวจสอบระดับระยะทางและของรางวัลที่ร่วมรายการก่อนเริ่ม บันทึกผลเดินหรือวิ่งผ่านช่องทางที่โครงการรองรับ กดรับสิทธิภายในเวลาที่กำหนด และติดต่อสาขาเพื่อตรวจสอบรุ่นกรอบ ค่าเลนส์หรือการอัปเกรด และระยะเวลารอรับสินค้า เงื่อนไขอาจต่างตามระดับสิทธิและสินค้าคงเหลือ",
+    "scenario_details": {
+      "category": "health activity and optical-product redemption campaign",
+      "mechanism": "complete a selected walking/running distance and redeem under campaign rules",
+      "uncertainties": "eligible tracking method, frame/ lens entitlement, extra charges, branch stock, and fulfilment time must be checked"
+    },
+    "source_urls": [
+      "https://page.line.me/fjq1171g/media/225151397499883/item/1178290040659524600",
+      "https://www.facebook.com/TopCharoenOpticalOfficial/posts/1451301307031340/"
+    ]
+  },
+  {
+    "name": "ไทยช่วยไทยพลัส",
+    "baseline_message": "โครงการไทยช่วยไทย พลัส เป็นมาตรการร่วมจ่ายเพื่อลดภาระค่าครองชีพและสนับสนุนร้านค้ารายย่อย รัฐช่วยจ่าย 60 เปอร์เซ็นต์และประชาชนจ่าย 40 เปอร์เซ็นต์ผ่าน G-Wallet ในแอปเป๋าตัง โดยมีคุณสมบัติผู้รับสิทธิ ร้านค้าที่เข้าร่วม วงเงิน และรายการที่ไม่ร่วมโครงการตามหลักเกณฑ์ของรัฐ",
+    "clarity_message": "สรุปไทยช่วยไทย พลัส: เป็นมาตรการร่วมจ่าย 60/40 ผ่าน G-Wallet ในแอปเป๋าตัง ใช้ได้กับร้านค้าที่เข้าร่วมและสินค้าหรือบริการที่โครงการอนุญาต ผู้สนใจควรตรวจสอบคุณสมบัติ วันลงทะเบียน วงเงินคงเหลือ ร้านค้าใกล้บ้าน และรายการต้องห้ามจากช่องทางราชการก่อนใช้สิทธิ",
+    "scenario_details": {
+      "category": "government cost-of-living and local-commerce co-payment programme",
+      "government_share_percent": 60,
+      "participant_share_percent": 40,
+      "payment_channel": "Paotang G-Wallet",
+      "uncertainties": "eligibility, registration window, allowance, participating merchants, and excluded items follow official rules"
+    },
+    "source_urls": [
+      "https://thailand.go.th/issue-focus-detail/-6040--2569----?hl=th",
+      "https://www.thaigov.go.th/th/news/166739"
+    ]
+  }
+]

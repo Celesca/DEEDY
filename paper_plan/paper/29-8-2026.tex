@@ -60,8 +60,10 @@ reaction, diffusion, and narrative formation. We propose leakage-resistant
 evaluation against held-out Thai comments using sentiment and stance
 distribution distance, narrative coverage, response diversity, propagation
 error, repeated runs, and native-Thai human assessment. An OpenRouter pilot
-completed 500 calls across DeepSeek V4 Flash 0731 and Qwen3 8B, but its paired
-diagnostic intervals did not establish a grounding or model-fidelity advantage.
+completed 1,300 calls across DeepSeek V4 Flash 0731 and Qwen3 8B, including
+800 leakage-guarded Experiment~4--5 calls that generated 6,400 observable
+agent reactions. The paired diagnostics did not establish a grounding,
+model-fidelity, or message-clarity advantage.
 DEEDY is positioned as
 an exploratory campaign-planning and social-listening instrument, not as a
 deterministic forecast of consumer behavior or a replacement for field
@@ -860,8 +862,9 @@ absent during the first run, the web shell remained available while LLM- and
 Zep-dependent operations remained disabled. The backend health endpoint and
 frontend both returned HTTP 200 during the recorded run. A second Dockerized
 run on 29 August 2026 (Bangkok time) exercised the OpenRouter LLM path for
-Experiments~1--3. Zep-dependent graph-memory operations were not required for
-this bounded prompt-level pilot.
+Experiments~1--3. On 30 August, a further leakage-guarded cognitive-agent panel
+exercised the LLM path for Experiments~4--5. Zep-dependent graph-memory
+operations were not required for these bounded prompt-level pilots.
 
 The pilot used seeds 1--10, 12 rounds, requested mean degree 6, and populations
 of 200, 500, and 1,000. Experiment~4 comprised 900 runs
@@ -869,10 +872,16 @@ of 200, 500, and 1,000. Experiment~4 comprised 900 runs
 $\times 3$ population sizes $\times 10$ seeds). The automated portion of
 Experiment~5 added 100 runs ($5$ campaigns $\times 2$ message conditions
 $\times 10$ seeds) at $N=500$. Experiments~1--3 added 500 unique OpenRouter
-calls and 750 expanded metric rows. Input SHA-256 hashes, parameters, run-level
+calls and 750 expanded metric rows. The Experiment~4--5 panel added 800 calls:
+600 for the $5\times3\times2\times10\times2$
+campaign--feed--network--seed--model design and 200 for the
+$5\times2\times10\times2$ baseline/clarity--seed--model design. Each call
+requested eight cognitive-agent records, yielding 6,400 schema-valid reactions.
+Input SHA-256 hashes, parameters, run-level
 records, aggregate tables, smoke-test responses, provider pricing, and
 interpretation limits are stored in \texttt{MiroFish\_App/result/manifest.json},
-\texttt{llm\_exp123\_manifest.json}, and the accompanying machine-readable
+\texttt{llm\_exp123\_manifest.json}, \texttt{llm\_exp45\_manifest.json}, and
+the accompanying machine-readable
 files. No authentic comment text, author identifier, or post URL was placed in
 the result bundle or sent to OpenRouter.
 
@@ -898,11 +907,12 @@ models; native-Thai reference ratings remain unavailable. \\
 Exp. 3: Core model & DeepSeek V4 Flash 0731, Qwen3 8B, and the simple
 non-generative ABM were run; the Thai-specialized and full hybrid-tier
 comparison remains pending. \\
-Exp. 4: Social mechanism & The full automated feed, network-assumption, and
-population-size sensitivity sweep was run with ten seeds. \\
-Exp. 5: Application & Docker health, result provenance, and a paired internal
-message-frame counterfactual were run; analyst usefulness and presentation
-effects were not rated. \\
+Exp. 4: Social mechanism & The full non-generative feed, network-assumption,
+and population-size sweep and a two-model prompt-conditioned cognitive-agent
+panel were run with ten seeds; a full LLM/OASIS reply trajectory remains pending. \\
+Exp. 5: Application & Docker health, result provenance, a paired internal ABM
+counterfactual, and a paired two-model LLM clarity-frame panel were run;
+analyst usefulness and presentation effects were not rated. \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -1045,6 +1055,139 @@ Popularity & Post-affiliation proxy & 0.400 & 0.461 & 0.115 & 0.164 & 0.159 \\
 \end{tabular}
 \end{table*}
 
+\subsection{Leakage-Guarded LLM Cognitive-Agent Panel: Experiments 4--5}
+
+The original Experiment~4--5 pilot above is a non-generative ABM. To inspect
+LLM-generated actions, reactions, and stated reasons without leaking the
+answer, we ran an additional prompt-conditioned cognitive-agent panel. Before
+generation, each model received only one frozen campaign packet, one mechanism
+condition, and eight Thai audience personas. It did not receive authentic
+comments, the sentiment summary, or a summary derived from those comments.
+Each returned record contains an action (like, share, comment, reply, or
+silence), Thai reaction text, sentiment, stance, narrative label, confidence,
+and a short \emph{rationale summary}. The latter is an auditable stated
+explanation, not private chain-of-thought. Only after all 800 calls completed
+did the scorer read the supplied
+\texttt{campaign\_sentiment\_summary.csv} and compute
+distance from its aggregate distributions.
+
+Table~\ref{tab:llm-exp45-scenarios} records the scenario facts visible to the
+agents and the all-comment target used only afterward for scoring. Parameter
+Gelato was framed as a premium six-flavour launch at Siam Paragon; KFC Bucket
+Ware as a limited reusable container redeemable for THB~99 after a THB~299
+qualifying purchase; MK Buffet as a THB~299 net, 33-item offer with four
+refillable seafood items and THB~59/129 upgrades; Top Charoen as a
+walk/run-and-redeem eyewear campaign; and Thai Chuai Thai Plus as a 60/40
+government co-payment through Paotang G-Wallet. The packets retained explicit
+uncertainties concerning price or serving size, dates, eligibility,
+participating locations, stock, entitlements, and extra charges rather than
+inventing missing facts.
+
+\begin{table*}[t]
+\caption{Frozen Experiment~4--5 campaign packets and scoring-only targets.
+Targets are negative/neutral/positive shares from the supplied all-comment
+summary; none was included in an LLM prompt.}
+\label{tab:llm-exp45-scenarios}
+\centering
+\scriptsize
+\begin{tabular}{@{}p{0.16\textwidth}p{0.56\textwidth}p{0.18\textwidth}@{}}
+\toprule
+Campaign & Scenario facts supplied to the agents & Scoring target (neg./neu./pos.) \\
+\midrule
+Parameter Gelato & Premium gelato launch, Siam Paragon G floor, six curated
+flavours; price, serving size, and availability left uncertain. & 0.362 / 0.476 / 0.162 \\
+KFC Bucket Ware & Limited reusable container; THB~299 qualifying purchase plus
+THB~99 redemption; dates, branches, and stock conditional. & 0.049 / 0.309 / 0.642 \\
+MK Buffet & THB~299 net, 33 items and four refillable seafood items; optional
+THB~59 and THB~129 upgrades; branch availability conditional. & 0.136 / 0.444 / 0.420 \\
+Walk/Run for Glasses (Top Charoen) & Choose a distance, record the activity,
+then redeem eligible eyewear; tracking, frame/lens entitlement, charges, stock,
+and fulfilment left conditional. & 0.050 / 0.700 / 0.250 \\
+Thai Chuai Thai Plus & Government 60/40 co-payment through Paotang G-Wallet;
+eligibility, registration window, allowance, merchants, and exclusions follow
+official rules. & 0.175 / 0.275 / 0.550 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Experiment~4 crossed chronological, interest, and popularity feed descriptions
+with a matched-random or post-affiliation-proxy network description. It
+produced 600 calls (50 campaign-seed runs per row) and 4,800 agent records.
+Table~\ref{tab:llm-exp4} shows that the best aggregate correspondence was
+DeepSeek with the chronological/matched-random prompt
+($d_{\mathrm{JS}}=0.2995$). Across conditions, DeepSeek JSD ranged from 0.2995
+to 0.3233 and Qwen from 0.3274 to 0.3432. Feed and network wording therefore
+changed the prompt-level outputs only modestly in this panel. Generated agents
+also under-produced negative reactions: mean negative share never exceeded
+0.0225 although the campaign targets ranged from 0.049 to 0.362. This mismatch
+is especially material for Parameter Gelato.
+
+\begin{table*}[t]
+\caption{Experiment~4 LLM cognitive-agent diagnostic. Each row averages five
+campaigns and ten seeds. MR is matched random; PA is the post-affiliation
+proxy. Visible action excludes silence.}
+\label{tab:llm-exp4}
+\centering
+\scriptsize
+\begin{tabular}{@{}llrrrrrrr@{}}
+\toprule
+Model & Feed/network & Runs & JSD & Visible action & Positive & Neutral & Negative \\
+\midrule
+DeepSeek & Chronological/MR & 50 & 0.2995 & 0.7825 & 0.4100 & 0.5700 & 0.0200 \\
+DeepSeek & Chronological/PA & 50 & 0.3211 & 0.7800 & 0.3875 & 0.6050 & 0.0075 \\
+DeepSeek & Interest/MR & 50 & 0.3159 & 0.7675 & 0.3975 & 0.5800 & 0.0225 \\
+DeepSeek & Interest/PA & 50 & 0.3154 & 0.7750 & 0.3925 & 0.5925 & 0.0150 \\
+DeepSeek & Popularity/MR & 50 & 0.3051 & 0.7825 & 0.4100 & 0.5825 & 0.0075 \\
+DeepSeek & Popularity/PA & 50 & 0.3233 & 0.7600 & 0.3825 & 0.6100 & 0.0075 \\
+Qwen & Chronological/MR & 50 & 0.3291 & 0.7450 & 0.3575 & 0.6400 & 0.0025 \\
+Qwen & Chronological/PA & 50 & 0.3277 & 0.7450 & 0.3450 & 0.6500 & 0.0050 \\
+Qwen & Interest/MR & 50 & 0.3389 & 0.7400 & 0.3375 & 0.6625 & 0.0000 \\
+Qwen & Interest/PA & 50 & 0.3432 & 0.7400 & 0.3250 & 0.6725 & 0.0025 \\
+Qwen & Popularity/MR & 50 & 0.3274 & 0.7475 & 0.3575 & 0.6425 & 0.0000 \\
+Qwen & Popularity/PA & 50 & 0.3431 & 0.7525 & 0.3450 & 0.6550 & 0.0000 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+For the generative Experiment~5 diagnostic, the interest/PA mechanism was held
+fixed and each campaign-seed-model combination received either its baseline
+packet or a clarity frame that made conditions and uncertainties more explicit.
+The 200 calls yielded 1,600 agent records. As Table~\ref{tab:llm-exp5} shows,
+clarity improved DeepSeek's mean JSD by 0.0074 but worsened Qwen's by 0.0015.
+Across all 100 matched model--campaign--seed pairs, clarity-minus-baseline JSD
+was $-0.0030$, with an empirical 2.5--97.5 percentile interval of $-0.1888$ to
+$0.1261$. The interval spans zero and does not support a reliable clarity
+advantage. Campaign-level JSD ranged from 0.1744 (Qwen, Top Charoen baseline)
+to 0.4872 (DeepSeek, Parameter Gelato clarity). All 800 calls were schema-valid
+after bounded retries, and the recorded Experiment~4--5 provider cost was
+\$0.3586.
+
+\begin{table*}[t]
+\caption{Experiment~5 LLM baseline/clarity diagnostic. Each row averages five
+campaigns and ten seeds; JSD uses the scoring-only all-comment target.}
+\label{tab:llm-exp5}
+\centering
+\footnotesize
+\begin{tabular}{@{}llrrrrrr@{}}
+\toprule
+Model & Frame & Runs & JSD & Visible action & Positive & Neutral & Negative \\
+\midrule
+DeepSeek & Baseline & 50 & 0.3189 & 0.7775 & 0.4175 & 0.5725 & 0.0100 \\
+DeepSeek & Clarity & 50 & 0.3114 & 0.8200 & 0.4050 & 0.5700 & 0.0250 \\
+Qwen & Baseline & 50 & 0.3335 & 0.7450 & 0.3475 & 0.6525 & 0.0000 \\
+Qwen & Clarity & 50 & 0.3349 & 0.7500 & 0.3300 & 0.6650 & 0.0050 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+This panel answers whether Experiments~4--5 were run through an LLM, but it is
+not a full DEEDY Simulation trajectory. Feed and network conditions were prompt
+inputs to independent cognitive panels; they did not generate a temporally
+ordered OASIS reply cascade. Moreover, the scoring target aggregates all real
+comments rather than an independent campaign holdout. The outputs expose how
+the agents say they would react and why, and permit aggregate correspondence
+checks, but they do not establish forecasting or causal validity.
+
 \subsection{Conditional Message-Frame Smoke Test}
 
 The application pilot compared the baseline with a positive-clarity signal of
@@ -1064,8 +1207,8 @@ signal and response rule are model assumptions, these changes are conditional
 model behavior rather than causal effects on Thai consumers.
 
 Overall, the automated pilot satisfies the engineering portion of application
-completion and provenance and exercises the two configured OpenRouter models.
-Its self-labeled prompt diagnostics do not satisfy the pre-registered
+completion and provenance and exercises the two configured OpenRouter models
+across all five experiment groups. Its self-labeled prompt diagnostics do not satisfy the pre-registered
 linguistic, held-out correspondence, observed-cascade, or analyst-usefulness
 criteria. Those acceptance decisions remain open rather than being inferred
 from the proxy results.
@@ -1109,17 +1252,21 @@ participatory research with Thai communities.
 This work specifies DEEDY as a Thai campaign-simulation adaptation of MiroFish
 and implements reproducible generative and non-generative pilot paths. The
 repaired Docker stack served both the FastAPI backend and current React
-frontend; 1,000 non-generative runs and 500 OpenRouter calls completed with
-run-level provenance. DeepSeek V4 Flash 0731 cost less in this run and Qwen3 8B
-returned all requested items faster, but paired sentiment-JSD intervals did not
-establish a fidelity advantage for grounding, either model, or the LLM tier.
+frontend; 1,000 non-generative runs and 1,300 OpenRouter calls completed with
+run-level provenance. DeepSeek V4 Flash 0731 cost less in the Experiment~1--3
+run and Qwen3 8B returned all requested Experiment~1--3 items faster, but paired
+sentiment-JSD intervals did not establish a fidelity advantage for grounding,
+either model, the LLM tier, or the Experiment~5 clarity frame.
 The mechanism pilot exposed a separate operating boundary: propagation outcomes
 were far more sensitive to the assumed network than to population size, while
 the available crawl provided no reply links with which to validate either
 network or its cascades. A positive message-frame counterfactual changed
 simulated sentiment as designed but increased distance from the calibration
-distribution; it therefore demonstrates pipeline sensitivity, not campaign
-effectiveness.
+distribution. The additional Experiment~4--5 LLM panel exposed agent actions,
+Thai reactions, narrative labels, and stated rationale summaries, yet
+under-produced negative sentiment and did not execute a temporal reply cascade.
+Together, these paths demonstrate pipeline sensitivity and auditability, not
+campaign effectiveness.
 
 These findings do not validate the paper's central claims about Thai linguistic
 fidelity or the hybrid LLM architecture. Completing that evaluation requires

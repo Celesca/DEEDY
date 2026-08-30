@@ -51,3 +51,45 @@ docker compose --profile experiments run --rm llm-experiments --smoke-test
 
 The live runner validates the key, enforces a USD cost cap, writes each
 completed call immediately, and resumes only incomplete jobs after interruption.
+
+## OpenRouter Experiments 4--5
+
+The original Exp. 4--5 pilot is non-generative. To run the additional
+leakage-guarded LLM cognitive-agent panel, use:
+
+```sh
+docker compose --profile experiments run --rm llm-experiments-45
+```
+
+From the repository root, the equivalent local command is:
+
+```sh
+python3 MiroFish_App/experiments/run_llm_exp45.py \
+  --scenarios MiroFish_App/experiments/exp45_scenarios.json \
+  --summary 1_data-prep/apify/data/campaign_sentiment_summary.csv \
+  --output MiroFish_App/result
+```
+
+Both commands resume completed schema-valid calls from
+`result/llm_exp45_calls.jsonl`, so an interrupted run does not start over.
+
+The run covers all five campaigns, three feed policies, two network
+assumptions, baseline/clarity message frames, ten seeds, and both configured
+models. A dry run prints the exact matrix and worst-case cost estimate:
+
+```sh
+docker compose --profile experiments run --rm llm-experiments-45 --dry-run
+```
+
+A six-call live smoke test (Experiment 4 plus both Experiment 5 variants for
+both models) is available:
+
+```sh
+docker compose --profile experiments run --rm llm-experiments-45 --smoke-test
+```
+
+The prompts read only `experiments/exp45_scenarios.json`. The real aggregate
+sentiment ratios in `campaign_sentiment_summary.csv` are loaded only after all
+model calls finish and are used solely for post-generation JSD scoring. Full
+agent texts, actions, narratives, and short stated rationales are written to
+`result/llm_exp45_calls.jsonl`.
