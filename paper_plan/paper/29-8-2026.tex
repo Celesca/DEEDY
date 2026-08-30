@@ -7,9 +7,22 @@
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{microtype}
+\usepackage{tikz}
 \usepackage{url}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
+\usetikzlibrary{arrows.meta,fit,positioning}
+
+\definecolor{deedyred}{RGB}{177,52,52}
+\definecolor{deedyorange}{RGB}{196,111,21}
+\definecolor{deedyblue}{RGB}{42,96,153}
+\definecolor{deedygreen}{RGB}{48,126,91}
+\tikzset{
+    deedybox/.style={draw, rounded corners=2pt, align=center,
+        minimum height=8mm, inner sep=4pt, fill=white},
+    deedyarrow/.style={-{Latex[length=2mm]}, semithick},
+    deedydashed/.style={-{Latex[length=2mm]}, semithick, dashed}
+}
 
 \setlength{\textfloatsep}{9pt plus 2pt minus 2pt}
 \setlength{\dbltextfloatsep}{9pt plus 2pt minus 2pt}
@@ -211,13 +224,57 @@ sarcasm as interchangeable labels.
 
 \begin{figure*}[t]
     \centering
-    \includegraphics[width=0.78\textwidth]{system_arch.png}
-    \caption{DEEDY application architecture. Thai campaign context and
-    social-media data are
-    separated into a scenario-construction stream and a held-out validation
-    stream. The MiroFish core combines graph grounding, dual memory, a hybrid
-    cognitive--stochastic population, configurable exposure mechanisms, and
-    auditable outputs for multi-level evaluation.}
+    \begin{tikzpicture}[font=\footnotesize, node distance=5mm and 7mm]
+        \node[deedybox, minimum width=27mm] (sources)
+            {Campaign brief\\and public post URLs};
+        \node[deedybox, minimum width=27mm, right=of sources] (collect)
+            {Apify collection\\and normalization};
+        \node[deedybox, minimum width=28mm, right=of collect] (freeze)
+            {Provenance-preserving\\campaign corpus};
+        \node[deedybox, minimum width=28mm, right=of freeze] (split)
+            {Campaign-level split\\before inspection};
+
+        \node[deedybox, minimum width=31mm, below left=10mm and -3mm of split]
+            (scenario) {Scenario evidence $S_e$\\facts and approved context};
+        \node[deedybox, minimum width=31mm, below right=10mm and -3mm of split]
+            (holdout) {Held-out evidence $G_e$\\posts and comments};
+        \node[deedybox, minimum width=34mm, below=13mm of scenario] (core)
+            {MiroFish/MarketFish core\\world, actors, simulation};
+        \node[deedybox, minimum width=34mm, below=13mm of holdout] (reference)
+            {Human-reviewed reference\\labels and observed traces};
+        \node[deedybox, minimum width=34mm, below=13mm of core] (outputs)
+            {Auditable simulation logs\\and campaign reports};
+        \node[deedybox, minimum width=34mm, below=13mm of reference] (evaluate)
+            {Multi-level evaluation\\with uncertainty};
+
+        \draw[deedyarrow] (sources) -- (collect);
+        \draw[deedyarrow] (collect) -- (freeze);
+        \draw[deedyarrow] (freeze) -- (split);
+        \draw[deedyarrow] (split) -- (scenario);
+        \draw[deedyarrow] (split) -- (holdout);
+        \draw[deedyarrow] (scenario) -- node[right, font=\scriptsize]
+            {construction only} (core);
+        \draw[deedyarrow] (holdout) -- node[right, font=\scriptsize]
+            {never shown to agents} (reference);
+        \draw[deedyarrow] (core) -- (outputs);
+        \draw[deedyarrow] (outputs) -- (evaluate);
+        \draw[deedyarrow] (reference) -- (evaluate);
+
+        \node[draw=deedyred, rounded corners=4pt,
+            fit=(sources)(collect)(freeze)(split), inner sep=5pt,
+            label={[text=deedyred,font=\bfseries\footnotesize]above:Data preparation}] {};
+        \node[draw=deedyorange, rounded corners=4pt,
+            fit=(scenario)(core)(outputs), inner sep=5pt,
+            label={[text=deedyorange,font=\bfseries\footnotesize]above:Simulation path}] {};
+        \node[draw=deedyblue, rounded corners=4pt,
+            fit=(holdout)(reference)(evaluate), inner sep=5pt,
+            label={[text=deedyblue,font=\bfseries\footnotesize]above:Validation path}] {};
+    \end{tikzpicture}
+    \caption{DEEDY application architecture. Campaign evidence is frozen and
+    partitioned before simulation: only $S_e$ constructs the scenario, while
+    $G_e$ remains hidden until the simulation logs and reports are evaluated.
+    This is a data-partition and evaluation architecture, not a model
+    training/test pipeline.}
     \label{fig:deedy-architecture}
 \end{figure*}
 
@@ -228,7 +285,8 @@ Figure~\ref{fig:deedy-architecture} organizes DEEDY into three layers. The
 cleans, partitions, and annotates Thai campaign material. The \emph{core layer}
 supplies the scenario summary to
 MiroFish, which constructs a GraphRAG-backed world and executes the hybrid
-simulation layer adapted from the MarketFish component design. This layer
+simulation layer adapted from the MarketFish component design
+~\cite{marketfish2026architecture}. This layer
 combines cognitive LLM agents with stochastic public agents, dual memory,
 FYP or KOL seeding, network propagation, and an optional information-operations
 stress test. The
@@ -370,6 +428,83 @@ prevents observed campaign reactions from leaking into agent memory.
 
 \subsection{MiroFish Core Engine}
 
+Figure~\ref{fig:core-technology} makes the core execution path explicit. It
+adapts the MarketFish architecture and workflow described by the ISAL-NLP
+manuscript~\cite{marketfish2026architecture}; DEEDY adds the scenario packet,
+GraphRAG grounding, Thai actor attributes, provenance, and the external
+holdout protocol described in this paper.
+
+\begin{figure*}[t]
+    \centering
+    \resizebox{0.96\textwidth}{!}{%
+    \begin{tikzpicture}[font=\footnotesize, node distance=6mm and 8mm]
+        \node[deedybox, minimum width=29mm] (packet)
+            {Scenario packet $S_e$\\and GraphRAG context};
+        \node[deedybox, minimum width=29mm, below=of packet] (seed)
+            {FYP seeding or\\direct KOL injection};
+        \node[deedybox, minimum width=29mm, below=of seed] (io)
+            {Optional IO stress test\\labeled bot actions};
+
+        \node[deedybox, minimum width=32mm, right=8mm of seed] (orch)
+            {FastAPI orchestrator\\ticks, queues, concurrency};
+
+        \node[deedybox, minimum width=31mm, above right=4mm and 8mm of orch]
+            (cognitive) {Cognitive agents\\LLM-backed KOLs};
+        \node[deedybox, minimum width=31mm, below right=4mm and 8mm of orch]
+            (math) {Stochastic agents\\large public tier};
+
+        \node[deedybox, minimum width=28mm, right=8mm of cognitive] (redis)
+            {Short-term memory\\Redis interface};
+        \node[deedybox, minimum width=28mm, right=8mm of math] (chroma)
+            {Long-term memory\\ChromaDB/RAG};
+
+        \node[deedybox, minimum width=29mm, right=8mm of redis] (log)
+            {Action, exposure,\\memory and network log};
+        \node[deedybox, minimum width=29mm, right=8mm of chroma] (report)
+            {Report agent and\\simulation analytics};
+        \node[deedybox, minimum width=29mm, below=of report] (ui)
+            {React dashboard\\REST and WebSocket};
+
+        \draw[deedyarrow] (packet) -- (orch);
+        \draw[deedyarrow] (seed) -- (orch);
+        \draw[deedyarrow] (io) -- (orch);
+        \draw[deedyarrow] (orch) -- (cognitive);
+        \draw[deedyarrow] (orch) -- (math);
+        \draw[deedyarrow] (cognitive) -- node[left, font=\scriptsize]
+            {influence signal} (math);
+        \draw[deedydashed] (cognitive) -- (redis);
+        \draw[deedydashed] (math) -- (chroma);
+        \draw[deedydashed] (redis) -- (chroma);
+        \draw[deedyarrow] (cognitive) -- (log);
+        \draw[deedyarrow] (math) -- (report);
+        \draw[deedyarrow] (log) -- (report);
+        \draw[deedyarrow] (report) -- (ui);
+        \draw[deedydashed] (ui.west) -| node[pos=.25, below, font=\scriptsize]
+            {configuration} (orch.south);
+
+        \node[draw=deedyorange, rounded corners=4pt,
+            fit=(packet)(seed)(io)(orch), inner sep=5pt,
+            label={[text=deedyorange,font=\bfseries\footnotesize]above:Orchestration and intervention}] {};
+        \node[draw=deedygreen, rounded corners=4pt,
+            fit=(cognitive)(math), inner sep=5pt,
+            label={[text=deedygreen,font=\bfseries\footnotesize]above:Hybrid population}] {};
+        \node[draw=deedyblue, rounded corners=4pt,
+            fit=(redis)(chroma), inner sep=5pt,
+            label={[text=deedyblue,font=\bfseries\footnotesize]above:Dual memory}] {};
+        \node[draw=deedyred, rounded corners=4pt,
+            fit=(log)(report)(ui), inner sep=5pt,
+            label={[text=deedyred,font=\bfseries\footnotesize]above:Auditable outputs}] {};
+    \end{tikzpicture}%
+    }
+    \caption{Core-technology architecture adapted from MarketFish
+    ~\cite{marketfish2026architecture}. The orchestrator combines configurable
+    exposure and intervention with a hybrid cognitive--stochastic population;
+    agents use short- and long-term memory, and their traces feed reporting and
+    the live application. Solid arrows denote the main execution/data path;
+    dashed arrows denote memory or configuration access.}
+    \label{fig:core-technology}
+\end{figure*}
+
 \subsubsection{Reality Seed, GraphRAG, and Dual Memory}
 
 The scenario packet contains the campaign brief, creative message, dated
@@ -418,7 +553,8 @@ distinction for interpreting diffusion failure.
 
 Directly invoking an LLM for every decision limits population size, increases
 cost, and makes a viral exposure burst vulnerable to rate limits. DEEDY
-therefore integrates the component paper's hybrid ABM design. Let
+therefore integrates the component paper's hybrid ABM design
+~\cite{marketfish2026architecture}. Let
 $\mathcal{A}=\mathcal{C}\,\dot\cup\,\mathcal{M}$ be the agent population, where
 $\mathcal{C}$ contains cognitive agents and $\mathcal{M}$ contains stochastic
 mathematical agents. The cognitive tier is a small, configurable share of the
