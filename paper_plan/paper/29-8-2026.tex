@@ -136,7 +136,8 @@ from real consumer reactions used to test it, and stochastic conditions must
 be repeated rather than judged from a single persuasive-looking run.
 
 This paper presents \textbf{DEEDY}, a Thai-centric campaign-analysis
-application that combines an Apify data-preparation pipeline, the MiroFish core,
+application that combines an Apify data-preparation pipeline, the DEEDY
+Simulation Core,
 and an explicit validation layer. Analysts provide campaign topics and public
 post URLs from Facebook, Instagram, or TikTok. DEEDY requests up to 1,000
 comments for each post, preserves provenance and conversation structure, and
@@ -239,7 +240,7 @@ sarcasm as interchangeable labels.
         \node[deedybox, minimum width=31mm, below right=10mm and -3mm of split]
             (holdout) {Held-out evidence $G_e$\\posts and comments};
         \node[deedybox, minimum width=34mm, below=13mm of scenario] (core)
-            {MiroFish/MarketFish core\\world, actors, simulation};
+            {DEEDY Simulation Core\\MiroFish-based social simulation};
         \node[deedybox, minimum width=34mm, below=13mm of holdout] (reference)
             {Human-reviewed reference\\labels and observed traces};
         \node[deedybox, minimum width=34mm, below=13mm of core] (outputs)
@@ -265,7 +266,7 @@ sarcasm as interchangeable labels.
             label={[text=deedyred,font=\bfseries\footnotesize]above:Data preparation}] {};
         \node[draw=deedyorange, rounded corners=4pt,
             fit=(scenario)(core)(outputs), inner sep=5pt,
-            label={[text=deedyorange,font=\bfseries\footnotesize]above:Simulation path}] {};
+            label={[text=deedyorange,font=\bfseries\footnotesize]above:DEEDY Simulation}] {};
         \node[draw=deedyblue, rounded corners=4pt,
             fit=(holdout)(reference)(evaluate), inner sep=5pt,
             label={[text=deedyblue,font=\bfseries\footnotesize]above:Validation path}] {};
@@ -283,10 +284,10 @@ sarcasm as interchangeable labels.
 Figure~\ref{fig:deedy-architecture} organizes DEEDY into three layers. The
 \emph{data layer} selects campaign posts, collects comments through Apify,
 cleans, partitions, and annotates Thai campaign material. The \emph{core layer}
-supplies the scenario summary to
-MiroFish, which constructs a GraphRAG-backed world and executes the hybrid
-simulation layer adapted from the MarketFish component design
-~\cite{marketfish2026architecture}. This layer
+supplies the scenario summary to the \emph{DEEDY Simulation Core}, which uses
+MiroFish to construct a GraphRAG-backed world and execute the hybrid
+simulation layer. Its hybrid-ABM and dual-memory design is informed by the
+ISAL-NLP architecture manuscript~\cite{marketfish2026architecture}. This layer
 combines cognitive LLM agents with stochastic public agents, dual memory,
 FYP or KOL seeding, network propagation, and an optional information-operations
 stress test. The
@@ -426,13 +427,14 @@ disagreements, report Krippendorff's $\alpha$, and audit errors involving
 sarcasm, code-mixing, indirect criticism, and platform source. This separation
 prevents observed campaign reactions from leaking into agent memory.
 
-\subsection{MiroFish Core Engine}
+\subsection{DEEDY Simulation Core}
 
 Figure~\ref{fig:core-technology} makes the core execution path explicit. It
-adapts the MarketFish architecture and workflow described by the ISAL-NLP
-manuscript~\cite{marketfish2026architecture}; DEEDY adds the scenario packet,
-GraphRAG grounding, Thai actor attributes, provenance, and the external
-holdout protocol described in this paper.
+names the deployed component \emph{DEEDY Simulation Core}; MiroFish is the
+underlying simulation engine. The hybrid-ABM and dual-memory architecture is
+informed by the ISAL-NLP MarketFish manuscript~\cite{marketfish2026architecture}.
+DEEDY adds the scenario packet, GraphRAG grounding, Thai actor attributes,
+provenance, and the external holdout protocol described in this paper.
 
 \begin{figure*}[t]
     \centering
@@ -496,12 +498,13 @@ holdout protocol described in this paper.
             label={[text=deedyred,font=\bfseries\footnotesize]above:Auditable outputs}] {};
     \end{tikzpicture}%
     }
-    \caption{Core-technology architecture adapted from MarketFish
-    ~\cite{marketfish2026architecture}. The orchestrator combines configurable
-    exposure and intervention with a hybrid cognitive--stochastic population;
-    agents use short- and long-term memory, and their traces feed reporting and
-    the live application. Solid arrows denote the main execution/data path;
-    dashed arrows denote memory or configuration access.}
+    \caption{DEEDY Simulation Core architecture. The core is MiroFish-based and
+    its hybrid-ABM and dual-memory design is informed by the ISAL-NLP MarketFish
+    manuscript~\cite{marketfish2026architecture}. The orchestrator combines
+    configurable exposure and intervention with a hybrid cognitive--stochastic
+    population; agents use short- and long-term memory, and their traces feed
+    reporting and the live application. Solid arrows denote the main
+    execution/data path; dashed arrows denote memory or configuration access.}
     \label{fig:core-technology}
 \end{figure*}
 
@@ -516,7 +519,8 @@ retrieved memory attached to an agent action includes its supporting node or
 source identifier. Unsupported details generated during graph construction are
 marked as model assumptions and are not silently promoted to facts.
 
-The component design adds two timescales of per-agent memory. A short-term
+The ISAL component design adds two timescales of per-agent memory
+~\cite{marketfish2026architecture}. A short-term
 store holds exposures, private-state updates, and interactions within the
 active simulation window; a persistent ChromaDB store holds vectorized prior
 and reflected memories retrieved across rounds. This division reduces the
@@ -553,7 +557,7 @@ distinction for interpreting diffusion failure.
 
 Directly invoking an LLM for every decision limits population size, increases
 cost, and makes a viral exposure burst vulnerable to rate limits. DEEDY
-therefore integrates the component paper's hybrid ABM design
+therefore integrates the ISAL manuscript's hybrid ABM design
 ~\cite{marketfish2026architecture}. Let
 $\mathcal{A}=\mathcal{C}\,\dot\cup\,\mathcal{M}$ be the agent population, where
 $\mathcal{C}$ contains cognitive agents and $\mathcal{M}$ contains stochastic
