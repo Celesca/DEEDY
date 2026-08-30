@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": "2026-08-30T18:28:17.840388+00:00",
+  "runner": {
+    "path": "experiments/run_llm_judge_exp45.py",
+    "sha256": "3a66fe357a584bf1ec6727e841945126f85a7e92db9dfc3f53d97d6a0250ecbd"
+  },
+  "inputs": {
+    "synthetic_calls": {
+      "sha256": "cafea426503b7d52b1b820f9abbf34e4dbea549ba4b5afdc55065c87af38aac5",
+      "prompt_input": true
+    },
+    "real_comments": {
+      "sha256": "1b745d3c1737ce89da9ada0c447376485c66f7d311e8bcf2d32c8fee3416a04a",
+      "prompt_input": "sanitized text only"
+    },
+    "campaign_sentiment_analysis": {
+      "sha256": "4ebd8f47cd724bd4c2d85b2be165bc7bbd45096f07ec3fe26ccf1c11cd010119",
+      "prompt_input": false,
+      "use": "post-judging provenance cross-check only"
+    },
+    "campaign_sentiment_summary": {
+      "sha256": "8586a2868f5b91099cc4b99e11a4458e423aae04d71607d0ea6948bf6f4ec135",
+      "prompt_input": false,
+      "use": "post-judging aggregate sentiment correspondence"
+    },
+    "scenarios": {
+      "sha256": "03d4866fa5b73e18a1d9606c1f2e630ec58fb176dfe33d1c0b98c6bac9e81289",
+      "prompt_input": true
+    }
+  },
+  "openrouter": {
+    "model": "z-ai/glm-5.3-flash",
+    "key_validated": true
+  },
+  "parameters": {
+    "pairs": 741,
+    "excluded_all_silence_calls": 59,
+    "orientations_per_pair": 2,
+    "temperature": 0.0,
+    "max_tokens": 3200,
+    "dimensions": [
+      "thai_naturalness",
+      "campaign_relevance",
+      "social_media_plausibility",
+      "pragmatic_cultural_fit",
+      "contextual_specificity",
+      "unsupported_claim_risk"
+    ],
+    "mixed_sentiment_mapping": "Judge label `mixed` is mapped to `neutral` for the supplied three-class reference."
+  },
+  "row_counts": {
+    "judge_calls": 1482,
+    "pairs": 741,
+    "overall_groups": 16,
+    "campaign_groups": 80,
+    "model_groups": 4,
+    "campaign_overall_groups": 5
+  },
+  "actual_cost_usd": 0.557967,
+  "privacy": [
+    "Author objects, comment IDs, post URLs, and source identity are excluded from prompts.",
+    "URLs, emails, handles, and phone-like strings are redacted from comment text before judging.",
+    "Raw authentic and synthetic comment text is not persisted in judge result artifacts."
+  ],
+  "interpretation_limits": [
+    "GLM-5.3-Flash is a single secondary judge, not human ground truth.",
+    "The rule-based ABM is not text-judged because it emits states rather than comments.",
+    "Pairwise realism does not establish behavioral, causal, network, or cascade fidelity.",
+    "Native-Thai human ratings and judge-human agreement remain pending."
+  ],
+  "artifacts": {
+    "llm_judge_exp45_plan.json": {
+      "sha256": "2d598bf388e53a3518df88d810f90d0221fb9ff482daaea85ce43bfdfe097b50"
+    },
+    "llm_judge_exp45_calls.jsonl": {
+      "sha256": "ca9c3200d39cf818bc9d75558e0f27a0fc8ab490d3ceac198e68533af6af3125"
+    },
+    "llm_judge_exp45_pairs.jsonl": {
+      "sha256": "b73aff5ed05a1436dce4bb9e4ab33cc4ddce379099d6e1d82af191c72b7f092a"
+    },
+    "llm_judge_exp45_global_summary.csv": {
+      "sha256": "b4997f512cf959b60e100ec12d7dd60b730db7d4017b0132556f5e1307c59855"
+    },
+    "llm_judge_exp45_overall_summary.csv": {
+      "sha256": "8e8299cd8eade7fb6158127447bf51dac3da7dd9de99681f7e0eee34f805e8f0"
+    },
+    "llm_judge_exp45_campaign_summary.csv": {
+      "sha256": "4159858f8882b9e1510243cb63ce6f94fc048062bad579788521cea8b54934f6"
+    },
+    "llm_judge_exp45_model_summary.csv": {
+      "sha256": "b91a3e9333774741270b0a06f11a11a806e453f94aec59caa19a51570ec87098"
+    },
+    "llm_judge_exp45_campaign_overall.csv": {
+      "sha256": "dfa9030e6ddfbbe81bdf05bd304d309266b548d1842ac7a901c140a3e0969088"
+    },
+    "LLM_JUDGE_EXP45_RESULTS.md": {
+      "sha256": "3ba15593150787941b0431250c6fb68bf83a8c7eae7ac905b81cdfba3a205a0c"
+    }
+  }
+}

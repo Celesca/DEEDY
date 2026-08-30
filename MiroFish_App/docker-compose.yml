@@ -111,3 +111,35 @@ services:
       - ../1_data-prep:/data-prep:ro
       - ./experiments:/app/experiments:ro
       - ./result:/app/result
+
+  llm-judge-experiments-45:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: deedy:local
+    profiles:
+      - experiments
+    env_file:
+      - path: .env
+        required: false
+    working_dir: /app
+    entrypoint:
+      - /app/backend/.venv/bin/python
+      - /app/experiments/run_llm_judge_exp45.py
+    command:
+      - --synthetic
+      - /app/result/llm_exp45_calls.jsonl
+      - --real-comments
+      - /data-prep/apify/data/social_comments_crawled.jsonl
+      - --analysis
+      - /data-prep/apify/data/campaign_sentiment_analysis.jsonl
+      - --summary
+      - /data-prep/apify/data/campaign_sentiment_summary.csv
+      - --scenarios
+      - /app/experiments/exp45_scenarios.json
+      - --output
+      - /app/result
+    volumes:
+      - ../1_data-prep:/data-prep:ro
+      - ./experiments:/app/experiments:ro
+      - ./result:/app/result

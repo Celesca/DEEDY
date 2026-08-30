@@ -93,3 +93,34 @@ sentiment ratios in `campaign_sentiment_summary.csv` are loaded only after all
 model calls finish and are used solely for post-generation JSD scoring. Full
 agent texts, actions, narratives, and short stated rationales are written to
 `result/llm_exp45_calls.jsonl`.
+
+## GLM-5.3-Flash judge for Experiments 4--5
+
+After the generative Experiment 4--5 run is complete, run the blinded
+same-campaign real-versus-simulated comparison with:
+
+```sh
+docker compose --profile experiments run --rm llm-judge-experiments-45
+```
+
+The local equivalent from the repository root is:
+
+```sh
+python3 MiroFish_App/experiments/run_llm_judge_exp45.py \
+  --synthetic MiroFish_App/result/llm_exp45_calls.jsonl \
+  --real-comments 1_data-prep/apify/data/social_comments_crawled.jsonl \
+  --analysis 1_data-prep/apify/data/campaign_sentiment_analysis.jsonl \
+  --summary 1_data-prep/apify/data/campaign_sentiment_summary.csv \
+  --scenarios MiroFish_App/experiments/exp45_scenarios.json \
+  --output MiroFish_App/result
+```
+
+The judge is `z-ai/glm-5.3-flash`. One visible synthetic reaction from every
+Experiment 4--5 call is paired with one authentic same-campaign comment and
+judged twice with reversed A/B order. Author objects, URLs, comment IDs, and
+post IDs are excluded; URL, email, handle, and phone-like strings are redacted
+before judging. Calls in which every agent chose silence have no comment to
+compare and are excluded from text judging while remaining in action-rate
+metrics. The sentiment analysis and aggregate summary are withheld from the
+judge and loaded only after all calls complete. Use `--dry-run` to inspect the
+741-pair/1,482-call plan or `--smoke-test` for two pairs/four calls.
