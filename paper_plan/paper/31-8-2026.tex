@@ -43,7 +43,8 @@ This paper presents DEEDY (Digital Environment for Emergent Dynamics and
 Yield), a Thai-centric multi-agent framework for analyzing social-media
 campaign response. DEEDY separates factual campaign evidence from authentic
 consumer reactions, constructs a grounded simulated world, and combines
-language-model agents with a scalable stochastic population. The evaluation
+language-model agents representing key opinion leaders (KOLs) with a scalable
+stochastic public population. The evaluation
 uses 5,000 comments from five Thai campaigns. Across five experiments, 1,300
 generation calls test grounding, Thai prompting, response models, social
 mechanisms, and message clarity. A separate GLM-5.3-Flash judge evaluates 741
@@ -382,30 +383,32 @@ eligibility, allowance, merchants, dates, and exclusions follow official rules.
 \end{table*}
 
 \begin{table*}[t]
-\caption{Experiments~1--3 over five campaigns and ten seeds. Each model cell
-reports mean JSD followed by generated negative/neutral/positive (N/Neu/P)
-shares. The aggregate reference is a diagnostic target, not an independent
+\caption{Experiments~1--3 over five campaigns and ten seeds. Mean JSD and
+generated negative/neutral/positive (N/Neu/P) shares are reported in separate
+columns. The aggregate reference is a diagnostic target, not an independent
 holdout; no reported paired interval excluded zero.}
 \label{tab:exp13-results}
 \centering
 \scriptsize
-\begin{tabular}{@{}llccc@{}}
+\begin{tabular}{@{}llrcrcrc@{}}
 \toprule
-Experiment & Condition & \shortstack{DeepSeek\\JSD; N/Neu/P} &
-\shortstack{Qwen\\JSD; N/Neu/P} & \shortstack{Stochastic ABM\\JSD; N/Neu/P} \\
+Experiment & Condition & \multicolumn{2}{c}{DeepSeek} &
+\multicolumn{2}{c}{Qwen} & \multicolumn{2}{c}{Stochastic ABM} \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(l){7-8}
+& & JSD & N/Neu/P & JSD & N/Neu/P & JSD & N/Neu/P \\
 \midrule
-Exp. 1 & Grounded scenario & \shortstack{0.2572;\\.313/.359/.328} &
-\shortstack{0.2859;\\.093/.537/.370} & -- \\
-Exp. 1 & Ungrounded prompt & \shortstack{0.2635;\\.307/.325/.367} &
-\shortstack{0.2388;\\.173/.490/.337} & -- \\
-Exp. 2 & Thai-context prompt & \shortstack{0.2572;\\.313/.359/.328} &
-\shortstack{0.2859;\\.093/.537/.370} & -- \\
-Exp. 2 & Translated/unadapted & \shortstack{0.2604;\\.320/.320/.360} &
-\shortstack{0.2523;\\.207/.422/.372} & -- \\
-Exp. 2 & Normalized, no context & \shortstack{0.2460;\\.304/.304/.392} &
-\shortstack{0.2548;\\.213/.438/.348} & -- \\
-Exp. 3 & Response-model comparison & \shortstack{0.2572;\\.313/.359/.328} &
-\shortstack{0.2859;\\.093/.537/.370} & \shortstack{0.2779;\\.322/.363/.315} \\
+Exp. 1 & Grounded scenario & 0.2572 & .313/.359/.328 &
+0.2859 & .093/.537/.370 & -- & -- \\
+Exp. 1 & Ungrounded prompt & 0.2635 & .307/.325/.367 &
+0.2388 & .173/.490/.337 & -- & -- \\
+Exp. 2 & Thai-context prompt & 0.2572 & .313/.359/.328 &
+0.2859 & .093/.537/.370 & -- & -- \\
+Exp. 2 & Translated/unadapted & 0.2604 & .320/.320/.360 &
+0.2523 & .207/.422/.372 & -- & -- \\
+Exp. 2 & Normalized, no context & 0.2460 & .304/.304/.392 &
+0.2548 & .213/.438/.348 & -- & -- \\
+Exp. 3 & Response-model comparison & 0.2572 & .313/.359/.328 &
+0.2859 & .093/.537/.370 & 0.2779 & .322/.363/.315 \\
 \bottomrule
 \end{tabular}
 \end{table*}
