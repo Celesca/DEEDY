@@ -382,22 +382,30 @@ eligibility, allowance, merchants, dates, and exclusions follow official rules.
 \end{table*}
 
 \begin{table*}[t]
-\caption{Experiments~1--3: mean sentiment JSD over five campaigns and ten
-seeds. The aggregate reference is a diagnostic calibration target, not an
-independent holdout. No reported paired interval excluded zero.}
+\caption{Experiments~1--3 over five campaigns and ten seeds. Each model cell
+reports mean JSD followed by generated negative/neutral/positive (N/Neu/P)
+shares. The aggregate reference is a diagnostic target, not an independent
+holdout; no reported paired interval excluded zero.}
 \label{tab:exp13-results}
 \centering
-\footnotesize
-\begin{tabular}{@{}llrrr@{}}
+\scriptsize
+\begin{tabular}{@{}llccc@{}}
 \toprule
-Experiment & Condition & DeepSeek & Qwen & Stochastic ABM \\
+Experiment & Condition & \shortstack{DeepSeek\\JSD; N/Neu/P} &
+\shortstack{Qwen\\JSD; N/Neu/P} & \shortstack{Stochastic ABM\\JSD; N/Neu/P} \\
 \midrule
-Exp. 1 & Grounded scenario & 0.2572 & 0.2859 & -- \\
-Exp. 1 & Ungrounded prompt & 0.2635 & 0.2388 & -- \\
-Exp. 2 & Thai-context prompt & 0.2572 & 0.2859 & -- \\
-Exp. 2 & Translated/unadapted & 0.2604 & 0.2523 & -- \\
-Exp. 2 & Normalized, no context & 0.2460 & 0.2548 & -- \\
-Exp. 3 & Response-model comparison & 0.2572 & 0.2859 & 0.2779 \\
+Exp. 1 & Grounded scenario & \shortstack{0.2572;\\.313/.359/.328} &
+\shortstack{0.2859;\\.093/.537/.370} & -- \\
+Exp. 1 & Ungrounded prompt & \shortstack{0.2635;\\.307/.325/.367} &
+\shortstack{0.2388;\\.173/.490/.337} & -- \\
+Exp. 2 & Thai-context prompt & \shortstack{0.2572;\\.313/.359/.328} &
+\shortstack{0.2859;\\.093/.537/.370} & -- \\
+Exp. 2 & Translated/unadapted & \shortstack{0.2604;\\.320/.320/.360} &
+\shortstack{0.2523;\\.207/.422/.372} & -- \\
+Exp. 2 & Normalized, no context & \shortstack{0.2460;\\.304/.304/.392} &
+\shortstack{0.2548;\\.213/.438/.348} & -- \\
+Exp. 3 & Response-model comparison & \shortstack{0.2572;\\.313/.359/.328} &
+\shortstack{0.2859;\\.093/.537/.370} & \shortstack{0.2779;\\.322/.363/.315} \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -412,25 +420,26 @@ baseline. High Thai-character ratios were not interpreted as naturalness or
 cultural competence.
 
 \begin{table*}[t]
-\caption{Experiments~4--5 LLM reaction results. Experiment~4 entries are ranges
-over six feed/network descriptions; Experiment~5 entries average five campaigns
-and ten seeds. Visible action excludes silence.}
+\caption{Experiments~4--5 LLM reaction results. Experiment~4 JSD and action
+entries are ranges over six feed/network descriptions, while its sentiment
+shares are means over those conditions. Experiment~5 averages five campaigns
+and ten seeds. Sentiment is N/Neu/P; visible action excludes silence.}
 \label{tab:exp45-results}
 \centering
 \footnotesize
-\begin{tabular}{@{}llllrrr@{}}
+\begin{tabular}{@{}llllrrl@{}}
 \toprule
 Experiment & Generator & Condition & Runs & Sentiment JSD &
-Visible action & Negative share \\
+Visible action & Sentiment N/Neu/P \\
 \midrule
 Exp. 4 & DeepSeek & Feed/network range & 300 & 0.2995--0.3233 &
-0.760--0.783 & 0.008--0.023 \\
+0.760--0.783 & .013/.590/.397 \\
 Exp. 4 & Qwen & Feed/network range & 300 & 0.3274--0.3432 &
-0.740--0.753 & 0.000--0.005 \\
-Exp. 5 & DeepSeek & Baseline & 50 & 0.3189 & 0.7775 & 0.0100 \\
-Exp. 5 & DeepSeek & Clarity & 50 & 0.3114 & 0.8200 & 0.0250 \\
-Exp. 5 & Qwen & Baseline & 50 & 0.3335 & 0.7450 & 0.0000 \\
-Exp. 5 & Qwen & Clarity & 50 & 0.3349 & 0.7500 & 0.0050 \\
+0.740--0.753 & .002/.654/.345 \\
+Exp. 5 & DeepSeek & Baseline & 50 & 0.3189 & 0.7775 & .010/.573/.418 \\
+Exp. 5 & DeepSeek & Clarity & 50 & 0.3114 & 0.8200 & .025/.570/.405 \\
+Exp. 5 & Qwen & Baseline & 50 & 0.3335 & 0.7450 & .000/.653/.348 \\
+Exp. 5 & Qwen & Clarity & 50 & 0.3349 & 0.7500 & .005/.665/.330 \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -438,26 +447,26 @@ Exp. 5 & Qwen & Clarity & 50 & 0.3349 & 0.7500 & 0.0050 \\
 \begin{table*}[!t]
 \caption{Experiment~4 LLM cognitive-agent sensitivity. Each row averages five
 campaigns and ten seeds. MR denotes matched random and PA the post-affiliation
-proxy; visible action excludes silence.}
+proxy. Sentiment is N/Neu/P; visible action excludes silence.}
 \label{tab:exp4-llm-detail}
 \centering
 \footnotesize
-\begin{tabular}{@{}llrrrrr@{}}
+\begin{tabular}{@{}llrrrl@{}}
 \toprule
-Generator & Feed/network & Runs & Sentiment JSD & Visible action & Neutral share & Negative share \\
+Generator & Feed/network & Runs & Sentiment JSD & Visible action & Sentiment N/Neu/P \\
 \midrule
-DeepSeek & Chronological/MR & 50 & 0.2995 & 0.7825 & 0.5700 & 0.0200 \\
-DeepSeek & Chronological/PA & 50 & 0.3211 & 0.7800 & 0.6050 & 0.0075 \\
-DeepSeek & Interest/MR      & 50 & 0.3159 & 0.7675 & 0.5800 & 0.0225 \\
-DeepSeek & Interest/PA      & 50 & 0.3154 & 0.7750 & 0.5925 & 0.0150 \\
-DeepSeek & Popularity/MR    & 50 & 0.3051 & 0.7825 & 0.5825 & 0.0075 \\
-DeepSeek & Popularity/PA    & 50 & 0.3233 & 0.7600 & 0.6100 & 0.0075 \\
-Qwen & Chronological/MR     & 50 & 0.3291 & 0.7450 & 0.6400 & 0.0025 \\
-Qwen & Chronological/PA     & 50 & 0.3277 & 0.7450 & 0.6500 & 0.0050 \\
-Qwen & Interest/MR          & 50 & 0.3389 & 0.7400 & 0.6625 & 0.0000 \\
-Qwen & Interest/PA          & 50 & 0.3432 & 0.7400 & 0.6725 & 0.0025 \\
-Qwen & Popularity/MR        & 50 & 0.3274 & 0.7475 & 0.6425 & 0.0000 \\
-Qwen & Popularity/PA        & 50 & 0.3431 & 0.7525 & 0.6550 & 0.0000 \\
+DeepSeek & Chronological/MR & 50 & 0.2995 & 0.7825 & .0200/.5700/.4100 \\
+DeepSeek & Chronological/PA & 50 & 0.3211 & 0.7800 & .0075/.6050/.3875 \\
+DeepSeek & Interest/MR      & 50 & 0.3159 & 0.7675 & .0225/.5800/.3975 \\
+DeepSeek & Interest/PA      & 50 & 0.3154 & 0.7750 & .0150/.5925/.3925 \\
+DeepSeek & Popularity/MR    & 50 & 0.3051 & 0.7825 & .0075/.5825/.4100 \\
+DeepSeek & Popularity/PA    & 50 & 0.3233 & 0.7600 & .0075/.6100/.3825 \\
+Qwen & Chronological/MR     & 50 & 0.3291 & 0.7450 & .0025/.6400/.3575 \\
+Qwen & Chronological/PA     & 50 & 0.3277 & 0.7450 & .0050/.6500/.3450 \\
+Qwen & Interest/MR          & 50 & 0.3389 & 0.7400 & .0000/.6625/.3375 \\
+Qwen & Interest/PA          & 50 & 0.3432 & 0.7400 & .0025/.6725/.3250 \\
+Qwen & Popularity/MR        & 50 & 0.3274 & 0.7475 & .0000/.6425/.3575 \\
+Qwen & Popularity/PA        & 50 & 0.3431 & 0.7525 & .0000/.6550/.3450 \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -472,21 +481,22 @@ despite authentic campaign references ranging from 0.049 to 0.362.
 
 \begin{table*}[!t]
 \caption{Experiment~4 non-generative social-mechanism sensitivity ($N=500$;
-means over five campaigns and ten seeds). JSD is a diagnostic comparison with
-the aggregate sentiment reference; cascade size is a fraction of agents.}
+means over five campaigns and ten seeds). Sentiment is N/Neu/P. JSD is a
+diagnostic comparison with the aggregate reference; cascade size is a fraction
+of agents.}
 \label{tab:mechanism}
 \centering
 \footnotesize
-\begin{tabular}{@{}llrrrrr@{}}
+\begin{tabular}{@{}llrrlrrr@{}}
 \toprule
-Feed policy & Network assumption & Action rate & Reach & JSD & Polarization & Largest cascade \\
+Feed policy & Network assumption & Action rate & Reach & Sentiment N/Neu/P & JSD & Polarization & Largest cascade \\
 \midrule
-Chronological & Matched random & 0.968 & 0.997 & 0.077 & 0.172 & 0.251 \\
-Interest      & Matched random & 0.970 & 0.997 & 0.102 & 0.138 & 0.224 \\
-Popularity    & Matched random & 0.968 & 0.997 & 0.120 & 0.126 & 0.239 \\
-Chronological & Post-affiliation proxy & 0.402 & 0.463 & 0.082 & 0.169 & 0.159 \\
-Interest      & Post-affiliation proxy & 0.400 & 0.463 & 0.097 & 0.163 & 0.161 \\
-Popularity    & Post-affiliation proxy & 0.400 & 0.461 & 0.115 & 0.164 & 0.159 \\
+Chronological & Matched random & 0.968 & 0.997 & .148/.419/.433 & 0.077 & 0.172 & 0.251 \\
+Interest      & Matched random & 0.970 & 0.997 & .136/.432/.432 & 0.102 & 0.138 & 0.224 \\
+Popularity    & Matched random & 0.968 & 0.997 & .137/.436/.428 & 0.120 & 0.126 & 0.239 \\
+Chronological & Post-affiliation proxy & 0.402 & 0.463 & .144/.420/.436 & 0.082 & 0.169 & 0.159 \\
+Interest      & Post-affiliation proxy & 0.400 & 0.463 & .136/.421/.443 & 0.097 & 0.163 & 0.161 \\
+Popularity    & Post-affiliation proxy & 0.400 & 0.461 & .147/.412/.442 & 0.115 & 0.164 & 0.159 \\
 \bottomrule
 \end{tabular}
 \end{table*}
