@@ -1,0 +1,123 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\citation{macal2010tutorial}
+\citation{park2023generative}
+\citation{park2022social}
+\citation{gao2023s3}
+\citation{yang2024oasis}
+\citation{tang2025gensim}
+\citation{mirofish2026}
+\citation{arreerard2022survey}
+\citation{phatthiyaphaibun2023pythainlp}
+\citation{lowphansirikul2021wangchanberta}
+\citation{pipatanakul2024typhoon2}
+\citation{kim2025thaicli}
+\citation{argyle2023out}
+\citation{mooney2025coherent}
+\citation{schwager2026conditioned}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{section.1}\protected@file@percent }
+\citation{park2023generative}
+\citation{gao2023s3}
+\citation{yang2024oasis}
+\citation{tang2025gensim}
+\citation{mirofish2026}
+\citation{argyle2023out}
+\citation{schwager2026conditioned}
+\citation{cross2025validating}
+\citation{arreerard2022survey}
+\citation{phatthiyaphaibun2023pythainlp}
+\citation{lowphansirikul2021wangchanberta}
+\citation{pipatanakul2024typhoon2}
+\citation{kim2025thaicli}
+\citation{hazarika2018cascade}
+\citation{marketfish2026architecture}
+\@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Generative Agents and Social Simulation}{2}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Grounding and Operational Validity}{2}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Thai Online Language and Campaign Response}{2}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}DEEDY System Architecture and Workflow}{2}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}System Architecture Overview}{2}{subsection.3.1}\protected@file@percent }
+\citation{apify2026actors}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces DEEDY application architecture. Campaign evidence is frozen and partitioned before simulation: only $S_e$ constructs the scenario, while $G_e$ remains hidden until the simulation logs and reports are evaluated. This is a data-partition and evaluation architecture, not a model training/test pipeline.}}{3}{figure.1}\protected@file@percent }
+\newlabel{fig:deedy-architecture}{{1}{3}{DEEDY application architecture. Campaign evidence is frozen and partitioned before simulation: only $S_e$ constructs the scenario, while $G_e$ remains hidden until the simulation logs and reports are evaluated. This is a data-partition and evaluation architecture, not a model training/test pipeline}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Data Preparation Pipeline}{3}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-B}1}Campaign Definition and Post Selection}{3}{subsubsection.3.2.1}\protected@file@percent }
+\newlabel{sec:apify-collection}{{\mbox  {III-B}2}{3}{Apify Comment Collection}{subsubsection.3.2.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-B}2}Apify Comment Collection}{3}{subsubsection.3.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-B}3}Normalization and Provenance}{3}{subsubsection.3.2.3}\protected@file@percent }
+\citation{marketfish2026architecture}
+\citation{marketfish2026architecture}
+\citation{marketfish2026architecture}
+\citation{mirofish2026}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Executed LLM-as-a-judge workflow. Only sanitized comment text and frozen scenario facts enter the judge prompt. Source identity, authors, URLs, aggregate sentiment targets, and campaign-level analyses are hidden. Each pair is judged twice with reversed order; the dashed arrow marks the native-Thai validation that remains pending.}}{4}{figure.2}\protected@file@percent }
+\newlabel{fig:judge-workflow}{{2}{4}{Executed LLM-as-a-judge workflow. Only sanitized comment text and frozen scenario facts enter the judge prompt. Source identity, authors, URLs, aggregate sentiment targets, and campaign-level analyses are hidden. Each pair is judged twice with reversed order; the dashed arrow marks the native-Thai validation that remains pending}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-B}4}Thai-Aware Data Views}{4}{subsubsection.3.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-B}5}Evidence Split and Structured Weak Annotation}{4}{subsubsection.3.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}DEEDY Simulation Core}{4}{subsection.3.3}\protected@file@percent }
+\citation{marketfish2026architecture}
+\citation{yang2024oasis}
+\citation{marketfish2026architecture}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces DEEDY Simulation Core architecture. The core is MiroFish-based and its hybrid-ABM and dual-memory design is informed by the ISAL-NLP MarketFish manuscript~\cite  {marketfish2026architecture}. The orchestrator combines configurable exposure and intervention with a hybrid cognitive--stochastic population; agents use short- and long-term memory, and their traces feed reporting and the live application. Solid arrows denote the main execution/data path; dashed arrows denote memory or configuration access.}}{5}{figure.3}\protected@file@percent }
+\newlabel{fig:core-technology}{{3}{5}{DEEDY Simulation Core architecture. The core is MiroFish-based and its hybrid-ABM and dual-memory design is informed by the ISAL-NLP MarketFish manuscript~\cite {marketfish2026architecture}. The orchestrator combines configurable exposure and intervention with a hybrid cognitive--stochastic population; agents use short- and long-term memory, and their traces feed reporting and the live application. Solid arrows denote the main execution/data path; dashed arrows denote memory or configuration access}{figure.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-C}1}Reality Seed, GraphRAG, and Dual Memory}{5}{subsubsection.3.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-C}2}Actor and Environment Construction}{5}{subsubsection.3.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-C}3}Hybrid Cognitive--Stochastic Population}{5}{subsubsection.3.3.3}\protected@file@percent }
+\newlabel{eq:hybrid-response}{{3}{5}{Hybrid Cognitive--Stochastic Population}{equation.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-C}4}Algorithmic Seeding and Network Propagation}{5}{subsubsection.3.3.4}\protected@file@percent }
+\citation{hazarika2018cascade}
+\newlabel{eq:algorithmic-exposure}{{4}{6}{Algorithmic Seeding and Network Propagation}{equation.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-C}5}Thai Context in Perception and Action}{6}{subsubsection.3.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-C}6}Information-Operations Stress Testing}{6}{subsubsection.3.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-C}7}Simulation Outputs and Application Layer}{6}{subsubsection.3.3.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Evaluation and Experimental Results}{6}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Research Questions}{6}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Dataset and Splitting Protocol}{6}{subsection.4.2}\protected@file@percent }
+\citation{zhang2020bertscore}
+\citation{yang2024oasis}
+\citation{shi2024judging}
+\citation{openrouter2026glm53flash}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Metrics}{7}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-C}1}Content and Population Correspondence}{7}{subsubsection.4.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-C}2}Temporal and Network Correspondence}{7}{subsubsection.4.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-C}3}Thai Quality and Report Evaluation}{7}{subsubsection.4.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-C}4}Executed GLM-5.3-Flash Judge Protocol}{7}{subsubsection.4.3.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Planned experiments. Each condition is run with the same campaign split, agent budget, round budget, and ten random seeds unless that factor is varied.}}{8}{table.1}\protected@file@percent }
+\newlabel{tab:experiments}{{I}{8}{Planned experiments. Each condition is run with the same campaign split, agent budget, round budget, and ten random seeds unless that factor is varied}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}Execution and Statistical Analysis}{8}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-E}}Acceptance Criteria for the Application}{8}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-F}}Automated Pilot Results}{8}{subsection.4.6}\protected@file@percent }
+\newlabel{sec:pilot-results}{{\mbox  {IV-F}}{8}{Automated Pilot Results}{subsection.4.6}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-F}1}Execution Scope and Reproducibility}{8}{subsubsection.4.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-F}2}Dataset and Trace Audit}{9}{subsubsection.4.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-F}3}OpenRouter LLM Diagnostics: Experiments 1--3}{9}{subsubsection.4.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-F}4}Social-Mechanism Sensitivity}{9}{subsubsection.4.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-F}5}Leakage-Guarded LLM Cognitive-Agent Panel: Experiments 4--5}{9}{subsubsection.4.6.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Coverage of the planned experiments in the automated pilot.}}{10}{table.2}\protected@file@percent }
+\newlabel{tab:pilot-coverage}{{II}{10}{Coverage of the planned experiments in the automated pilot}{table.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Experiments~1--2 OpenRouter diagnostics. Each cell averages five campaigns and ten seeds. Sentiment JSD is distance from an all-comment calibration target, not held-out accuracy; the leaky row is invalid by design.}}{10}{table.3}\protected@file@percent }
+\newlabel{tab:pilot-exp12}{{III}{10}{Experiments~1--2 OpenRouter diagnostics. Each cell averages five campaigns and ten seeds. Sentiment JSD is distance from an all-comment calibration target, not held-out accuracy; the leaky row is invalid by design}{table.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Experiment~3 core-model diagnostic over five campaigns and ten seeds. Cost is mean provider cost per campaign-seed row. The ABM emits states, not language.}}{10}{table.4}\protected@file@percent }
+\newlabel{tab:pilot-exp3}{{IV}{10}{Experiment~3 core-model diagnostic over five campaigns and ten seeds. Cost is mean provider cost per campaign-seed row. The ABM emits states, not language}{table.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces Experiment~4 automated pilot at $N=500$. Entries are means over five campaigns and ten seeds. JSD is distance from the all-comment calibration distribution, not held-out accuracy.}}{10}{table.5}\protected@file@percent }
+\newlabel{tab:pilot-exp4}{{V}{10}{Experiment~4 automated pilot at $N=500$. Entries are means over five campaigns and ten seeds. JSD is distance from the all-comment calibration distribution, not held-out accuracy}{table.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces Frozen Experiment~4--5 campaign packets and scoring-only targets. Targets are negative/neutral/positive shares from the supplied all-comment summary; none was included in an LLM prompt.}}{11}{table.6}\protected@file@percent }
+\newlabel{tab:llm-exp45-scenarios}{{VI}{11}{Frozen Experiment~4--5 campaign packets and scoring-only targets. Targets are negative/neutral/positive shares from the supplied all-comment summary; none was included in an LLM prompt}{table.6}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-F}6}Blinded GLM-5.3-Flash Judge Results}{11}{subsubsection.4.6.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {VII}{\ignorespaces Experiment~4 LLM cognitive-agent diagnostic. Each row averages five campaigns and ten seeds. MR is matched random; PA is the post-affiliation proxy. Visible action excludes silence.}}{12}{table.7}\protected@file@percent }
+\newlabel{tab:llm-exp4}{{VII}{12}{Experiment~4 LLM cognitive-agent diagnostic. Each row averages five campaigns and ten seeds. MR is matched random; PA is the post-affiliation proxy. Visible action excludes silence}{table.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VIII}{\ignorespaces Experiment~5 LLM baseline/clarity diagnostic. Each row averages five campaigns and ten seeds; JSD uses the scoring-only all-comment target.}}{12}{table.8}\protected@file@percent }
+\newlabel{tab:llm-exp5}{{VIII}{12}{Experiment~5 LLM baseline/clarity diagnostic. Each row averages five campaigns and ten seeds; JSD uses the scoring-only all-comment target}{table.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IX}{\ignorespaces Global GLM-5.3-Flash scores over 741 reversed-order pairs. Scores are 1--5; for unsupported-claim risk, higher is worse. Gaps are synthetic minus real with deterministic 2,000-resample bootstrap intervals.}}{12}{table.9}\protected@file@percent }
+\newlabel{tab:judge-global-scores}{{IX}{12}{Global GLM-5.3-Flash scores over 741 reversed-order pairs. Scores are 1--5; for unsupported-claim risk, higher is worse. Gaps are synthetic minus real with deterministic 2,000-resample bootstrap intervals}{table.9}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {X}{\ignorespaces GLM judge summary by experiment and generator. The realism score is synthetic preference plus half the tie share. Thai and plausibility gaps are synthetic minus real.}}{12}{table.10}\protected@file@percent }
+\newlabel{tab:judge-model-summary}{{X}{12}{GLM judge summary by experiment and generator. The realism score is synthetic preference plus half the tie share. Thai and plausibility gaps are synthetic minus real}{table.10}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-F}7}Conditional Message-Frame Smoke Test}{12}{subsubsection.4.6.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}Discussion, Limitations, and Future Work}{13}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Discussion}{13}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Limitations and Ethical Considerations}{13}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Conclusion and Future Work}{13}{subsection.5.3}\protected@file@percent }
+\bibstyle{IEEEtran}
+\bibdata{deedy_references}
+\gdef \@abspage@last{14}
