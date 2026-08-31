@@ -56,7 +56,7 @@ behavioral fidelity, campaign effectiveness, or deterministic forecasting.
 
 \begin{IEEEkeywords}
 LLM agents, social-media marketing, campaign analysis, social simulation, Thai
-NLP, agent-based modeling, MiroFish
+NLP, hybrid agent-based modeling, key opinion leaders, information operations
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -143,7 +143,7 @@ cultural fit, stance, and authenticity rather than sentiment alone.
         \node[deedybox, minimum width=30mm, right=of scenario] (graph)
             {Graph-grounded world\\actors and environment};
         \node[deedybox, minimum width=30mm, right=of graph] (agents)
-            {Hybrid population\\cognitive and stochastic};
+            {Hybrid ABM\\KOLs, public, and\\labeled IO actors};
         \node[deedybox, minimum width=29mm, right=of agents] (social)
             {Exposure, memory,\\and social actions};
         \node[deedybox, minimum width=28mm, right=of social] (report)
@@ -214,11 +214,12 @@ answers against which it will later be scored.
 \subsection{DEEDY Simulation Core}
 
 Figure~\ref{fig:deedy-architecture} presents the conceptual architecture. The
-deployed component is the \emph{DEEDY Simulation Core}; MiroFish supplies the
-world-construction and social-simulation foundation~\cite{mirofish2026}. The
-core executes five steps: (1) scenario construction, (2) actor and environment
-initialization, (3) hybrid-agent decision making, (4) exposure and network
-propagation, and (5) trace aggregation and report generation.
+deployed component is the \emph{DEEDY Simulation Core}. It executes five
+steps: (1) scenario construction, (2) actor and environment initialization,
+(3) hybrid-agent decision making, (4) exposure and network propagation, and
+(5) trace aggregation and report generation. The architecture belongs to the
+DEEDY application; external simulation systems are discussed only as prior
+work and implementation foundations.
 
 \subsubsection{Scenario, Actors, and Memory}
 
@@ -240,23 +241,43 @@ preserves code-mixing and uncertainty without forcing dialect caricatures.
 Thread context is available for replies because Thai stance and sarcasm may
 depend on earlier turns~\cite{hazarika2018cascade}.
 
-\subsubsection{Hybrid Population and Propagation}
+\subsubsection{Hybrid Agent-Based Modeling (Hybrid ABM)}
 
-The population combines a smaller cognitive tier with a larger stochastic
-tier. Cognitive agents retrieve relevant memories, observe a bounded feed,
-update their private stance, and generate a Thai action or remain silent.
-Stochastic agents preserve population scale using a probabilistic response
-conditioned on prior attitude, exposure, neighbors, and the preceding social
-signal. For an exposed stochastic agent $i$ at time $t$,
+DEEDY partitions the simulated population as
+$\mathcal{A}=\mathcal{K}\,\dot\cup\,\mathcal{P}\,\dot\cup\,\mathcal{I}$.
+The cognitive KOL tier $\mathcal{K}$ contains a small configurable set of
+influential or analytically important actors. These agents retrieve relevant
+memories, observe a bounded feed, update private stance, and generate a
+context-aware Thai action or remain silent. They represent key opinion-leader
+roles inside the scenario, not claims about the behavior of named real people.
+
+The public tier $\mathcal{P}$ is larger and stochastic. Each public agent
+retains an audience profile, prior attitude, exposure history, and network
+position, but uses a probabilistic response rule to preserve population scale.
+For an exposed public agent $i$ at time $t$,
 \begin{equation}
  \Pr(a_{i,t}\!\ne\!\varnothing)=\sigma(\beta_0+\beta_b b_i+
  \boldsymbol{\beta}_d^\top\mathbf d_i+\beta_s s_{t-1}+\beta_x x_{i,t}).
 \end{equation}
-The action space includes like, share, comment, reply, and silence. Initial
-exposure can be chronological, interest-based, popularity-based, or seeded
-through influential agents; later exposure propagates through the configured
-network. These mechanisms are experimental assumptions, not reconstructions
-of a platform's proprietary recommender.
+Here $b_i$ is prior attitude, $\mathbf d_i$ contains sampled audience
+attributes, $s_{t-1}$ is the preceding social signal, and $x_{i,t}$ summarizes
+exposure and neighbors. A categorical draw then selects like, share, comment,
+reply, or silence. Tier-specific results are retained so KOL output is not
+silently treated as public opinion.
+
+The optional astroturfing and information-operations (IO) tier $\mathcal{I}$
+injects a pre-registered proportion of coordinated positive promotion or
+negative attack. Every injected actor and action is labeled and reported
+separately from organic KOL and public activity. This tier supports
+counterfactual robustness testing as injection rate, timing, message
+consistency, and amplification vary; it is not a detector of real accounts and
+does not assert that authentic Thai users follow coordinated actors.
+
+Initial exposure can be chronological, interest-based, popularity-based,
+For-You-Page seeding, or direct KOL injection. Later shares propagate through
+the configured network. Feed rules, KOL selection, graph topology, and IO
+prevalence are experimental assumptions rather than reconstructions of a
+platform's proprietary recommender.
 
 \subsubsection{Outputs and Validation Path}
 
@@ -290,6 +311,39 @@ sentiment-distribution divergence, while text quality is assessed with
 diversity, semantic correspondence~\cite{zhang2020bertscore}, and blinded
 judgment. Tables~\ref{tab:exp13-results} and~\ref{tab:exp45-results} report the
 principal numeric results.
+
+Table~\ref{tab:campaign-packets} makes the Experiment~4--5 inputs and scoring
+boundary explicit. Agents received the scenario facts and stated
+uncertainties, but not the authentic sentiment proportions in the final
+column. Those proportions were computed from real comments and loaded only
+after generation as a weak aggregate reference rather than a human gold
+standard.
+
+\begin{table*}[t]
+\caption{Frozen Experiment~4--5 campaign scenarios and authentic scoring-only
+sentiment references. Values are negative/neutral/positive shares and were not
+included in agent prompts.}
+\label{tab:campaign-packets}
+\centering
+\scriptsize
+\begin{tabular}{@{}p{0.15\textwidth}p{0.60\textwidth}p{0.15\textwidth}@{}}
+\toprule
+Campaign & Scenario facts available to simulated agents & Reference \\
+\midrule
+Parameter Gelato & Premium six-flavour gelato launch at Siam Paragon; price,
+serving size, and availability left uncertain. & 0.362/0.476/0.162 \\
+KFC Bucket Ware & Limited reusable container: THB~299 qualifying purchase plus
+THB~99 redemption; dates, branches, and stock conditional. & 0.049/0.309/0.642 \\
+MK Buffet & THB~299 net, 33 items, four refillable seafood items, and optional
+THB~59/129 upgrades; branch availability conditional. & 0.136/0.444/0.420 \\
+Top Charoen & Record a chosen walk/run distance and redeem eligible eyewear;
+tracking, entitlement, charges, stock, and fulfilment conditional. & 0.050/0.700/0.250 \\
+Thai Chuai Thai Plus & Government 60/40 co-payment through Paotang G-Wallet;
+eligibility, allowance, merchants, dates, and exclusions follow official rules.
+& 0.175/0.275/0.550 \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 \begin{table*}[t]
 \caption{Experiments~1--3: mean sentiment JSD over five campaigns and ten
@@ -346,19 +400,115 @@ Exp. 5 & Qwen & Clarity & 50 & 0.3349 & 0.7500 & 0.0050 \\
 \end{table*}
 
 Experiment~4 changed LLM outputs only modestly across prompt-level
-feed/network descriptions and under-produced negative reactions. In the
-separate non-generative mechanism sweep, the matched-random graph produced
-action rates of 0.968--0.970 and reach of 0.997, whereas the post-affiliation
-proxy produced action rates of 0.400--0.402 and reach of 0.461--0.463. Network
-assumptions therefore dominated population-size changes. Because the corpus
-did not preserve reply edges, neither topology represents an observed Thai
-interaction network.
+feed/network descriptions and under-produced negative reactions.
+Table~\ref{tab:exp4-llm-detail} exposes the six conditions behind the ranges
+in Table~\ref{tab:exp45-results}. DeepSeek's lowest mean JSD occurred under the
+chronological/matched-random description (0.2995), whereas Qwen's occurred
+under popularity/matched-random (0.3274). Negative share never exceeded 0.0225,
+despite authentic campaign references ranging from 0.049 to 0.362.
+
+\begin{table*}[t]
+\caption{Experiment~4 LLM cognitive-agent sensitivity. Each row averages five
+campaigns and ten seeds. MR denotes matched random and PA the post-affiliation
+proxy; visible action excludes silence.}
+\label{tab:exp4-llm-detail}
+\centering
+\scriptsize
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+Generator & Feed/network & Runs & Sentiment JSD & Visible action & Neutral share & Negative share \\
+\midrule
+DeepSeek & Chronological/MR & 50 & 0.2995 & 0.7825 & 0.5700 & 0.0200 \\
+DeepSeek & Chronological/PA & 50 & 0.3211 & 0.7800 & 0.6050 & 0.0075 \\
+DeepSeek & Interest/MR      & 50 & 0.3159 & 0.7675 & 0.5800 & 0.0225 \\
+DeepSeek & Interest/PA      & 50 & 0.3154 & 0.7750 & 0.5925 & 0.0150 \\
+DeepSeek & Popularity/MR    & 50 & 0.3051 & 0.7825 & 0.5825 & 0.0075 \\
+DeepSeek & Popularity/PA    & 50 & 0.3233 & 0.7600 & 0.6100 & 0.0075 \\
+Qwen & Chronological/MR     & 50 & 0.3291 & 0.7450 & 0.6400 & 0.0025 \\
+Qwen & Chronological/PA     & 50 & 0.3277 & 0.7450 & 0.6500 & 0.0050 \\
+Qwen & Interest/MR          & 50 & 0.3389 & 0.7400 & 0.6625 & 0.0000 \\
+Qwen & Interest/PA          & 50 & 0.3432 & 0.7400 & 0.6725 & 0.0025 \\
+Qwen & Popularity/MR        & 50 & 0.3274 & 0.7475 & 0.6425 & 0.0000 \\
+Qwen & Popularity/PA        & 50 & 0.3431 & 0.7525 & 0.6550 & 0.0000 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+To isolate
+the social mechanism from language generation, a separate sweep used 500
+public agents under each feed--network combination. Table~\ref{tab:mechanism}
+shows that the graph assumption changed participation and diffusion much more
+than the ranking policy: the matched-random graph reached almost the entire
+population, whereas the post-affiliation proxy reached less than half.
+
+\begin{table*}[t]
+\caption{Experiment~4 non-generative social-mechanism sensitivity ($N=500$;
+means over five campaigns and ten seeds). JSD is a diagnostic comparison with
+the aggregate sentiment reference; cascade size is a fraction of agents.}
+\label{tab:mechanism}
+\centering
+\footnotesize
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+Feed policy & Network assumption & Action rate & Reach & JSD & Polarization & Largest cascade \\
+\midrule
+Chronological & Matched random & 0.968 & 0.997 & 0.077 & 0.172 & 0.251 \\
+Interest      & Matched random & 0.970 & 0.997 & 0.102 & 0.138 & 0.224 \\
+Popularity    & Matched random & 0.968 & 0.997 & 0.120 & 0.126 & 0.239 \\
+Chronological & Post-affiliation proxy & 0.402 & 0.463 & 0.082 & 0.169 & 0.159 \\
+Interest      & Post-affiliation proxy & 0.400 & 0.463 & 0.097 & 0.163 & 0.161 \\
+Popularity    & Post-affiliation proxy & 0.400 & 0.461 & 0.115 & 0.164 & 0.159 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Ranking changed JSD and polarization within each graph, but did not overcome
+the reach gap between graphs. Because the corpus did not preserve reply edges,
+neither topology represents an observed Thai interaction network. These
+results are sensitivity bounds, not evidence that a platform used one of the
+tested mechanisms.
 
 For Experiment~5, clarity improved DeepSeek JSD by 0.0075 but worsened Qwen JSD
 by 0.0014. Across 100 matched generator--campaign--seed pairs, the
 clarity-minus-baseline change was $-0.0030$ (95\% empirical interval
 $-0.1888$--$0.1261$). The interval spans zero and does not establish a
 message-clarity advantage.
+
+The generative panels measure one-step agent decisions and reaction text under
+controlled scenario descriptions. They do not constitute a temporally ordered
+reply cascade: feed and network conditions enter the cognitive-agent context,
+while the non-generative sweep separately tests diffusion. This distinction
+prevents comment-level realism scores from being misread as validation of the
+full network trajectory.
+
+Table~\ref{tab:paired-contrasts} reports the paired uncertainty estimates that
+support these restrained conclusions. Differences are computed within matched
+campaign--seed units, so negative values favor the first-listed condition when
+lower JSD is better. Every interval crosses zero; small differences in sample
+means should therefore not be promoted to treatment or model effects.
+
+\begin{table*}[t]
+\caption{Paired sentiment-JSD contrasts across Experiments~1--3 and 5.
+Intervals are empirical 2.5--97.5 percentiles over matched campaign--seed
+units. Lower JSD is better.}
+\label{tab:paired-contrasts}
+\centering
+\footnotesize
+\begin{tabular}{@{}lllrr@{}}
+\toprule
+Experiment & Generator/comparison & Contrast (first minus second) & Mean & 95\% interval \\
+\midrule
+Exp. 1 & DeepSeek & Grounded $-$ ungrounded & $-0.0063$ & [$-0.1483$, 0.1756] \\
+Exp. 1 & Qwen & Grounded $-$ ungrounded & 0.0471 & [$-0.3313$, 0.3484] \\
+Exp. 2 & DeepSeek & Thai-context $-$ translated & $-0.0032$ & [$-0.1444$, 0.1344] \\
+Exp. 2 & Qwen & Thai-context $-$ translated & 0.0337 & [$-0.1988$, 0.3302] \\
+Exp. 3 & Cross-model & DeepSeek $-$ Qwen & $-0.0287$ & [$-0.3592$, 0.2179] \\
+Exp. 3 & Cross-tier & DeepSeek $-$ stochastic ABM & $-0.0207$ & [$-0.2341$, 0.1955] \\
+Exp. 3 & Cross-tier & Qwen $-$ stochastic ABM & 0.0081 & [$-0.3765$, 0.4340] \\
+Exp. 5 & Pooled generators & Clarity $-$ baseline & $-0.0030$ & [$-0.1888$, 0.1261] \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 \subsection{Blinded LLM-as-a-Judge Evaluation}
 
@@ -407,10 +557,37 @@ authentic comments were more often selected as real. Social plausibility and
 unsupported-claim risk showed no clear difference. The judge-labeled sentiment
 distribution diverged less from the aggregate reference for authentic comments
 ($\mathrm{JSD}=0.077$) than for synthetic reactions ($0.215$), reinforcing the
-under-production of negative response. KFC was the only campaign with a
-synthetic-realism score slightly above 0.5, whereas Top Charoen had the largest
-authenticity gap. Campaign slices are diagnostic because sample eligibility
-and judge priors may differ.
+under-production of negative response.
+
+\begin{table*}[t]
+\caption{Blinded judge results by experiment and generator. Realism equals
+synthetic preference plus half the tie share. Score gaps are synthetic minus
+real; positive values favor the synthetic text.}
+\label{tab:judge-generator}
+\centering
+\footnotesize
+\begin{tabular}{@{}llrrrrrr@{}}
+\toprule
+Experiment & Generator & Pairs & Real preferred & Synthetic preferred &
+Realism (95\% CI) & Thai gap & Plausibility gap \\
+\midrule
+Exp. 4 & DeepSeek & 300 & 0.5533 & 0.4467 & 0.4467 [0.4000, 0.5000] & 0.5200 & 0.1917 \\
+Exp. 4 & Qwen     & 260 & 0.6481 & 0.3500 & 0.3510 [0.2990, 0.4038] & 0.2942 & $-0.1731$ \\
+Exp. 5 & DeepSeek & 100 & 0.5400 & 0.4600 & 0.4600 [0.3749, 0.5450] & 0.7200 & 0.4100 \\
+Exp. 5 & Qwen     &  81 & 0.6296 & 0.3642 & 0.3673 [0.2747, 0.4630] & 0.0926 & $-0.2531$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Table~\ref{tab:judge-generator} shows that DeepSeek was closer to the
+indifference point than Qwen in both experiments, but this is a comparison
+under one judge rather than evidence of general model superiority. The unequal
+sample counts also matter: all-silence calls have no synthetic text to pair and
+are therefore excluded from the realism comparison while remaining in action-
+rate analysis. KFC was the only campaign with a synthetic-realism score
+slightly above 0.5, whereas Top Charoen had the largest authenticity gap.
+Campaign slices are diagnostic because sample eligibility and judge priors may
+differ.
 
 \subsection{Campaign-Level Results}
 
@@ -455,6 +632,18 @@ evaluates reactions to hypothetical framing, not a causal effect on consumers.
 The simulations are consequently most useful for scenario exploration and
 failure discovery.
 
+The hybrid architecture also clarifies the coverage of the present results.
+The generative Experiment~4--5 panels exercise the cognitive, KOL-like decision
+path, while the non-generative mechanism sweep exercises the scaled public
+tier; they are not yet one end-to-end mixed-population trajectory. The IO tier
+remained disabled during real--synthetic correspondence because injected
+coordination would change the estimand and contaminate comparison with organic
+comments. A proper IO experiment must pre-register injection share, timing,
+polarity, and amplification; preserve labels on every injected trace; and
+compare reach, polarization, cross-group adoption, and recovery with a
+same-seed no-IO condition. It is therefore an auditable stress-test capability,
+not reported evidence of real astroturfing.
+
 The study has four principal limitations. First, manually selected public
 posts form a convenience sample rather than a representative Thai population.
 Second, missing reply edges prevent validation of propagation and cascade
@@ -475,7 +664,7 @@ forecasting, campaign effectiveness, or behavioral fidelity. This distinction
 is central to using generative simulation as an auditable hypothesis tool
 rather than a substitute for field research.
 
-\IEEEtriggeratref{16}
+\IEEEtriggeratref{13}
 \bibliographystyle{IEEEtran}
 \bibliography{deedy_references}
 
