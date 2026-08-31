@@ -39,127 +39,61 @@ King Mongkut's University of Technology Thonburi, Bangkok, Thailand\\
 \maketitle
 
 \begin{abstract}
-Social-media marketing campaigns generate large volumes of fast-moving,
-context-dependent consumer reactions that are difficult to interpret with
-sentiment classification alone. This paper presents DEEDY (Digital Environment
-for Emergent Dynamics and Yield), a Thai-centric application and experimental
-testbed for analyzing campaign response with large-language-model (LLM)
-agents. For each campaign post, an Apify-based pipeline requests up to 1,000
-publicly accessible comments from Facebook, Instagram, or TikTok, preserves
-post and collection provenance, and produces synchronized raw and Thai-aware
-analysis views. Campaign facts and approved context form a reality seed,
-whereas observed reactions reserved for evaluation remain hidden from the
-agents. DEEDY adapts MiroFish, an open-source multi-agent prediction engine
-that converts seed documents into a GraphRAG-grounded world, generates actors,
-runs OASIS social interactions, and supports report generation and post-run
-inspection. The resulting application lets marketers examine how message
-framing, audience composition, and platform mechanisms may shape simulated
-reaction, diffusion, and narrative formation. We propose leakage-resistant
-evaluation against held-out Thai comments using sentiment and stance
-distribution distance, narrative coverage, response diversity, propagation
-error, repeated runs, and native-Thai human assessment. OpenRouter generation
-completed 1,300 calls across DeepSeek V4 Flash 0731 and Qwen3 8B. An independent
-GLM-5.3-Flash judge then completed 1,482 blinded orientations over 741
-real--synthetic pairs. It preferred the authentic comment in 59.3\% of
-judgments, although synthetic reactions received higher mean naturalness and
-campaign-relevance scores. The results therefore establish neither behavioral
-fidelity nor a message-clarity advantage. DEEDY is positioned as an exploratory
-campaign-planning and social-listening instrument, not as a deterministic
-forecast of consumer behavior or a replacement for field research.
+This paper presents DEEDY (Digital Environment for Emergent Dynamics and
+Yield), a Thai-centric multi-agent framework for analyzing social-media
+campaign response. DEEDY separates factual campaign evidence from authentic
+consumer reactions, constructs a grounded simulated world, and combines
+language-model agents with a scalable stochastic population. The evaluation
+uses 5,000 comments from five Thai campaigns. Across five experiments, 1,300
+generation calls test grounding, Thai prompting, response models, social
+mechanisms, and message clarity. A separate GLM-5.3-Flash judge evaluates 741
+real--synthetic comment pairs twice with reversed presentation order. Authentic
+comments were preferred in 59.3\% of judgments, although synthetic reactions
+received higher naturalness and campaign-relevance scores. The system therefore
+demonstrates an auditable workflow and useful sensitivity analysis, but not
+behavioral fidelity, campaign effectiveness, or deterministic forecasting.
 \end{abstract}
 
 \begin{IEEEkeywords}
 LLM agents, social-media marketing, campaign analysis, social simulation, Thai
-NLP, GraphRAG, MiroFish, Apify
+NLP, agent-based modeling, MiroFish
 \end{IEEEkeywords}
 
 \section{Introduction}
 
-Marketing campaigns on social media are not one-way messages. Consumers reply
-to a campaign post, react to one another, repeat or contest emerging claims,
-and carry interpretations across platform feeds. A favorable first response
-may be displaced by complaints about price, product quality, brand conduct, or
-the credibility of an influencer; conversely, a small positive narrative may
-grow through recommendation and peer endorsement. Counting likes or assigning
-sentiment to comments can summarize a snapshot, but it cannot by itself
-represent the interaction process through which campaign narratives emerge.
-Agent-based modeling (ABM) provides a bottom-up way to represent local exposure
-and response decisions and observe their collective consequences
-~\cite{macal2010tutorial}.
+Social-media campaigns develop through exposure, reply, sharing, and
+recommendation rather than through isolated comments. Sentiment counts describe
+a snapshot but not the interaction process that produces it. Agent-based
+modeling (ABM) provides a bottom-up representation of local decisions and their
+collective effects~\cite{macal2010tutorial}; LLM agents add context-dependent
+language, memory, and open-ended actions
+~\cite{park2023generative,park2022social}.
 
-LLM agents extend ABM by allowing simulated actors to condition open-ended
-actions on a profile, memory, retrieved evidence, feed context, and earlier
-conversation. Generative Agents demonstrated memory-driven believable
-behavior~\cite{park2023generative}, while Social Simulacra showed how generated
-users and conversations can support social-computing prototypes
-~\cite{park2022social}. Systems including $S^3$, OASIS, and GenSim subsequently
-modeled social networks, recommendation, and multiple online actions at larger
-scales~\cite{gao2023s3,yang2024oasis,tang2025gensim}. These capabilities suggest
-a campaign-analysis application in which marketers can rehearse alternative
-message framing, audience composition, and feed conditions before interpreting
-the resulting differences as hypotheses for further testing.
+DEEDY adapts the MiroFish/OASIS simulation workflow
+~\cite{mirofish2026,yang2024oasis} to campaign analysis. It builds audience
+actors from approved campaign evidence, simulates exposure and social actions,
+and compares the resulting discourse with authentic reactions that were hidden
+during generation. Counterfactual differences are treated as hypotheses, not
+predictions of a specific person or the Thai market.
 
-\textbf{MiroFish} provides the application foundation for this work. The
-open-source project describes itself as a multi-agent prediction engine that
-constructs a parallel digital world from real-world seed material such as
-news, policy drafts, or analysis reports~\cite{mirofish2026}. Its workflow has
-five stages: graph building with seed extraction and GraphRAG memory injection;
-environment setup with entity, persona, and agent construction; dual-platform
-social simulation with temporal memory updates; report generation; and deep
-interaction with individual agents or the report agent. OASIS supplies the
-underlying social-simulation engine. MiroFish therefore offers a useful bridge
-from campaign documents to an inspectable simulated environment, but its
-outputs must still be validated before they are used to support marketing
-decisions.
-
-Applying this workflow to Thai campaigns introduces two challenges. First,
-Thai localization is more than translating an English prompt. Thai has no
-obligatory whitespace between words, and campaign comments frequently combine
-informal spelling, repeated characters, emoji, hashtags, transliterated
-English, regional language, sarcasm, indirect disagreement, and culturally
-specific politeness. Thai NLP resources and models have improved substantially
+Thai campaigns require more than prompt translation. Informal comments mix Thai
+and English, emoji, non-standard spelling, sarcasm, indirect disagreement, and
+culturally specific politeness. Thai resources have improved
 ~\cite{arreerard2022survey,phatthiyaphaibun2023pythainlp,
-lowphansirikul2021wangchanberta,pipatanakul2024typhoon2}, but cultural capability
-remains a distinct evaluation target~\cite{kim2025thaicli}. Second, social data
-collection is platform-dependent and incomplete. A reproducible study must
-record which campaign post was queried, the collection time, the requested
-limit, the returned count, and any access or visibility limitation.
-
-A further methodological problem is that plausible campaign comments do not
-prove behavioral fidelity. Demographically conditioned LLM samples can
-approximate some human distributions~\cite{argyle2023out}, yet recent work finds
-behavioral inconsistency across settings~\cite{mooney2025coherent}. Operational
-validation against authentic comments also shows that matching surface form
-can be separated from matching content~\cite{schwager2026conditioned}. For this
-reason, campaign context needed to construct the simulation must be separated
-from real consumer reactions used to test it, and stochastic conditions must
-be repeated rather than judged from a single persuasive-looking run.
-
-This paper presents \textbf{DEEDY}, a Thai-centric campaign-analysis
-application that combines an Apify data-preparation pipeline, the DEEDY
-Simulation Core, and an explicit validation layer. Analysts provide campaign
-topics and public post URLs from Facebook, Instagram, or TikTok. DEEDY requests
-up to 1,000 comments for each post, preserves provenance and conversation
-structure, and separates campaign context from held-out consumer reactions.
-Within the simulator, an analyst can compare a baseline campaign with
-counterfactual message framing, actor composition, network structure, or
-recommendation policy. The application reports where simulated and observed
-discourse agree or diverge; it does not claim to forecast the choices of a
-specific person or the Thai market as a whole.
+lowphansirikul2021wangchanberta,pipatanakul2024typhoon2}, but linguistic form
+does not guarantee cultural competence~\cite{kim2025thaicli}. Moreover,
+plausible generated text does not prove behavioral fidelity
+~\cite{argyle2023out,mooney2025coherent,schwager2026conditioned}. DEEDY
+therefore separates construction evidence from evaluation reactions and
+reports uncertainty across repeated conditions.
 
 Our contributions are threefold:
 \begin{itemize}
-    \item We define an end-to-end Thai campaign-data pipeline that uses Apify
-    Actors to request up to 1,000 publicly accessible comments per campaign
-    post, normalize cross-platform fields, preserve provenance, and produce
-    Thai-aware views for analysis and simulation.
-    \item We adapt the MiroFish/OASIS workflow to social-media marketing through
-    campaign-grounded actor construction, Thai linguistic attributes,
-    configurable campaign interventions, and auditable simulation outputs.
-    \item We specify a leakage-resistant protocol that evaluates content,
-    population, and dynamic correspondence against held-out Thai campaign
-    reactions using repeated runs, native-Thai review, ablations, and
-    uncertainty reporting.
+    \item a provenance-preserving Thai campaign corpus and evidence split;
+    \item a grounded hybrid simulation with configurable exposure, memory, and
+    Thai-language action generation; and
+    \item a leakage-resistant evaluation combining distributional metrics,
+    reversed-order LLM judging, and planned native-Thai review.
 \end{itemize}
 
 \section{Related Work}
@@ -280,13 +214,33 @@ answers against which it will later be scored.
 \subsection{DEEDY Simulation Core}
 
 Figure~\ref{fig:deedy-architecture} presents the conceptual architecture. The
-deployed component is called the \emph{DEEDY Simulation Core}; MiroFish is the
-underlying engine. Its hybrid-agent and dual-memory design is informed by the
-ISAL-NLP architecture~\cite{marketfish2026architecture}. First, campaign facts
-are converted into a graph-grounded world containing entities, relations, and
-retrievable memories. Audience roles are then sampled with interests, prior
-attitudes, activity, language register, and uncertainty. Unsupported details
-remain explicit assumptions rather than facts.
+deployed component is the \emph{DEEDY Simulation Core}; MiroFish supplies the
+world-construction and social-simulation foundation~\cite{mirofish2026}. The
+core executes five steps: (1) scenario construction, (2) actor and environment
+initialization, (3) hybrid-agent decision making, (4) exposure and network
+propagation, and (5) trace aggregation and report generation.
+
+\subsubsection{Scenario, Actors, and Memory}
+
+Campaign facts are organized as entities, relations, and retrievable scenario
+memories. This graph-grounding step is retained because an agent must recover
+the correct product, campaign condition, creator, and prior event when deciding
+how to react; it is not used to inject authentic evaluation comments. Audience
+roles are sampled with interests, prior attitude, activity, language register,
+Thai--English mixing, and uncertainty. Evidence-backed attributes remain
+separate from sampled attributes, and unsupported details remain assumptions.
+The environment defines the platform action space, time step, feed capacity,
+and exposure policy.
+
+Each cognitive agent maintains short-term interaction memory and longer-term
+scenario memory. At a simulation step, the agent retrieves relevant facts,
+observes a bounded feed and recent interaction context, updates its private
+stance, and selects like, share, comment, reply, or silence. Thai generation
+preserves code-mixing and uncertainty without forcing dialect caricatures.
+Thread context is available for replies because Thai stance and sarcasm may
+depend on earlier turns~\cite{hazarika2018cascade}.
+
+\subsubsection{Hybrid Population and Propagation}
 
 The population combines a smaller cognitive tier with a larger stochastic
 tier. Cognitive agents retrieve relevant memories, observe a bounded feed,
@@ -304,12 +258,15 @@ through influential agents; later exposure propagates through the configured
 network. These mechanisms are experimental assumptions, not reconstructions
 of a platform's proprietary recommender.
 
-Short-term memory stores current exposures and interactions, while long-term
-retrieval preserves scenario knowledge and reflected experience. Every output
-connects an action to its actor, exposure, retrieved evidence, parent action,
-and simulated time. The final report summarizes sentiment, stance, narratives,
-reach, engagement, influential actors, and disagreement across repeated runs.
-This traceability supports error analysis and counterfactual comparison but
+\subsubsection{Outputs and Validation Path}
+
+Every output connects an action to its actor, exposure, retrieved evidence,
+parent action, and simulated time. The simulation report summarizes sentiment,
+stance, narratives, reach, engagement, influential actors, and disagreement
+across repeated runs. Separately, visible generated reactions are paired with
+same-campaign authentic comments from $G_e$ for blinded evaluation. Aggregate
+reference distributions are loaded only after generation and judging. This
+traceable separation supports error analysis and counterfactual comparison but
 does not make a simulated difference a real-world causal effect.
 
 \section{Evaluation and Experimental Results}
@@ -331,33 +288,26 @@ makes conditions and uncertainties more explicit. Ten random seeds are used
 per campaign-condition combination. Jensen--Shannon distance (JSD) measures
 sentiment-distribution divergence, while text quality is assessed with
 diversity, semantic correspondence~\cite{zhang2020bertscore}, and blinded
-judgment. Table~\ref{tab:experiments-compact} reports only the conclusions
-supported by the executed pilot.
+judgment. Tables~\ref{tab:exp13-results} and~\ref{tab:exp45-results} report the
+principal numeric results.
 
 \begin{table*}[t]
-\caption{Executed experiments and essential findings. JSD comparisons use the
-available aggregate reference and are diagnostics rather than held-out causal
-estimates.}
-\label{tab:experiments-compact}
+\caption{Experiments~1--3: mean sentiment JSD over five campaigns and ten
+seeds. The aggregate reference is a diagnostic calibration target, not an
+independent holdout. No reported paired interval excluded zero.}
+\label{tab:exp13-results}
 \centering
 \footnotesize
-\begin{tabular}{@{}p{0.08\textwidth}p{0.24\textwidth}p{0.58\textwidth}@{}}
+\begin{tabular}{@{}llrrr@{}}
 \toprule
-Experiment & Comparison & Essential result \\
+Experiment & Condition & DeepSeek & Qwen & Stochastic ABM \\
 \midrule
-1 & Grounded vs. ungrounded generation & Paired JSD intervals spanned zero for
-both generators; grounding did not establish a fidelity advantage. \\
-2 & Thai-context vs. translated or normalized prompts & JSD intervals spanned
-zero. Thai-script frequency was high but cannot establish naturalness or
-cultural competence. \\
-3 & Two LLMs vs. stochastic ABM & No pairwise sentiment-JSD interval excluded
-zero; the ABM generated states rather than language. \\
-4 & Feed and network sensitivity; LLM reaction panel & Results were much more
-sensitive to the assumed network than population size. The best LLM-panel mean
-JSD was 0.2995, and negative reactions were under-produced. \\
-5 & Baseline vs. clarity frame & Across 100 matched generator--campaign--seed
-pairs, clarity changed JSD by $-0.0030$ (95\% empirical interval
-$-0.1888$--$0.1261$); no reliable advantage was found. \\
+Exp. 1 & Grounded scenario & 0.2572 & 0.2859 & -- \\
+Exp. 1 & Ungrounded prompt & 0.2635 & 0.2388 & -- \\
+Exp. 2 & Thai-context prompt & 0.2572 & 0.2859 & -- \\
+Exp. 2 & Translated/unadapted & 0.2604 & 0.2523 & -- \\
+Exp. 2 & Normalized, no context & 0.2460 & 0.2548 & -- \\
+Exp. 3 & Response-model comparison & 0.2572 & 0.2859 & 0.2779 \\
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -365,13 +315,50 @@ $-0.1888$--$0.1261$); no reliable advantage was found. \\
 Across Experiments~1--5, 1,300 generation calls completed. Experiments~4--5
 produced 6,400 agent records from 800 calls. Of these, 741 calls contained at
 least one visible reaction; 59 all-silence calls were retained in action-rate
-analysis but excluded from text comparison. The Experiment~4 panel showed only
-modest changes across feed/network prompt descriptions: DeepSeek JSD ranged
-from 0.2995 to 0.3233 and Qwen from 0.3274 to 0.3432. In the separate
-non-generative mechanism sweep, the assumed network produced substantially
-larger reach and action-rate changes than population size. Because the corpus
-did not preserve reply edges, neither topology can be interpreted as an
-observed Thai interaction network.
+analysis but excluded from text comparison. Experiment~1 did not establish a
+grounding advantage, Experiment~2 did not establish a Thai-context advantage,
+and Experiment~3 did not establish superiority of either LLM or the stochastic
+baseline. High Thai-character ratios were not interpreted as naturalness or
+cultural competence.
+
+\begin{table*}[t]
+\caption{Experiments~4--5 LLM reaction results. Experiment~4 entries are ranges
+over six feed/network descriptions; Experiment~5 entries average five campaigns
+and ten seeds. Visible action excludes silence.}
+\label{tab:exp45-results}
+\centering
+\footnotesize
+\begin{tabular}{@{}llllrrr@{}}
+\toprule
+Experiment & Generator & Condition & Runs & Sentiment JSD &
+Visible action & Negative share \\
+\midrule
+Exp. 4 & DeepSeek & Feed/network range & 300 & 0.2995--0.3233 &
+0.760--0.783 & 0.008--0.023 \\
+Exp. 4 & Qwen & Feed/network range & 300 & 0.3274--0.3432 &
+0.740--0.753 & 0.000--0.005 \\
+Exp. 5 & DeepSeek & Baseline & 50 & 0.3189 & 0.7775 & 0.0100 \\
+Exp. 5 & DeepSeek & Clarity & 50 & 0.3114 & 0.8200 & 0.0250 \\
+Exp. 5 & Qwen & Baseline & 50 & 0.3335 & 0.7450 & 0.0000 \\
+Exp. 5 & Qwen & Clarity & 50 & 0.3349 & 0.7500 & 0.0050 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Experiment~4 changed LLM outputs only modestly across prompt-level
+feed/network descriptions and under-produced negative reactions. In the
+separate non-generative mechanism sweep, the matched-random graph produced
+action rates of 0.968--0.970 and reach of 0.997, whereas the post-affiliation
+proxy produced action rates of 0.400--0.402 and reach of 0.461--0.463. Network
+assumptions therefore dominated population-size changes. Because the corpus
+did not preserve reply edges, neither topology represents an observed Thai
+interaction network.
+
+For Experiment~5, clarity improved DeepSeek JSD by 0.0075 but worsened Qwen JSD
+by 0.0014. Across 100 matched generator--campaign--seed pairs, the
+clarity-minus-baseline change was $-0.0030$ (95\% empirical interval
+$-0.1888$--$0.1261$). The interval spans zero and does not establish a
+message-clarity advantage.
 
 \subsection{Blinded LLM-as-a-Judge Evaluation}
 
@@ -379,8 +366,7 @@ Each eligible synthetic reaction was paired with a distinct authentic comment
 from the same campaign. Direct identifiers and contact patterns were removed;
 the judge received only the campaign facts and two unlabeled texts. Each of
 the 741 pairs was evaluated twice with A/B order reversed, producing 1,482
-valid judgments. GLM-5.3-Flash, accessed through OpenRouter
-~\cite{openrouter2026glm53flash}, scored Thai naturalness, campaign relevance,
+valid judgments. GLM-5.3-Flash scored Thai naturalness, campaign relevance,
 social-media plausibility, pragmatic/cultural fit, contextual specificity, and
 unsupported-claim risk on five-point scales. It also predicted sentiment and
 selected which text appeared more authentic. Pair reversal was used because
@@ -428,37 +414,34 @@ and judge priors may differ.
 
 \subsection{Campaign-Level Results}
 
-Table~\ref{tab:campaign-results} reports all five campaign slices. The realism
-interval exceeded neither the 0.5 indifference point nor its uncertainty for
-any campaign. KFC was closest to indifference, while Top Charoen was most
-readily distinguished from authentic discussion. Sentiment correspondence did
+Table~\ref{tab:campaign-results} reports all five campaign slices. No
+campaign's realism interval lay wholly above the 0.5 indifference point. KFC
+was closest to indifference, while Top Charoen was most readily distinguished
+from authentic discussion. Sentiment correspondence did
 not always move with authenticity: Top Charoen's synthetic sentiment
 distribution was close to the aggregate reference even though its generated
 comments were rarely preferred as real. Distribution matching and
 comment-level realism therefore measure different properties and should be
 reported together.
 
-\begin{table*}[t]
+\begin{table}[t]
 \caption{Campaign-level judge results. Realism equals synthetic preference plus
-half the tie share. Sentiment JSD compares judge labels with each campaign's
-aggregate reference; lower is better.}
+half the tie share. JSD is shown as authentic/synthetic; lower is better.}
 \label{tab:campaign-results}
 \centering
-\footnotesize
-\begin{tabular}{@{}lrrrrr@{}}
+\scriptsize
+\begin{tabular}{@{}lrrr@{}}
 \toprule
-Campaign & Pairs & Authentic preferred & Synthetic realism (95\% CI) &
-Authentic JSD & Synthetic JSD \\
+Campaign & Pairs & Realism (95\% CI) & JSD (R/S) \\
 \midrule
-Parameter Gelato & 155 & 0.568 & 0.431 [0.363, 0.498] & 0.181 & 0.428 \\
-KFC Bucket Ware & 142 & 0.489 & 0.511 [0.440, 0.585] & 0.288 & 0.274 \\
-MK Buffet & 149 & 0.550 & 0.450 [0.376, 0.527] & 0.123 & 0.220 \\
-Walk/Run for Glasses (Top Charoen) & 155 & 0.752 &
-0.247 [0.182, 0.313] & 0.068 & 0.049 \\
-Thai Chuai Thai Plus & 140 & 0.596 & 0.404 [0.332, 0.475] & 0.174 & 0.376 \\
+Parameter Gelato & 155 & 0.431 [0.363, 0.498] & 0.181/0.428 \\
+KFC Bucket Ware & 142 & 0.511 [0.440, 0.585] & 0.288/0.274 \\
+MK Buffet & 149 & 0.450 [0.376, 0.527] & 0.123/0.220 \\
+Top Charoen & 155 & 0.247 [0.182, 0.313] & 0.068/0.049 \\
+Thai Chuai Thai Plus & 140 & 0.404 [0.332, 0.475] & 0.174/0.376 \\
 \bottomrule
 \end{tabular}
-\end{table*}
+\end{table}
 
 \section{Discussion, Limitations, and Conclusion}
 

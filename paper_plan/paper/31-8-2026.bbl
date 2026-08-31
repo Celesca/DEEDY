@@ -38,10 +38,12 @@ J.~S. Park, L.~Popowski, C.~J. Cai, M.~R. Morris, P.~Liang, and M.~S.
   computing systems,'' in \emph{Proceedings of the 35th Annual ACM Symposium on
   User Interface Software and Technology}, 2022, pp. 1--18.
 
-\bibitem{gao2023s3}
-C.~Gao, X.~Lan, Z.~Lu, J.~Mao, J.~Piao, H.~Wang, D.~Jin, and Y.~Li, ``{$S^3$:
-  Social-Network Simulation System with Large Language Model-Empowered
-  Agents},'' 2023.
+\bibitem{mirofish2026}
+\BIBentryALTinterwordspacing
+{MiroFish Contributors}, ``{MiroFish}: A simple and universal swarm
+  intelligence engine,'' Open-source software repository, 2026, accessed 12
+  August 2026. [Online]. Available: \url{https://github.com/666ghj/MiroFish}
+\BIBentrySTDinterwordspacing
 
 \bibitem{yang2024oasis}
 \BIBentryALTinterwordspacing
@@ -51,24 +53,6 @@ Z.~Yang, Z.~Zhang, Z.~Zheng, Y.~Jiang, Z.~Gan, Z.~Wang, Z.~Ling, J.~Chen,
   social interaction simulations with one million agents,'' in \emph{Advances
   in Neural Information Processing Systems}, 2024. [Online]. Available:
   \url{https://arxiv.org/abs/2411.11581}
-\BIBentrySTDinterwordspacing
-
-\bibitem{tang2025gensim}
-\BIBentryALTinterwordspacing
-J.~Tang, H.~Gao, X.~Pan, L.~Wang, H.~Tan, D.~Gao, Y.~Chen, X.~Chen, Y.~Lin,
-  Y.~Li, B.~Ding, J.~Zhou, J.~Wang, and J.-R. Wen, ``{GenSim}: A general social
-  simulation platform with large language model based agents,'' in
-  \emph{Proceedings of the 2025 Conference of the Nations of the Americas
-  Chapter of the Association for Computational Linguistics: Human Language
-  Technologies (System Demonstrations)}, 2025, pp. 143--150. [Online].
-  Available: \url{https://aclanthology.org/2025.naacl-demo.15/}
-\BIBentrySTDinterwordspacing
-
-\bibitem{mirofish2026}
-\BIBentryALTinterwordspacing
-{MiroFish Contributors}, ``{MiroFish}: A simple and universal swarm
-  intelligence engine,'' Open-source software repository, 2026, accessed 12
-  August 2026. [Online]. Available: \url{https://github.com/666ghj/MiroFish}
 \BIBentrySTDinterwordspacing
 
 \bibitem{arreerard2022survey}
@@ -130,6 +114,22 @@ N.~Schwager, S.~M{\"u}nker, A.~Plum, and A.~Rettinger, ``Towards simulating
   \url{https://aclanthology.org/2026.wassa-1.16/}
 \BIBentrySTDinterwordspacing
 
+\bibitem{gao2023s3}
+C.~Gao, X.~Lan, Z.~Lu, J.~Mao, J.~Piao, H.~Wang, D.~Jin, and Y.~Li, ``{$S^3$:
+  Social-Network Simulation System with Large Language Model-Empowered
+  Agents},'' 2023.
+
+\bibitem{tang2025gensim}
+\BIBentryALTinterwordspacing
+J.~Tang, H.~Gao, X.~Pan, L.~Wang, H.~Tan, D.~Gao, Y.~Chen, X.~Chen, Y.~Lin,
+  Y.~Li, B.~Ding, J.~Zhou, J.~Wang, and J.-R. Wen, ``{GenSim}: A general social
+  simulation platform with large language model based agents,'' in
+  \emph{Proceedings of the 2025 Conference of the Nations of the Americas
+  Chapter of the Association for Computational Linguistics: Human Language
+  Technologies (System Demonstrations)}, 2025, pp. 143--150. [Online].
+  Available: \url{https://aclanthology.org/2025.naacl-demo.15/}
+\BIBentrySTDinterwordspacing
+
 \bibitem{cross2025validating}
 L.~Cross, N.~Haber, and D.~L.~K. Yamins, ``Validating generative agent-based
   models of social norm enforcement: From replication to novel predictions,''
@@ -151,24 +151,12 @@ D.~Hazarika, S.~Poria, S.~Gorantla, E.~Cambria, R.~Zimmermann, and R.~Mihalcea,
   \url{https://docs.apify.com/actors/running/runs-and-builds}
 \BIBentrySTDinterwordspacing
 
-\bibitem{marketfish2026architecture}
-{ISAL-NLP Laboratory}, ``{MarketFish}: A dual-llm agent-based social media
-  simulation engine with algorithmic seeding,'' 2026, unpublished architecture
-  manuscript.
-
 \bibitem{zhang2020bertscore}
 \BIBentryALTinterwordspacing
 T.~Zhang, V.~Kishore, F.~Wu, K.~Q. Weinberger, and Y.~Artzi, ``{BERTScore}:
   Evaluating text generation with {BERT},'' in \emph{International Conference
   on Learning Representations}, 2020. [Online]. Available:
   \url{https://openreview.net/forum?id=SkeHuCVFDr}
-\BIBentrySTDinterwordspacing
-
-\bibitem{openrouter2026glm53flash}
-\BIBentryALTinterwordspacing
-{OpenRouter}, ``{Z.ai: GLM 5.3 Flash} model card and api information,'' Online,
-  2026, accessed 31 August 2026. [Online]. Available:
-  \url{https://openrouter.ai/z-ai/glm-5.3-flash}
 \BIBentrySTDinterwordspacing
 
 \bibitem{shi2024judging}
