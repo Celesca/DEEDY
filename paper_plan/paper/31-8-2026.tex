@@ -11,7 +11,7 @@
 \usepackage{url}
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
-\usetikzlibrary{arrows.meta,fit,positioning}
+\usetikzlibrary{arrows.meta,fit,positioning,shapes.geometric}
 
 \definecolor{deedyred}{RGB}{177,52,52}
 \definecolor{deedyorange}{RGB}{196,111,21}
@@ -67,7 +67,7 @@ a snapshot but not the interaction process that produces it. Agent-based
 modeling (ABM) provides a bottom-up representation of local decisions and their
 collective effects~\cite{macal2010tutorial}; LLM agents add context-dependent
 language, memory, and open-ended actions
-~\cite{park2023generative,park2022social}.
+~\cite{park2023generative}.
 
 DEEDY adapts the MiroFish/OASIS simulation workflow
 ~\cite{mirofish2026,yang2024oasis} to campaign analysis. It builds audience
@@ -79,11 +79,11 @@ predictions of a specific person or the Thai market.
 Thai campaigns require more than prompt translation. Informal comments mix Thai
 and English, emoji, non-standard spelling, sarcasm, indirect disagreement, and
 culturally specific politeness. Thai resources have improved
-~\cite{arreerard2022survey,phatthiyaphaibun2023pythainlp,
-lowphansirikul2021wangchanberta,pipatanakul2024typhoon2}, but linguistic form
+~\cite{arreerard2022survey,lowphansirikul2021wangchanberta,
+pipatanakul2024typhoon2}, but linguistic form
 does not guarantee cultural competence~\cite{kim2025thaicli}. Moreover,
 plausible generated text does not prove behavioral fidelity
-~\cite{argyle2023out,mooney2025coherent,schwager2026conditioned}. DEEDY
+~\cite{argyle2023out,schwager2026conditioned}. DEEDY
 therefore separates construction evidence from evaluation reactions and
 reports uncertainty across repeated conditions.
 
@@ -99,9 +99,9 @@ Our contributions are threefold:
 \section{Related Work}
 
 Generative Agents introduced memory, reflection, and planning for believable
-behavior~\cite{park2023generative}; $S^3$, OASIS, and GenSim extended this idea
-to networked social environments, multiple online actions, and reusable
-simulations~\cite{gao2023s3,yang2024oasis,tang2025gensim}. MiroFish connects a
+behavior~\cite{park2023generative}; $S^3$ and OASIS extended this idea to
+networked social environments and multiple online actions
+~\cite{gao2023s3,yang2024oasis}. MiroFish connects a
 reality seed to graph-grounded personas, social simulation, and report
 generation~\cite{mirofish2026}. DEEDY adapts this workflow to Thai campaign
 analysis and adds an explicit separation between evidence used to construct a
@@ -118,8 +118,8 @@ validated incrementally before counterfactual claims are made
 Thai social-media analysis adds informal spelling, code-mixing, emoji,
 sarcasm, indirect stance, and culturally specific politeness. Thai NLP tools
 and pretrained models provide useful linguistic infrastructure
-~\cite{arreerard2022survey,phatthiyaphaibun2023pythainlp,
-lowphansirikul2021wangchanberta,pipatanakul2024typhoon2}, but cultural knowledge
+~\cite{arreerard2022survey,lowphansirikul2021wangchanberta,
+pipatanakul2024typhoon2}, but cultural knowledge
 remains a separate capability~\cite{kim2025thaicli}. Conversation context is
 also necessary because sarcasm can reverse literal polarity
 ~\cite{hazarika2018cascade}. These findings motivate evaluation of naturalness,
@@ -130,45 +130,40 @@ cultural fit, stance, and authenticity rather than sentiment alone.
 \begin{figure*}[t]
     \centering
     \resizebox{0.98\textwidth}{!}{%
-    \begin{tikzpicture}[font=\footnotesize, node distance=6mm and 7mm]
-        \node[deedybox, minimum width=27mm] (source)
+    \begin{tikzpicture}[font=\footnotesize]
+        \node[deedybox, text width=22mm, inner sep=2.5pt] (source) at (-5.6,2.3)
             {Campaign brief and\\public social posts};
-        \node[deedybox, minimum width=27mm, right=of source] (corpus)
+        \node[deedybox, text width=22mm, inner sep=2.5pt] (corpus) at (-2.8,2.3)
             {Collection, normalization,\\and provenance};
-        \node[deedybox, minimum width=26mm, right=of corpus] (split)
-            {Frozen evidence split\\before simulation};
+        \node[deedybox, text width=22mm, inner sep=2.5pt] (split) at (0,2.3)
+            {Frozen split\\$S_e$ for simulation; $G_e$ held out};
 
-        \node[deedybox, minimum width=29mm, below left=9mm and -4mm of split]
-            (scenario) {Scenario evidence $S_e$\\facts and approved context};
-        \node[deedybox, minimum width=30mm, right=of scenario] (graph)
+        \node[deedybox, text width=22mm, inner sep=2.5pt] (scenario) at (0,0.65)
+            {Scenario evidence $S_e$\\facts and approved context};
+        \node[deedybox, text width=22mm, inner sep=2.5pt] (graph) at (2.8,0.65)
             {Graph-grounded world\\actors and environment};
-        \node[deedybox, minimum width=30mm, right=of graph] (agents)
+        \node[deedybox, text width=22mm, inner sep=2.5pt] (agents) at (5.6,0.65)
             {Hybrid ABM\\KOLs, public, and\\labeled IO actors};
-        \node[deedybox, minimum width=29mm, right=of agents] (social)
+        \node[deedybox, text width=22mm, inner sep=2.5pt] (social) at (8.4,0.65)
             {Exposure, memory,\\and social actions};
-        \node[deedybox, minimum width=28mm, right=of social] (report)
+        \node[deedybox, text width=22mm, inner sep=2.5pt] (report) at (11.2,0.65)
             {Simulation traces and\\campaign report};
 
-        \node[deedybox, minimum width=29mm, below=10mm of graph] (holdout)
-            {Held-out reactions $G_e$\\never shown to agents};
-        \node[deedybox, minimum width=30mm, below=10mm of agents] (pair)
-            {Same-campaign\\real--synthetic pairs};
-        \node[deedybox, minimum width=29mm, below=10mm of social] (judge)
+        \node[deedybox, text width=24mm, inner sep=2.5pt] (pair) at (11.2,-1.05)
+            {Pair report outputs\\with held-out $G_e$};
+        \node[deedybox, text width=24mm, inner sep=2.5pt] (judge) at (8.2,-1.05)
             {Blinded reversed-order\\LLM judge};
-        \node[deedybox, minimum width=28mm, below=10mm of report] (metrics)
+        \node[deedybox, text width=24mm, inner sep=2.5pt] (metrics) at (5.2,-1.05)
             {Metrics, uncertainty,\\and human review};
 
         \draw[deedyarrow] (source) -- (corpus);
         \draw[deedyarrow] (corpus) -- (split);
         \draw[deedyarrow] (split) -- (scenario);
-        \draw[deedyarrow] (split) |- (holdout);
         \draw[deedyarrow] (scenario) -- (graph);
         \draw[deedyarrow] (graph) -- (agents);
         \draw[deedyarrow] (agents) -- (social);
         \draw[deedyarrow] (social) -- (report);
-        \draw[deedydashed] (social.south) |- (graph.south);
-        \draw[deedyarrow] (holdout) -- (pair);
-        \draw[deedyarrow] (report) |- (pair);
+        \draw[deedyarrow] (report) -- (pair);
         \draw[deedyarrow] (pair) -- (judge);
         \draw[deedyarrow] (judge) -- (metrics);
 
@@ -179,21 +174,20 @@ cultural fit, stance, and authenticity rather than sentiment alone.
             fit=(scenario)(graph)(agents)(social)(report), inner sep=4pt,
             label={[text=deedyorange,font=\bfseries\footnotesize]above:DEEDY Simulation Core}] {};
         \node[draw=deedyblue, rounded corners=4pt,
-            fit=(holdout)(pair)(judge)(metrics), inner sep=4pt,
+            fit=(pair)(judge)(metrics), inner sep=4pt,
             label={[text=deedyblue,font=\bfseries\footnotesize]below:Leakage-resistant validation}] {};
     \end{tikzpicture}%
     }
     \caption{DEEDY architecture and executed evaluation workflow. Campaign
     facts construct the simulated world, while authentic reactions remain
-    hidden until outputs are scored. The dashed arrow represents memory
-    feedback within the simulation.}
+    hidden until the simulation report is paired and scored.}
     \label{fig:deedy-architecture}
 \end{figure*}
 
 \subsection{Evidence Preparation}
 
 Public campaign posts and comments are collected from Facebook, Instagram,
-and TikTok through recorded Apify queries~\cite{apify2026actors}. Text is
+and TikTok through recorded queries. Text is
 preserved with emoji, Thai--English code-mixing, repeated characters, and
 thread cues because these may carry pragmatic meaning. Direct identifiers are
 removed from research views, while campaign, platform, post, time, and
@@ -240,6 +234,48 @@ stance, and selects like, share, comment, reply, or silence. Thai generation
 preserves code-mixing and uncertainty without forcing dialect caricatures.
 Thread context is available for replies because Thai stance and sarcasm may
 depend on earlier turns~\cite{hazarika2018cascade}.
+
+\begin{figure}[!ht]
+    \centering
+    \resizebox{0.94\columnwidth}{!}{%
+    \begin{tikzpicture}[font=\scriptsize,
+        stage/.style={deedybox, text width=26mm, minimum height=6mm,
+            inner sep=2pt, fill=deedyblue!7},
+        event/.style={deedybox, text width=32mm, minimum height=6mm,
+            inner sep=2pt, fill=deedyorange!9},
+        outcome/.style={deedybox, text width=24mm, minimum height=6mm,
+            inner sep=2pt, fill=deedyblue!7},
+        decision/.style={diamond, draw, aspect=1.7, align=center,
+            minimum width=18mm, minimum height=9mm, inner sep=1pt,
+            fill=deedygreen!10}]
+        \node[stage] (init) at (0,0)
+            {Agent initialization};
+        \node[event] (inject) at (0,-0.75)
+            {Campaign / KOL / labeled IO\\exposure};
+        \node[stage] (feed) at (0,-1.5)
+            {Hybrid feed evaluation};
+        \node[decision] (act) at (0,-2.45) {Visible\\action?};
+        \node[outcome] (engage) at (-2.45,-2.45)
+            {Public engagement};
+        \node[outcome] (silent) at (2.45,-2.45)
+            {Silent shift / ignore};
+        \node[stage, text width=34mm] (next) at (0,-3.45)
+            {Record state and advance to next tick};
+
+        \draw[deedyarrow] (init) -- (inject);
+        \draw[deedyarrow] (inject) -- (feed);
+        \draw[deedyarrow] (feed) -- (act);
+        \draw[deedyarrow] (act.west) -- node[above] {engage} (engage.east);
+        \draw[deedyarrow] (act.east) -- node[above] {silence} (silent.west);
+        \draw[deedyarrow] (engage.south) |- (next.west);
+        \draw[deedyarrow] (silent.south) |- (next.east);
+    \end{tikzpicture}%
+    }
+    \caption{Per-agent Hybrid ABM decision cycle. Engagement produces a
+    visible social action; silence still records a private state transition
+    before the next feed tick.}
+    \label{fig:hybrid-cycle}
+\end{figure}
 
 \subsubsection{Hybrid Agent-Based Modeling (Hybrid ABM)}
 
@@ -399,21 +435,13 @@ Exp. 5 & Qwen & Clarity & 50 & 0.3349 & 0.7500 & 0.0050 \\
 \end{tabular}
 \end{table*}
 
-Experiment~4 changed LLM outputs only modestly across prompt-level
-feed/network descriptions and under-produced negative reactions.
-Table~\ref{tab:exp4-llm-detail} exposes the six conditions behind the ranges
-in Table~\ref{tab:exp45-results}. DeepSeek's lowest mean JSD occurred under the
-chronological/matched-random description (0.2995), whereas Qwen's occurred
-under popularity/matched-random (0.3274). Negative share never exceeded 0.0225,
-despite authentic campaign references ranging from 0.049 to 0.362.
-
-\begin{table*}[t]
+\begin{table*}[!t]
 \caption{Experiment~4 LLM cognitive-agent sensitivity. Each row averages five
 campaigns and ten seeds. MR denotes matched random and PA the post-affiliation
 proxy; visible action excludes silence.}
 \label{tab:exp4-llm-detail}
 \centering
-\scriptsize
+\footnotesize
 \begin{tabular}{@{}llrrrrr@{}}
 \toprule
 Generator & Feed/network & Runs & Sentiment JSD & Visible action & Neutral share & Negative share \\
@@ -434,14 +462,15 @@ Qwen & Popularity/PA        & 50 & 0.3431 & 0.7525 & 0.6550 & 0.0000 \\
 \end{tabular}
 \end{table*}
 
-To isolate
-the social mechanism from language generation, a separate sweep used 500
-public agents under each feed--network combination. Table~\ref{tab:mechanism}
-shows that the graph assumption changed participation and diffusion much more
-than the ranking policy: the matched-random graph reached almost the entire
-population, whereas the post-affiliation proxy reached less than half.
+Experiment~4 changed LLM outputs only modestly across prompt-level
+feed/network descriptions and under-produced negative reactions.
+Table~\ref{tab:exp4-llm-detail} exposes the six conditions behind the ranges
+in Table~\ref{tab:exp45-results}. DeepSeek's lowest mean JSD occurred under the
+chronological/matched-random description (0.2995), whereas Qwen's occurred
+under popularity/matched-random (0.3274). Negative share never exceeded 0.0225,
+despite authentic campaign references ranging from 0.049 to 0.362.
 
-\begin{table*}[t]
+\begin{table*}[!t]
 \caption{Experiment~4 non-generative social-mechanism sensitivity ($N=500$;
 means over five campaigns and ten seeds). JSD is a diagnostic comparison with
 the aggregate sentiment reference; cascade size is a fraction of agents.}
@@ -462,6 +491,13 @@ Popularity    & Post-affiliation proxy & 0.400 & 0.461 & 0.115 & 0.164 & 0.159 \
 \end{tabular}
 \end{table*}
 
+To isolate the social mechanism from language generation, a separate sweep
+used 500 public agents under each feed--network combination.
+Table~\ref{tab:mechanism} shows that the graph assumption changed participation
+and diffusion much more than the ranking policy: the matched-random graph
+reached almost the entire population, whereas the post-affiliation proxy
+reached less than half.
+
 Ranking changed JSD and polarization within each graph, but did not overcome
 the reach gap between graphs. Because the corpus did not preserve reply edges,
 neither topology represents an observed Thai interaction network. These
@@ -481,13 +517,7 @@ while the non-generative sweep separately tests diffusion. This distinction
 prevents comment-level realism scores from being misread as validation of the
 full network trajectory.
 
-Table~\ref{tab:paired-contrasts} reports the paired uncertainty estimates that
-support these restrained conclusions. Differences are computed within matched
-campaign--seed units, so negative values favor the first-listed condition when
-lower JSD is better. Every interval crosses zero; small differences in sample
-means should therefore not be promoted to treatment or model effects.
-
-\begin{table*}[t]
+\begin{table*}[!t]
 \caption{Paired sentiment-JSD contrasts across Experiments~1--3 and 5.
 Intervals are empirical 2.5--97.5 percentiles over matched campaign--seed
 units. Lower JSD is better.}
@@ -510,7 +540,33 @@ Exp. 5 & Pooled generators & Clarity $-$ baseline & $-0.0030$ & [$-0.1888$, 0.12
 \end{tabular}
 \end{table*}
 
+Table~\ref{tab:paired-contrasts} reports the paired uncertainty estimates that
+support these restrained conclusions. Differences are computed within matched
+campaign--seed units, so negative values favor the first-listed condition when
+lower JSD is better. Every interval crosses zero; small differences in sample
+means should therefore not be promoted to treatment or model effects.
+
 \subsection{Blinded LLM-as-a-Judge Evaluation}
+
+\begin{table*}[!t]
+\caption{Blinded judge results over 741 real--synthetic pairs. Score gaps are
+synthetic minus real; risk is the only dimension where higher is worse.}
+\label{tab:judge-results}
+\centering
+\footnotesize
+\begin{tabular}{@{\extracolsep{8mm}}lrrr@{}}
+\toprule
+Dimension & Real & Synthetic & Gap (95\% CI) \\
+\midrule
+Thai naturalness & 3.77 & 4.19 & 0.42 [0.29, 0.57] \\
+Campaign relevance & 2.83 & 4.46 & 1.64 [1.51, 1.77] \\
+Social plausibility & 3.84 & 3.88 & 0.04 [$-0.11$, 0.20] \\
+Cultural fit & 3.57 & 4.07 & 0.50 [0.35, 0.65] \\
+Context specificity & 2.23 & 3.14 & 0.91 [0.76, 1.05] \\
+Unsupported-claim risk & 1.83 & 1.87 & 0.04 [$-0.06$, 0.14] \\
+\bottomrule
+\end{tabular}
+\end{table*}
 
 Each eligible synthetic reaction was paired with a distinct authentic comment
 from the same campaign. Direct identifiers and contact patterns were removed;
@@ -530,26 +586,6 @@ synthetic-realism score of 0.406 (bootstrap 95\% CI 0.374--0.438), below the
 0.5 indifference point. Reversed-order preference agreed for 83.5\% of pairs,
 while candidate A was selected in 55.9\% of non-ties, confirming measurable
 position sensitivity.
-
-\begin{table}[t]
-\caption{Blinded judge results over 741 real--synthetic pairs. Score gaps are
-synthetic minus real; risk is the only dimension where higher is worse.}
-\label{tab:judge-results}
-\centering
-\scriptsize
-\begin{tabular}{@{}lrrr@{}}
-\toprule
-Dimension & Real & Synthetic & Gap (95\% CI) \\
-\midrule
-Thai naturalness & 3.77 & 4.19 & 0.42 [0.29, 0.57] \\
-Campaign relevance & 2.83 & 4.46 & 1.64 [1.51, 1.77] \\
-Social plausibility & 3.84 & 3.88 & 0.04 [$-0.11$, 0.20] \\
-Cultural fit & 3.57 & 4.07 & 0.50 [0.35, 0.65] \\
-Context specificity & 2.23 & 3.14 & 0.91 [0.76, 1.05] \\
-Unsupported-claim risk & 1.83 & 1.87 & 0.04 [$-0.06$, 0.14] \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 Table~\ref{tab:judge-results} reveals a useful tension. Synthetic reactions
 were rated more natural, relevant, culturally appropriate, and specific, yet
@@ -664,7 +700,6 @@ forecasting, campaign effectiveness, or behavioral fidelity. This distinction
 is central to using generative simulation as an auditable hypothesis tool
 rather than a substitute for field research.
 
-\IEEEtriggeratref{13}
 \bibliographystyle{IEEEtran}
 \bibliography{deedy_references}
 
